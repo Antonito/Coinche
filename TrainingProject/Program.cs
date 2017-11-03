@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrainingProject
+namespace Coinche
 {
     class Program
     {

@@ -13,17 +13,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Server\" />
+    <Folder Include="ServerSrc\" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\TrainingProject\Core\Card.cs">
-      <Link>Core\Card.cs</Link>
+      <Link>ServerSrc\Core\Card.cs</Link>
     </Compile>
     <Compile Include="..\TrainingProject\Core\Deck.cs">
-      <Link>Core\Deck.cs</Link>
+      <Link>ServerSrc\Core\Deck.cs</Link>
     </Compile>
     <Compile Include="..\TrainingProject\Core\Game.cs">
-      <Link>Core\Game.cs</Link>
+      <Link>ServerSrc\Core\Game.cs</Link>
     </Compile>
-    <Compile Include="..\TrainingProject\Core\Hand.cs">
-      <Link>Core\Hand.cs</Link>
+    <Compile Include="..\TrainingProject\Core\Player.cs">
+      <Link>ServerSrc\Core\Player.cs</Link>
+    </Compile>
+    <Compile Include="..\TrainingProject\Core\Team.cs">
+      <Link>ServerSrc\Core\Team.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

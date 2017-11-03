@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TrainingProject.Core
+namespace Coinche.Server.Core
 {
     public class Card
     {
@@ -26,7 +26,7 @@ namespace TrainingProject.Core
 
         // The values of the cards when playing in standard mode 
         // and that the card is an asset
-        private static readonly Dictionary<CardType, int> CardValuesIsAsset =
+        private static readonly Dictionary<CardType, int> cardValueIsAsset =
             new Dictionary<CardType, int> {
             { CardType.Ace, 11 },
             { CardType.King, 4 },
@@ -40,7 +40,7 @@ namespace TrainingProject.Core
 
         // The values of the cards when playing in standard mode 
         // and that the card is not an asset
-        private static readonly Dictionary<CardType, int> CardValuesIsNotAsset =
+        private static readonly Dictionary<CardType, int> cardValueIsNotAsset =
             new Dictionary<CardType, int> {
             { CardType.Ace, 11 },
             { CardType.King, 4 },
@@ -53,7 +53,7 @@ namespace TrainingProject.Core
         };
 
         // The values of the card when playing in "All assets" mode
-        private static readonly Dictionary<CardType, int> CardValuesAllAsset =
+        private static readonly Dictionary<CardType, int> cardValueAllAssets =
             new Dictionary<CardType, int> {
             { CardType.Ace, 7 },
             { CardType.King, 3 },
@@ -66,7 +66,7 @@ namespace TrainingProject.Core
         };
 
         // The values of the card when playing in "No asset" mode
-        private static readonly Dictionary<CardType, int> CardValuesNoAsset =
+        private static readonly Dictionary<CardType, int> cardValueNoAsset =
             new Dictionary<CardType, int> {
             { CardType.Ace, 19 },
             { CardType.King, 4 },
@@ -87,12 +87,11 @@ namespace TrainingProject.Core
         public int Value { get { return _value; } }
         public CardType Type { get { return _type; } }
         public CardColor Color { get { return _color; } }
-
-        // TODO: Available only when unit testing ?
         public bool Asset { get { return _isAsset; } }
 
         // Initialize a card
-        public Card(CardType type, CardColor color, bool isAsset, Game.GameMode gameMode)
+        public Card(CardType type, CardColor color, bool isAsset, 
+                    Game.GameMode gameMode)
         {
             _type = type;
             _color = color;
@@ -110,19 +109,19 @@ namespace TrainingProject.Core
             {
                 if (_isAsset)
                 {
-                    valueSet = CardValuesIsAsset;
+                    valueSet = cardValueIsAsset;
                 }
                 else
                 {
-                    valueSet = CardValuesIsNotAsset;
+                    valueSet = cardValueIsNotAsset;
                 }
             }
             else if (_gameMode == Game.GameMode.AllAssets)
             {
-                valueSet = CardValuesAllAsset;
+                valueSet = cardValueAllAssets;
             }
             else {
-                valueSet = CardValuesNoAsset;
+                valueSet = cardValueNoAsset;
             }
             return valueSet[type];
         }

@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using Xunit;
-using TrainingProject.Core;
+using Coinche.Server.Core;
 
-namespace UnitTests
+namespace Server
 {
     public class UnitTestDeck
     {

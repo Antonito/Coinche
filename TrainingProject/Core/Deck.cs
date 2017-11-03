@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
-namespace TrainingProject.Core
+namespace Coinche.Server.Core
 {
     public class Deck
     {
-        private readonly Queue<Card> _cards;
+        private readonly List<Card> _cards;
 
-        public Queue<Card> Cards { get { return _cards; } }
+        public List<Card> Cards { get { return _cards; } }
 
         public Deck(Game.GameMode gameMode, Card.CardColor assetColor)
         {
@@ -27,8 +28,40 @@ namespace TrainingProject.Core
             _cards = CreateAssetsDeck(gameMode);
         }
 
-        static private Queue<Card> CreateClassicDeck(Card.CardColor assetColor) {
-            Queue<Card> cards = new Queue<Card>();
+        public void DistributeCards(List<Player> players) {
+            if (players.Count() != 4) {
+                throw new ArgumentException("Invalid number of players, must be 4.");
+            }
+            var shuffledCards = _cards.OrderBy(a => Guid.NewGuid()).ToList();
+
+            // Distribute 3 cards, then 2, then 3.
+            foreach (Player player in players) {
+                for (int i = 0; i < 3; ++i)
+                {
+                    player.GiveCard(shuffledCards[0]);
+                    shuffledCards.RemoveAt(0);
+                }
+            }
+            foreach (Player player in players)
+            {
+                for (int i = 0; i < 2; ++i)
+                {
+                    player.GiveCard(shuffledCards[0]);
+                    shuffledCards.RemoveAt(0);
+                }
+            }
+            foreach (Player player in players)
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    player.GiveCard(shuffledCards[0]);
+                    shuffledCards.RemoveAt(0);
+                }
+            }
+        }
+
+        static private List<Card> CreateClassicDeck(Card.CardColor assetColor) {
+            List<Card> cards = new List<Card>();
 
             foreach (Card.CardColor color in 
                      Enum.GetValues(typeof(Card.CardColor)))
@@ -38,16 +71,16 @@ namespace TrainingProject.Core
                 {
                     bool isAsset = (color == assetColor) ? true : false;
 
-                    cards.Enqueue(new Card(type, color, isAsset, 
+                    cards.Add(new Card(type, color, isAsset, 
                                            Game.GameMode.Classic));
                 }
             }
             return cards;
         }
 
-        static private Queue<Card> CreateAssetsDeck(Game.GameMode gameMode)
+        static private List<Card> CreateAssetsDeck(Game.GameMode gameMode)
         {
-            Queue<Card> cards = new Queue<Card>();
+            List<Card> cards = new List<Card>();
             bool isAsset = (gameMode == Game.GameMode.AllAssets) ? true : false;
 
             foreach (Card.CardColor color in 
@@ -56,7 +89,7 @@ namespace TrainingProject.Core
                 foreach (Card.CardType type in 
                          Enum.GetValues(typeof(Card.CardType)))
                 {
-                    cards.Enqueue(new Card(type, color, isAsset, gameMode));
+                    cards.Add(new Card(type, color, isAsset, gameMode));
                 }
             }
             return cards;

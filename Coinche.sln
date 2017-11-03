@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingProject", "TrainingProject\TrainingProject.csproj", "{0FCD341F-5225-4B08-94D9-0AE4C35A7BB1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "TrainingProject\Server.csproj", "{0FCD341F-5225-4B08-94D9-0AE4C35A7BB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{0CAEA39D-841F-4F93-B9DE-4C3383ABD2A0}"
 EndProject

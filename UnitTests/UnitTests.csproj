@@ -17,19 +17,19 @@
     <Folder Include="ServerSrc\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\TrainingProject\Core\Card.cs">
+    <Compile Include="..\Coinche\Core\Card.cs">
       <Link>ServerSrc\Core\Card.cs</Link>
     </Compile>
-    <Compile Include="..\TrainingProject\Core\Deck.cs">
+    <Compile Include="..\Coinche\Core\Deck.cs">
       <Link>ServerSrc\Core\Deck.cs</Link>
     </Compile>
-    <Compile Include="..\TrainingProject\Core\Game.cs">
+    <Compile Include="..\Coinche\Core\Game.cs">
       <Link>ServerSrc\Core\Game.cs</Link>
     </Compile>
-    <Compile Include="..\TrainingProject\Core\Player.cs">
+    <Compile Include="..\Coinche\Core\Player.cs">
       <Link>ServerSrc\Core\Player.cs</Link>
     </Compile>
-    <Compile Include="..\TrainingProject\Core\Team.cs">
+    <Compile Include="..\Coinche\Core\Team.cs">
       <Link>ServerSrc\Core\Team.cs</Link>
     </Compile>
   </ItemGroup>

@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2847828B-823D-4CE8-9817-141F1BF08840}</ProjectGuid>
+    <ProjectGuid>{7E247A23-91BC-4F3E-8755-5E6791742B04}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Client</RootNamespace>
-    <AssemblyName>Client</AssemblyName>
+    <RootNamespace>Server</RootNamespace>
+    <AssemblyName>Server</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,6 +32,14 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\Card.cs" />
+    <Compile Include="Core\Deck.cs" />
+    <Compile Include="Core\Game.cs" />
+    <Compile Include="Core\Player.cs" />
+    <Compile Include="Core\Team.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

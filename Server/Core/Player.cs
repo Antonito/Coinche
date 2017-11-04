@@ -15,9 +15,11 @@ namespace Coinche.Server.Core
             _cards = new List<Card>();
         }
 
-        public void GiveCard(Card card) {
+        public void GiveCard(Card card)
+        {
             _cards.Add(card);
-            if (_cards.Count() > 8) {
+            if (_cards.Count() > 8)
+            {
                 throw new ArgumentException("Added too many cards");
             }
         }

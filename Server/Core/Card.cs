@@ -90,7 +90,7 @@ namespace Coinche.Server.Core
         public bool Asset { get { return _isAsset; } }
 
         // Initialize a card
-        public Card(CardType type, CardColor color, bool isAsset, 
+        public Card(CardType type, CardColor color, bool isAsset,
                     Game.GameMode gameMode)
         {
             _type = type;
@@ -120,7 +120,8 @@ namespace Coinche.Server.Core
             {
                 valueSet = cardValueAllAssets;
             }
-            else {
+            else
+            {
                 valueSet = cardValueNoAsset;
             }
             return valueSet[type];

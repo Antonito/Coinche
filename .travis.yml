@@ -1,2 +1,8 @@
 language: csharp
 solution: Coinche.sln
+install:
+  - nuget restore solution-name.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Debug Coinche.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tests/bin/Debug/Tests.dll

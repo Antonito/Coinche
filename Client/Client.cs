@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using NetworkCommsDotNet.Connections.TCP;
+
+#if HAS_SSL
+using System.Collections.Generic;
+using System.Text;
 using Coinche.Common;
+#endif
 
 namespace Coinche.Client
 {
@@ -62,43 +65,8 @@ namespace Coinche.Client
         {
             Console.WriteLine(message);
             connection.RemoveIncomingPacketHandler("WelcomeResponse");
-
-            connection.AppendIncomingPacketHandler<string>("LobbyInfo", LobbyInfoHandler);
-            connection.AppendIncomingPacketHandler<string>("LobbyError", LobbyErrorHandler);
-
-            Console.WriteLine("Which lobby do you want to join ?");
-            string msg = Console.ReadLine();
-            connection.SendObject("SelectLobby", msg);
-        }
-
-        private static void LobbyErrorHandler(PacketHeader header, Connection connection, string message)
-        {
-            Console.WriteLine(message);
-
-            Console.WriteLine("Which lobby do you want to join ?");
-            string msg = Console.ReadLine();
-            connection.SendObject("SelectLobby", msg);
-        }
-
-        private static void LobbyInfoHandler(PacketHeader header, Connection connection, string message)
-        {
-            Console.WriteLine(message);
-            connection.RemoveIncomingPacketHandler("LobbyError");
-            connection.RemoveIncomingPacketHandler("LobbyInfo");
-            connection.AppendIncomingPacketHandler<string>("LobbyRoomMessage", LobbyRoomMessageHandler);
-
-            while (true)
-            {
-                Console.WriteLine("Send message to lobby: ");
-                string msg = Console.ReadLine();
-
-                connection.SendObject("LobbyRoomMessage", msg);
-            }
-        }
-
-        private static void LobbyRoomMessageHandler(PacketHeader header, Connection connection, string message)
-        {
-            Console.WriteLine(message);
+            Lobby.Register(connection);
+            Lobby.Connect(connection);
         }
     }
 }

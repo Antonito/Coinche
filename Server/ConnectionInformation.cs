@@ -21,7 +21,7 @@ namespace Coinche.Server
             get { return _lobby; }
             set 
             { 
-                if (!value.IsInLobby(_connection)) 
+                if (value != null && !value.IsInLobby(_connection)) 
                 {
                     throw new Exceptions.LobbyError("Client is not in lobby");      
                 }

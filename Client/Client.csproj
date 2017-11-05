@@ -31,6 +31,9 @@
     <Reference Include="NetworkCommsDotNet">
       <HintPath>..\packages\NetworkCommsDotNet.3.0.3\lib\NetworkCommsDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />

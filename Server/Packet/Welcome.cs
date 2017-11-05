@@ -28,7 +28,7 @@ namespace Coinche.Server.Packet
             Unregister(connection);
             SelectLobby.Register(connection);
             ConnectionManager.Get(connection).Pseudo = message;
-                connection.SendObject("WelcomeResponse", "Welcome To NetCoinche");
+            connection.SendObject("WelcomeResponse", "Welcome To NetCoinche");
          }
     }
 }

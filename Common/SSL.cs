@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections.TCP;
 using NetworkCommsDotNet.Tools;
+using ProtoBuf;
 
 namespace Coinche.Common
 {

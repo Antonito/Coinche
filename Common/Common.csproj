@@ -31,13 +31,22 @@
     <Reference Include="NetworkCommsDotNet">
       <HintPath>..\packages\NetworkCommsDotNet.3.0.3\lib\NetworkCommsDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SSL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PacketType\Contract.cs" />
+    <Compile Include="PacketType\PlayCard.cs" />
+    <Compile Include="PacketType\EndRound.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PacketType\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

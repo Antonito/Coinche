@@ -31,6 +31,9 @@
     <Reference Include="NetworkCommsDotNet">
       <HintPath>..\packages\NetworkCommsDotNet.3.0.3\lib\NetworkCommsDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server.cs" />
@@ -49,6 +52,9 @@
     <Compile Include="Packet\LobbyRoom.cs" />
     <Compile Include="Exceptions\LobbyError.cs" />
     <Compile Include="LobbyManager.cs" />
+    <Compile Include="Core\Fold.cs" />
+    <Compile Include="Core\Contract.cs" />
+    <Compile Include="Packet\NetworkGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

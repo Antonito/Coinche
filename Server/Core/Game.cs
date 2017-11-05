@@ -14,8 +14,10 @@ namespace Coinche.Server.Core
         }
 
         private readonly List<Player> _players;
-        private readonly GameMode _gameMode;
-        private readonly Deck _deck;
+        private readonly List<Team> _teams;
+
+        //we store all fold history
+        private List<Fold> _folds;
 
         static private readonly int _maxPoints = 3000;
 
@@ -35,18 +37,22 @@ namespace Coinche.Server.Core
                 throw new ArgumentException("Asset must not be null if GameMode is classic.");
             }
             _players = players;
-            _gameMode = mode;
-            if (asset == null)
-            {
-                _deck = new Deck(mode);
-            }
-            else
-            {
-                _deck = new Deck(mode, asset.Value);
-            }
+            _folds = new List<Fold>();
 
-            // Distribute cards
-            _deck.DistributeCards(_players);
+            //while not enought point to terminate the game
+            _teams = new List<Team>();
+            _teams.Add(new Team(_players[0], _players[1]));
+            _teams.Add(new Team(_players[2], _players[3]));
+            while (_teams[0].Score < _maxPoints || _teams[1].Score < _maxPoints)
+            {
+                Fold fold = new Fold(_players);
+                fold.Compute();
+                fold.SetResult(_teams);
+
+                //optional
+                _folds.Add(fold);
+            }
+            //Game ended
         }
     }
 }

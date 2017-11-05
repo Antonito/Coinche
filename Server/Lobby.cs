@@ -50,7 +50,7 @@ namespace Coinche.Server
             }
         }
 
-        private bool IsFull()
+        public bool IsFull()
         {
             return _connections.Count() == 4;
         }

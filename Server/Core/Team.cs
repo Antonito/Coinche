@@ -5,7 +5,7 @@ namespace Coinche.Server.Core
     public class Team
     {
         private readonly List<Player> _members;
-        private readonly int _score;
+        private int _score;
         static private readonly int _maxScore = 3000;
 
         public int MaxScore { get { return _maxScore; } }
@@ -15,6 +15,11 @@ namespace Coinche.Server.Core
         {
             _score = 0;
             _members = new List<Player> { player1, player2 };
+        }
+
+        public void AddScore(int scoreToAdd)
+        {
+            _score += scoreToAdd;
         }
     }
 }

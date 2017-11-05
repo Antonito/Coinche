@@ -8,6 +8,7 @@ namespace Coinche.Server.Core
 
         public int Value { get { return _value; }}
         public Card.CardColor Color { get { return _color; }}
+
         public Contract(int valueToSet, Card.CardColor colorToSet)
         {
             _value = valueToSet;

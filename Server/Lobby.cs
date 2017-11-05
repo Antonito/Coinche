@@ -14,7 +14,7 @@ namespace Coinche.Server
         public string Name { get { return _name; } }
         public int NbPlayers { get { return _connections.Count(); } }
 
-        // TODO: Improve with somethign using yield ?
+        // TODO: Improve with something using yield ?
         public List<Connection> Connection { get { return _connections; }}
 
         public Lobby(string name)

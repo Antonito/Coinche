@@ -14,7 +14,8 @@ namespace Coinche.Server.Packet
 
         public static void Register(Connection connection)
         {
-            SendReceiveOptions customSendReceiveOptions = new SendReceiveOptions<ProtobufSerializer>();
+            // TODO: 
+            //SendReceiveOptions customSendReceiveOptions = new SendReceiveOptions<ProtobufSerializer>();
             connection.AppendIncomingPacketHandler<StartGame>(_type, Handler);
 
         }
@@ -22,7 +23,6 @@ namespace Coinche.Server.Packet
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_type);
-
         }
 
         private static void Handler(PacketHeader header, Connection connection, StartGame game)
@@ -33,11 +33,11 @@ namespace Coinche.Server.Packet
                 _gameReadyCount++;
                 connectInfos.IsGameReady = true;
                 Console.WriteLine("{0} is ready", connectInfos.Pseudo);
-                //send to client ok waiting others
+                // TODO: send to client ok waiting others
             }
             if (_gameReadyCount == 4)
             {
-                //game ready lets go
+                // TODO: game ready lets go
                 Console.WriteLine("game launched");
             }
         }

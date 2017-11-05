@@ -51,15 +51,13 @@ namespace Coinche.Server.Packet
                 NetworkGame.AskClientReady(connection);
                 if (lobby.IsFull())
                 {
-                    //start game here
+                    // TODO: start game here
                     Console.WriteLine("preparing game");
                 }
             }
             catch (Exception e)
             {
                 connection.SendObject("LobbyError", e.Message);
-                Console.WriteLine("Error in lobby");
-                Console.WriteLine(e.Message);
             }
         }
     }

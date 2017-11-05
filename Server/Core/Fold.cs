@@ -39,9 +39,9 @@ namespace Coinche.Server.Core
 
         public void Compute()
         {
-            //set contrat
-            //check fold
-            //add fold cards into player fold list
+            // TODO: set contrat
+            //       check fold
+            //       add fold cards into player fold list
         }
 
         public void SetResult(List<Team> teams)

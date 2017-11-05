@@ -29,10 +29,14 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="NetworkCommsDotNet">
+      <HintPath>..\packages\NetworkCommsDotNet.3.0.3\lib\NetworkCommsDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server\DeckTest.cs" />
     <Compile Include="Server\UtilsTest.cs" />
+    <Compile Include="Server\LobbyTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

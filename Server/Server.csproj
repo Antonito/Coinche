@@ -48,6 +48,7 @@
     <Compile Include="Lobby.cs" />
     <Compile Include="Packet\LobbyRoom.cs" />
     <Compile Include="Exceptions\LobbyError.cs" />
+    <Compile Include="LobbyManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

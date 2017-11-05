@@ -32,13 +32,13 @@ namespace Coinche.Server.Packet
             //       2) Else -> Unregister this handler, respond to client, and switch to lobby room
             // II. If it does not exist, create lobby, respond to client, and switch to lobby room
 
-            var lobby = App.GetLobby(message);
+            var lobby = LobbyManager.GetLobby(message);
             if (lobby == null)
             {
                 // Create lobby
                 Console.WriteLine("Player " + pseudo + " created lobby " + message);
-                App.AddLobby(message);
-                lobby = App.GetLobby(message);
+                LobbyManager.AddLobby(message);
+                lobby = LobbyManager.GetLobby(message);
             }
             try
             {

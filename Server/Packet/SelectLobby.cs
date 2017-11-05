@@ -11,7 +11,7 @@ namespace Coinche.Server.Packet
 
         public static void Register(Connection connection)
         {
-            connection.AppendIncomingPacketHandler<string>(_type, SelectLobbyClient);
+            connection.AppendIncomingPacketHandler<string>(_type, Handler);
         }
 
         public static void Unregister(Connection connection)
@@ -19,16 +19,39 @@ namespace Coinche.Server.Packet
             connection.RemoveIncomingPacketHandler(_type);
         }
 
-        private static void SelectLobbyClient(PacketHeader header, Connection connection, string message)
+        private static void Handler(PacketHeader header, Connection connection, string message)
         {
+            var connectInfos = ConnectionManager.Get(connection);
+            var pseudo = connectInfos.Pseudo;
             Console.WriteLine("Player " + 
-                              ConnectionManager.Get(connection).Pseudo + 
+                              pseudo + 
                               " selected lobby " + message);
-            // TODO: Check if requested lobby exists.
+            // Check if requested lobby exists.
             // I.  If it exists, try to join it.
             //       1) If it is full -> send error back to client and ask for another lobby
-            //       2) Else -> Unregister this handler, respond to client, and switch to game mode (register new handler)
-            // II. If it does not exist, create lobby, respond to client, and switch to game
+            //       2) Else -> Unregister this handler, respond to client, and switch to lobby room
+            // II. If it does not exist, create lobby, respond to client, and switch to lobby room
+
+            var lobby = App.GetLobby(message);
+            if (lobby == null)
+            {
+                // Create lobby
+                Console.WriteLine("Player " + pseudo + " created lobby " + message);
+                App.AddLobby(message);
+                lobby = App.GetLobby(message);
+            }
+            try
+            {
+                lobby.AddPlayer(connection);
+                connectInfos.Lobby = lobby;
+                Unregister(connection);
+                LobbyRoom.Register(connection);
+                connection.SendObject("LobbyInfo", "Joined Lobby " + message + ": there are " + lobby.NbPlayers + " players.");
+            }
+            catch (Exception e)
+            {
+                connection.SendObject("LobbyError", e.Message);
+            }
         }
     }
 }

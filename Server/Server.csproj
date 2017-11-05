@@ -45,6 +45,8 @@
     <Compile Include="ConnectionInformation.cs" />
     <Compile Include="Utils\SetOnce.cs" />
     <Compile Include="Packet\SelectLobby.cs" />
+    <Compile Include="Lobby.cs" />
+    <Compile Include="Packet\LobbyRoom.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

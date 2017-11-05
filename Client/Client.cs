@@ -63,9 +63,42 @@ namespace Coinche.Client
             Console.WriteLine(message);
             connection.RemoveIncomingPacketHandler("WelcomeResponse");
 
+            connection.AppendIncomingPacketHandler<string>("LobbyInfo", LobbyInfoHandler);
+            connection.AppendIncomingPacketHandler<string>("LobbyError", LobbyErrorHandler);
+
             Console.WriteLine("Which lobby do you want to join ?");
             string msg = Console.ReadLine();
             connection.SendObject("SelectLobby", msg);
+        }
+
+        private static void LobbyErrorHandler(PacketHeader header, Connection connection, string message)
+        {
+            Console.WriteLine(message);
+
+            Console.WriteLine("Which lobby do you want to join ?");
+            string msg = Console.ReadLine();
+            connection.SendObject("SelectLobby", msg);
+        }
+
+        private static void LobbyInfoHandler(PacketHeader header, Connection connection, string message)
+        {
+            Console.WriteLine(message);
+            connection.RemoveIncomingPacketHandler("LobbyError");
+            connection.RemoveIncomingPacketHandler("LobbyInfo");
+            connection.AppendIncomingPacketHandler<string>("LobbyRoomMessage", LobbyRoomMessageHandler);
+
+            while (true)
+            {
+                Console.WriteLine("Send message to lobby: ");
+                string msg = Console.ReadLine();
+
+                connection.SendObject("LobbyRoomMessage", msg);
+            }
+        }
+
+        private static void LobbyRoomMessageHandler(PacketHeader header, Connection connection, string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }

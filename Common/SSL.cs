@@ -37,7 +37,7 @@ namespace Coinche.Common
                                            DateTime.Now, DateTime.Now.AddYears(1));
 
 
-                details.KeyLength = 4096;
+                details.KeyLength = 2048;
                 SSLTools.CreateSelfSignedCertificatePFX(details, certName);
                 _certificate = new X509Certificate2(certName);
                 Console.WriteLine("\t... certificate successfully created.");

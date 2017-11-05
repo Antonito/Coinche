@@ -12,7 +12,7 @@ namespace Coinche.Server.Packet
         
         public static void Register(Connection connection)
         {
-            connection.AppendIncomingPacketHandler<string>(_type, WelcomeClient);
+            connection.AppendIncomingPacketHandler<string>(_type, Handler);
         }
 
         public static void Unregister(Connection connection)
@@ -21,7 +21,7 @@ namespace Coinche.Server.Packet
         }
 
         // Gets the pseudo of a player, welcomes the player, then switch to lobby selection
-        private static void WelcomeClient(PacketHeader header, Connection connection, string message)
+        private static void Handler(PacketHeader header, Connection connection, string message)
         {
             Console.WriteLine("[" + connection.ToString() + "] Player " + 
                                message + " logged to the game.");

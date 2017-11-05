@@ -9,7 +9,7 @@ namespace Coinche.Server
         _connections = new ConcurrentDictionary<Connection, ConnectionInformation>();
 
         public static void Add(Connection connection) {
-            _connections[connection] = new ConnectionInformation();
+            _connections[connection] = new ConnectionInformation(connection);
         }
 
         public static void Remove(Connection connection) {

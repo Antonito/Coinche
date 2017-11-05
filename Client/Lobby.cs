@@ -48,6 +48,7 @@ namespace Coinche.Client
             Console.WriteLine(message);
             Unregister(connection);
             LobbyRoom.Register(connection);
+            NetworkGame.Register(connection);
 
             // TODO: Move
             while (true)

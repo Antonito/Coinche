@@ -54,6 +54,7 @@
     <Compile Include="LobbyManager.cs" />
     <Compile Include="Core\Fold.cs" />
     <Compile Include="Core\Contract.cs" />
+    <Compile Include="Packet\NetworkGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

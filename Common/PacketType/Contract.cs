@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace Coinche.Common.PacketType
 {
     [ProtoContract]
-    class Contract
+    public class Contract
     {
         [ProtoMember(1)]
         public int Id { get; set; }

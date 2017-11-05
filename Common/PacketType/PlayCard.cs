@@ -4,7 +4,7 @@ using ProtoBuf;
 namespace Coinche.Common.PacketType
 {
     [ProtoContract]
-    class PlayCard
+    public class PlayCard
     {
         [ProtoMember(1)]
         public int CardValue { get; set; }

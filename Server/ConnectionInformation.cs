@@ -16,6 +16,9 @@ namespace Coinche.Server
             set { _pseudo.Value = value; }
         }
 
+        public bool IsGameReady { get; set; } = false;
+        public bool IsRoundReady { get; set; } = false;
+
         public Lobby Lobby
         {
             get { return _lobby; }

@@ -23,7 +23,7 @@ namespace Coinche.Server
             { 
                 if (!value.IsInLobby(_connection)) 
                 {
-                    throw new Exception.LobbyError("Client is not in lobby");      
+                    throw new Exceptions.LobbyError("Client is not in lobby");      
                 }
                 _lobby = value; 
             }

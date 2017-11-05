@@ -1,4 +1,4 @@
-﻿namespace Coinche.Server.Exception
+﻿namespace Coinche.Server.Exceptions
 {
     public class LobbyError : System.Exception
     {

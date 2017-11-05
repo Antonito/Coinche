@@ -4,7 +4,8 @@ using NetworkCommsDotNet.Connections;
              
 namespace Coinche.Server
 {
-    public class ConnectionInformation
+    // This class contains informations concerning one connection
+    public sealed class ConnectionInformation
     {
         private readonly Connection _connection;
         private readonly SetOnce<string> _pseudo;
@@ -24,6 +25,7 @@ namespace Coinche.Server
             get { return _lobby; }
             set 
             { 
+                // Check that the client is already in the lobby
                 if (value != null && !value.IsInLobby(_connection)) 
                 {
                     throw new Exceptions.LobbyError("Client is not in lobby");      

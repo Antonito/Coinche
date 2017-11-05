@@ -1,6 +1,6 @@
 ﻿namespace Coinche.Server.Exceptions
 {
-    public class LobbyError : System.Exception
+    public sealed class LobbyError : System.Exception
     {
         public LobbyError()
         {

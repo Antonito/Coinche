@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Coinche.Server.Core
 {
-    public class Deck
+    public sealed class Deck
     {
         private readonly List<Card> _cards;
 

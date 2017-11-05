@@ -2,7 +2,7 @@
 
 namespace Coinche.Server.Core
 {
-    public class Card
+    public sealed class Card
     {
         public enum CardType
         {

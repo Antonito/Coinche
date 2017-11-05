@@ -6,7 +6,7 @@ using Coinche.Server.Core;
 
 namespace Coinche.Server
 {
-    public class Lobby
+    public sealed class Lobby
     {
         private readonly string _name;
         private readonly List<Connection> _connections;

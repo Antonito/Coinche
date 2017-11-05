@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Coinche.Server.Utils
 {
+    // This class allows a value to be set only once
     public sealed class SetOnce<T>
     {
         private T _value;

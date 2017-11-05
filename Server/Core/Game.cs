@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Coinche.Server.Core
 {
-    public class Game
+    public sealed class Game
     {
         public enum GameMode
         {
@@ -17,9 +17,7 @@ namespace Coinche.Server.Core
         private readonly List<Team> _teams;
 
         //we store all fold history
-        private List<Fold> _folds;
-
-        static private readonly int _maxPoints = 3000;
+        private readonly List<Fold> _folds;
 
         public Game(List<Player> players, GameMode mode, Card.CardColor? asset)
         {
@@ -43,7 +41,7 @@ namespace Coinche.Server.Core
             _teams = new List<Team>();
             _teams.Add(new Team(_players[0], _players[1]));
             _teams.Add(new Team(_players[2], _players[3]));
-            while (_teams[0].Score < _maxPoints || _teams[1].Score < _maxPoints)
+            while (!_teams[0].HasWon() && !_teams[1].HasWon())
             {
                 Fold fold = new Fold(_players);
                 fold.Compute();

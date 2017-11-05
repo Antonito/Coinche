@@ -2,7 +2,7 @@
 
 namespace Coinche.Server.Core
 {
-    public class Team
+    public sealed class Team
     {
         private readonly List<Player> _members;
         private int _score;
@@ -20,6 +20,11 @@ namespace Coinche.Server.Core
         public void AddScore(int scoreToAdd)
         {
             _score += scoreToAdd;
+        }
+
+        public bool HasWon()
+        {
+            return _score <= _maxScore;
         }
     }
 }

@@ -3,7 +3,8 @@ using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Server
 {
-    public class ConnectionManager
+    // This class manages connections
+    public static class ConnectionManager
     {
         private static ConcurrentDictionary<Connection, ConnectionInformation> 
         _connections = new ConcurrentDictionary<Connection, ConnectionInformation>();

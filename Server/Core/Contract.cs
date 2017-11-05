@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Coinche.Server.Core
 {
-    public class Contract
+    public sealed class Contract
     {
         private readonly int _value;
         private readonly Card.CardColor _color;

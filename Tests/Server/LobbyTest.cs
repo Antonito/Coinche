@@ -63,6 +63,31 @@ namespace Server
         }
 
         [Test]
+        // Create a lobby and delete it by name
+        public void CreateLobbyAndGetByName()
+        {
+            string lobbyName1 = "toto";
+
+            LobbyManager.AddLobby(lobbyName1);
+            Assert.AreNotEqual(null, LobbyManager.GetLobby(lobbyName1));
+            LobbyManager.DeleteLobby(lobbyName1);
+            Assert.AreEqual(null, LobbyManager.GetLobby(lobbyName1));
+        }
+
+        [Test]
+        // Create a lobby and delete it by value
+        public void CreateLobbyAndGetByValue()
+        {
+            string lobbyName1 = "toto";
+
+            LobbyManager.AddLobby(lobbyName1);
+            var lobby = LobbyManager.GetLobby(lobbyName1);
+            Assert.AreNotEqual(null, lobby);
+            LobbyManager.DeleteLobby(lobby);
+            Assert.AreEqual(null, LobbyManager.GetLobby(lobbyName1));
+        }
+
+        [Test]
         // Create a lobby and add 1 player
         public void CreateLobbyAndAddOnePlayer()
         {

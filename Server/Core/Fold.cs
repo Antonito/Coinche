@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Coinche.Server.Core
 {
-    public class Fold
+    public sealed class Fold
     {
         private readonly List<Player> _players;
         private Game.GameMode _gameMode;

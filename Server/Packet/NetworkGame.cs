@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace Coinche.Server.Packet
 {
-    public class NetworkGame
+    public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
         private static int _gameReadyCount = 0;

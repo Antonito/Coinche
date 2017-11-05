@@ -44,6 +44,10 @@ namespace Coinche.Server
         public void RemovePlayer(Connection connection)
         {
             _connections.Remove(connection);
+            if (_connections.Count() == 0)
+            {
+                LobbyManager.DeleteLobby(_name);
+            }
         }
 
         private bool IsFull()

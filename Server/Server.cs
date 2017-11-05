@@ -83,13 +83,7 @@ namespace Coinche.Server
                 // Disconnect client from the current lobby
                 var nbPlayers = connectInfos.Lobby.NbPlayers;
                 connectInfos.Lobby.RemovePlayer(connection);
-                if (nbPlayers == 1)
-                {
-                    // If there is no other player, delete the room
-                    LobbyManager.DeleteLobby(connectInfos.Lobby);
-                }
             }
-
             ConnectionManager.Remove(connection);
         }
     }

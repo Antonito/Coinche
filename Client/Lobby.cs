@@ -8,17 +8,20 @@ namespace Coinche.Client
     {
         private static readonly string _infos = "LobbyInfo";
         private static readonly string _err = "LobbyError";
+        private static readonly string _select = "LobbySelect";
 
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<string>(_infos, LobbyInfoHandler);
             connection.AppendIncomingPacketHandler<string>(_err, LobbyErrorHandler);
+            connection.AppendIncomingPacketHandler<string>(_select, LobbySelectHandler);
         }
 
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_err);
             connection.RemoveIncomingPacketHandler(_infos);
+            connection.RemoveIncomingPacketHandler(_select);
         }
 
         public static void Connect(Connection connection)
@@ -26,6 +29,11 @@ namespace Coinche.Client
             Console.WriteLine("Which lobby do you want to join ?");
             string msg = Console.ReadLine();
             connection.SendObject("SelectLobby", msg);
+        }
+
+        private static void LobbySelectHandler(PacketHeader header, Connection connection, string message)
+        {
+            Connect(connection);
         }
 
         private static void LobbyErrorHandler(PacketHeader header, Connection connection, string message)
@@ -47,7 +55,17 @@ namespace Coinche.Client
                 Console.WriteLine("Send message to lobby: ");
                 string msg = Console.ReadLine();
 
-                connection.SendObject("LobbyRoomMessage", msg);
+                if (msg.StartsWith("/quit"))
+                {
+                    connection.SendObject("LobbyRoomQuit");
+                    LobbyRoom.Unregister(connection);
+                    Lobby.Register(connection);
+                    break;
+                }
+                else
+                {
+                    connection.SendObject("LobbyRoomMessage", msg);
+                }
             }
         }
     }

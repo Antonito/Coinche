@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.com/Antonito/Coinche.svg?branch=master)](https://travis-ci.com/Antonito/Coinche)

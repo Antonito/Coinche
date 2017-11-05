@@ -29,26 +29,10 @@ namespace Coinche.Common
 
         public SSL(string certName)
         {
-            if (!File.Exists(certName))
-            {
-                // Create a new certificate
-                CertificateDetails details = 
-                    new CertificateDetails("CN=bache_a_troncy_l_netcoinche2020.net", 
-                                           DateTime.Now, DateTime.Now.AddYears(1));
+            _certificate = new X509Certificate2(certName);
 
-
-                details.KeyLength = 2048;
-                SSLTools.CreateSelfSignedCertificatePFX(details, certName);
-                _certificate = new X509Certificate2(certName);
-                Console.WriteLine("\t... certificate successfully created.");
-            }
-            else
-            {
-                // Load an existing certificate
-                _certificate = new X509Certificate2(certName);
-            }
             // Require clients to provide certificate
-            _listenerSSLOptions = new SSLOptions(_certificate, true, true);
+            _listenerSSLOptions = new SSLOptions(_certificate, true, false);
 
             // Provide certificate for outgoing connections
             _connectionSSLOptions = new SSLOptions(_certificate, true);

@@ -50,10 +50,7 @@ namespace Coinche.Client
                     Thread.Sleep(500);
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.Message);
-            }
+
             finally
             {
                 // We have used comms so we make sure to call shutdown

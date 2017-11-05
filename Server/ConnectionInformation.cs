@@ -23,8 +23,7 @@ namespace Coinche.Server
             { 
                 if (!value.IsInLobby(_connection)) 
                 {
-                    // TODO: Custom Exception
-                    throw new ArgumentException("Client is not in lobby");      
+                    throw new Exception.LobbyError("Client is not in lobby");      
                 }
                 _lobby = value; 
             }

@@ -27,13 +27,11 @@ namespace Coinche.Server
         {
             if (IsFull())
             {
-                // TODO: Custom Exception
-                throw new ArgumentException("Lobby is full.");
+                throw new Exception.LobbyError("Lobby is full.");
             }
             if (IsInLobby(connection)) 
             {
-                // TODO: Custom Exception
-                throw new ArgumentException("Client is already in lobby.");
+                throw new Exception.LobbyError("Client is already in lobby.");
             }
             _connections.Add(connection);
         }

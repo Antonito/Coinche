@@ -47,11 +47,13 @@
     <Compile Include="Packet\SelectLobby.cs" />
     <Compile Include="Lobby.cs" />
     <Compile Include="Packet\LobbyRoom.cs" />
+    <Compile Include="Exception\LobbyError.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
     <Folder Include="Packet\" />
     <Folder Include="Utils\" />
+    <Folder Include="Exception\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

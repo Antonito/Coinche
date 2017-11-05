@@ -100,8 +100,7 @@ namespace Coinche.Server
             var matchingvalue = _lobbies.FirstOrDefault(l => l.Name == name);
             if (matchingvalue != null)
             {
-                // TODO: Custom exception
-                throw new ArgumentException("Lobby already exists");
+                throw new Exception.LobbyError("Lobby already exists");
             }
             _lobbies.Add(new Lobby(name));
         }

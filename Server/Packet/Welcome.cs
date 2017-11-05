@@ -4,24 +4,31 @@ using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Server.Packet
 {
-    // This message is the first received packet, must be 
-    public class Welcome : IPacket
+    // This packet is the first packet received by the server
+    // The received message should be the pseudo of the player
+    public static class Welcome
     {
-        public void Register()
+        private static readonly string _type = "WelcomeRequest";
+        
+        public static void Register(Connection connection)
         {
-            NetworkComms.AppendGlobalIncomingPacketHandler<string>("Welcome", WelcomeClient);
+            connection.AppendIncomingPacketHandler<string>(_type, WelcomeClient);
         }
 
+        public static void Unregister(Connection connection)
+        {
+            connection.RemoveIncomingPacketHandler(_type);   
+        }
+
+        // Gets the pseudo of a player, welcomes the player, then switch to lobby selection
         private static void WelcomeClient(PacketHeader header, Connection connection, string message)
         {
-            Console.WriteLine("\nA message was received from " + 
-                              connection.ToString() + " which said '" + 
-                              message + "'.");
-            RemoveIncomingPacketHandler("Welcome");
-            if (message != "Hello NetCoinche !")
-            {
-                connection.CloseConnection(true);
-            }
-        }
+            Console.WriteLine("[" + connection.ToString() + "] Player " + 
+                               message + " logged to the game.");
+            Unregister(connection);
+            SelectLobby.Register(connection);
+            ConnectionManager.Get(connection).Pseudo = message;
+                connection.SendObject("WelcomeResponse", "Welcome To NetCoinche");
+         }
     }
 }

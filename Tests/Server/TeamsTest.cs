@@ -63,7 +63,7 @@ namespace Server
         {
             var team = new Team(new Player(), new Player());
 
-            team.AddScore(team.MaxScore);
+            team.AddScore(Team.MaxScore);
             Assert.AreEqual(true, team.HasWon());
         }
 
@@ -75,7 +75,7 @@ namespace Server
         {
             var team = new Team(new Player(), new Player());
 
-            team.AddScore(team.MaxScore + 5000);
+            team.AddScore(Team.MaxScore + 5000);
             Assert.AreEqual(true, team.HasWon());
         }
     }

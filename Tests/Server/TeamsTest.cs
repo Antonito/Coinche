@@ -1,11 +1,10 @@
-﻿using System;
-using Coinche.Server.Core;
+﻿using Coinche.Server.Core;
 using NUnit.Framework;
 
 namespace Server
 {
     [TestFixture]
-    public class Teams
+    public class TeamsTest
     {
         [Test]
         public void TeamInitialScore()

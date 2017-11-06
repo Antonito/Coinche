@@ -24,7 +24,7 @@ namespace Coinche.Server.Core
 
         public bool HasWon()
         {
-            return _score <= _maxScore;
+            return _score >= _maxScore;
         }
     }
 }

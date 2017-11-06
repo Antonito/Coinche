@@ -6,8 +6,8 @@ namespace Coinche.Server.Core
 {
     public sealed class Player
     {
-        private List<Card> _cardsHand;
-        private List<Card> _cardsFold;
+        private readonly List<Card> _cardsHand;
+        private readonly List<Card> _cardsFold;
 
         public List<Card> Hand { get { return _cardsHand; } }
         public List<Card> Folds { get { return _cardsFold; } set { _cardsFold.AddRange(value); } }
@@ -39,8 +39,8 @@ namespace Coinche.Server.Core
 
         public void ResetCards()
         {
-            _cardsHand = new List<Card>();
-            _cardsFold = new List<Card>();
+            _cardsHand.Clear();
+            _cardsFold.Clear();
         }
     }
 }

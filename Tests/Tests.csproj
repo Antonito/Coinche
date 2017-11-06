@@ -37,6 +37,8 @@
     <Compile Include="Server\DeckTest.cs" />
     <Compile Include="Server\UtilsTest.cs" />
     <Compile Include="Server\LobbyTest.cs" />
+    <Compile Include="Server\TeamsTest.cs" />
+    <Compile Include="Server\PlayerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

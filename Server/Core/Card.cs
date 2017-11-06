@@ -95,17 +95,15 @@ namespace Coinche.Server.Core
             { CardType.Seven, 0 }
         };
 
-        private readonly int _value;
+        /// <summary>
+        /// The type.
+        /// </summary>
         private readonly CardType _type;
-        private readonly bool _isAsset;
-        private readonly Game.GameMode _gameMode;
-        private readonly CardColor _color;
 
         /// <summary>
-        /// Gets the value.
+        /// The color.
         /// </summary>
-        /// <value>The value.</value>
-        public int Value { get { return _value; } }
+        private readonly CardColor _color;
 
         /// <summary>
         /// Gets the type.
@@ -120,57 +118,62 @@ namespace Coinche.Server.Core
         public CardColor Color { get { return _color; } }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="T:Coinche.Server.Core.Card"/> is asset.
-        /// </summary>
-        /// <value><c>true</c> if asset; otherwise, <c>false</c>.</value>
-        public bool Asset { get { return _isAsset; } }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Card"/> class.
         /// </summary>
         /// <param name="type">Type.</param>
         /// <param name="color">Color.</param>
-        /// <param name="isAsset">If set to <c>true</c> is asset.</param>
-        /// <param name="gameMode">Game mode.</param>
-        public Card(CardType type, CardColor color, bool isAsset,
-                    Game.GameMode gameMode)
+        public Card(CardType type, CardColor color)
         {
             _type = type;
             _color = color;
-            _isAsset = isAsset;
-            _gameMode = gameMode;
-            _value = SetCardValue(type);
         }
 
         /// <summary>
-        /// Get and set the correct card value for the current game mode and card
+        /// Gets the card value.
         /// </summary>
         /// <returns>The card value.</returns>
-        /// <param name="type">Type.</param>
-        private int SetCardValue(CardType type)
+        /// <param name="card">Card.</param>
+        /// <param name="gameMode">Game mode.</param>
+        public static int GetCardValue(Card card, Game.GameMode gameMode)
         {
             Dictionary<CardType, int> valueSet;
 
-            if (_gameMode == Game.GameMode.Classic)
-            {
-                if (_isAsset)
-                {
-                    valueSet = cardValueIsAsset;
-                }
-                else
-                {
-                    valueSet = cardValueIsNotAsset;
-                }
+            if (gameMode == Game.GameMode.Classic) {
+                throw new Exceptions.CardError("GameMode cannot be Classic");
             }
-            else if (_gameMode == Game.GameMode.AllAssets)
-            {
+            if (gameMode == Game.GameMode.AllAssets) {
                 valueSet = cardValueAllAssets;
+            }
+            else {
+                valueSet = cardValueNoAsset;
+            }
+            return valueSet[card.Type];
+        }
+
+        /// <summary>
+        /// Gets the card value.
+        /// </summary>
+        /// <returns>The card value.</returns>
+        /// <param name="card">Card.</param>
+        /// <param name="gameMode">Game mode.</param>
+        /// <param name="asset">Asset.</param>
+        public static int GetCardValue(Card card, Game.GameMode gameMode, CardColor asset)
+        {
+            Dictionary<CardType, int> valueSet;
+
+            if (gameMode != Game.GameMode.Classic)
+            {
+                throw new Exceptions.CardError("GameMode must be Classic");
+            }
+            if (asset == card.Color)
+            {
+                valueSet = cardValueIsAsset;
             }
             else
             {
-                valueSet = cardValueNoAsset;
+                valueSet = cardValueIsNotAsset;
             }
-            return valueSet[type];
+            return valueSet[card.Type];
         }
     }
 }

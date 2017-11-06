@@ -18,9 +18,10 @@ namespace Server
         [Test]
         public void PlayerAddOneCard()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
             try
@@ -42,9 +43,10 @@ namespace Server
         [Test]
         public void PlayerAddMaxCard()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
             try
@@ -67,9 +69,10 @@ namespace Server
         [Test]
         public void PlayerAddTooManyCard()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(10);
 
             try
@@ -92,9 +95,10 @@ namespace Server
         [Test]
         public void PlayerAddMaxCardThenReset()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
             try
@@ -120,9 +124,10 @@ namespace Server
         [Test]
         public void PlayerAddMaxCardThenResetThenAddOne()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
             try
@@ -150,9 +155,10 @@ namespace Server
         [Test]
         public void PlayerAddMaxCardThenResetThenAddMax()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
             try
@@ -183,9 +189,10 @@ namespace Server
         [Test]
         public void PlayerAddMaxCardThenResetThenAddTooMany()
         {
+            Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player();
-            var deck = new Deck(Game.GameMode.AllAssets);
+            var player = new Player(deck);
+            deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
             try

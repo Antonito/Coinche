@@ -15,7 +15,8 @@ namespace Server
         [Test]
         public void TeamInitialScore()
         {
-            var team = new Team(new Player(), new Player());
+            Deck deck = new Deck();
+            var team = new Team(new Player(deck), new Player(deck));
 
             Assert.AreEqual(0, team.Score);
         }
@@ -26,7 +27,8 @@ namespace Server
         [Test]
         public void TeamAddScore()
         {
-            var team = new Team(new Player(), new Player());
+            Deck deck = new Deck();
+            var team = new Team(new Player(deck), new Player(deck));
 
             team.AddScore(200);
             Assert.AreEqual(200, team.Score);
@@ -38,7 +40,8 @@ namespace Server
         [Test]
         public void TeamHasNotWonNoScore()
         {
-            var team = new Team(new Player(), new Player());
+            Deck deck = new Deck();
+            var team = new Team(new Player(deck), new Player(deck));
 
             Assert.AreEqual(false, team.HasWon());
         }
@@ -49,7 +52,8 @@ namespace Server
         [Test]
         public void TeamHasNotWonSmallScore()
         {
-            var team = new Team(new Player(), new Player());
+            Deck deck = new Deck();
+            var team = new Team(new Player(deck), new Player(deck));
 
             team.AddScore(200);
             Assert.AreEqual(false, team.HasWon());
@@ -61,7 +65,8 @@ namespace Server
         [Test]
         public void TeamHasWonEqualScore()
         {
-            var team = new Team(new Player(), new Player());
+            Deck deck = new Deck();
+            var team = new Team(new Player(deck), new Player(deck));
 
             team.AddScore(Team.MaxScore);
             Assert.AreEqual(true, team.HasWon());
@@ -73,7 +78,8 @@ namespace Server
         [Test]
         public void TeamHasWonBigScore()
         {
-            var team = new Team(new Player(), new Player());
+            Deck deck = new Deck();
+            var team = new Team(new Player(deck), new Player(deck));
 
             team.AddScore(Team.MaxScore + 5000);
             Assert.AreEqual(true, team.HasWon());

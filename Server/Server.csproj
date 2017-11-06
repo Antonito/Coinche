@@ -56,6 +56,8 @@
     <Compile Include="Core\Fold.cs" />
     <Compile Include="Core\Contract.cs" />
     <Compile Include="Packet\NetworkGame.cs" />
+    <Compile Include="Exceptions\DeckError.cs" />
+    <Compile Include="Exceptions\CardError.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

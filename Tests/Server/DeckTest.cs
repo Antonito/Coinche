@@ -12,38 +12,197 @@ namespace Server
     public class UnitTestDeck
     {
         /// <summary>
+        /// Test to get the value of a card from a desk with no game mode
+        /// </summary>
+        [Test]
+        public void NoGameModeSet()
+        {
+            Deck deck = new Deck();
+            Card[] cardList = deck.Cards.ToArray();
+            bool hasThrown = false;
+
+            try 
+            {
+                deck.GetCardValue(cardList[0]);
+            }
+            catch (Exception) 
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to get the value of a card from a desk with a game mode
+        /// </summary>
+        [Test]
+        public void GameModeSet()
+        {
+            Deck deck = new Deck();
+            Card[] cardList = deck.Cards.ToArray();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.NoAsset);
+                deck.GetCardValue(cardList[0]);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to set an invalid game mode to a deck #1
+        /// </summary>
+        [Test]
+        public void WrongGameModeSet1()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.NoAsset, Card.CardColor.Clover);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to set an invalid game mode to a deck #2
+        /// </summary>
+        [Test]
+        public void WrongGameModeSet2()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.AllAssets, Card.CardColor.Clover);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to set an invalid game mode to a deck #3
+        /// </summary>
+        [Test]
+        public void WrongGameModeSet3()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.Classic);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to set a valid game mode to a deck #1
+        /// </summary>
+        [Test]
+        public void ValidGameModeSet1()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.NoAsset);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to set a valid game mode to a deck #2
+        /// </summary>
+        [Test]
+        public void ValidGameModeSet2()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.AllAssets);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Test to set a valid game mode to a deck #3
+        /// </summary>
+        [Test]
+        public void ValidGameModeSet3()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+
+            try
+            {
+                deck.SetGameMode(Game.GameMode.Classic, Card.CardColor.Clover);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
         // Check the validity of a deck for a "No Asset" game mode
         /// </summary>
         [Test]
         public void NoAssetDeck()
         {
-            Deck deck = new Deck(Game.GameMode.NoAsset);
+            Deck deck = new Deck();
+            deck.SetGameMode(Game.GameMode.NoAsset);
 
             IsValidDeck(deck);
-            foreach (Card cur in deck.Cards)
-            {
-                Assert.AreEqual(false, cur.Asset);
-            }
-
             // Check the values of the cards
             Card[] cardList = deck.Cards.ToArray();
 
-            Assert.AreEqual(19, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Ace).Value);
-            Assert.AreEqual(4, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.King).Value);
-            Assert.AreEqual(3, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Queen).Value);
-            Assert.AreEqual(2, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Jack).Value);
-            Assert.AreEqual(10, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Ten).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Nine).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Eight).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Seven).Value);
+            Assert.AreEqual(19, deck.GetCardValue(Array.Find(cardList,
+                                                             p => p.Type == Card.CardType.Ace)));
+            Assert.AreEqual(4, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.King)));
+            Assert.AreEqual(3, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Queen)));
+            Assert.AreEqual(2, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Jack)));
+            Assert.AreEqual(10, deck.GetCardValue(Array.Find(cardList,
+                                                             p => p.Type == Card.CardType.Ten)));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Nine)));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Eight)));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Seven)));
         }
 
         /// <summary>
@@ -52,33 +211,29 @@ namespace Server
         [Test]
         public void AllAssetsDeck()
         {
-            Deck deck = new Deck(Game.GameMode.AllAssets);
+            Deck deck = new Deck();
+            deck.SetGameMode(Game.GameMode.AllAssets);
 
             IsValidDeck(deck);
-            foreach (Card cur in deck.Cards)
-            {
-                Assert.AreEqual(true, cur.Asset);
-            }
-
             // Check the values of the cards
             Card[] cardList = deck.Cards.ToArray();
 
-            Assert.AreEqual(7, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Ace).Value);
-            Assert.AreEqual(3, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.King).Value);
-            Assert.AreEqual(2, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Queen).Value);
-            Assert.AreEqual(14, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Jack).Value);
-            Assert.AreEqual(5, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Ten).Value);
-            Assert.AreEqual(9, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Nine).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Eight).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
-                                        p => p.Type == Card.CardType.Seven).Value);
+            Assert.AreEqual(7, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Ace)));
+            Assert.AreEqual(3, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.King)));
+            Assert.AreEqual(2, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Queen)));
+            Assert.AreEqual(14, deck.GetCardValue(Array.Find(cardList,
+                                                             p => p.Type == Card.CardType.Jack)));
+            Assert.AreEqual(5, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Ten)));
+            Assert.AreEqual(9, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Nine)));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Eight)));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
+                                                            p => p.Type == Card.CardType.Seven)));
         }
 
         /// <summary>
@@ -90,121 +245,116 @@ namespace Server
             foreach (Card.CardColor color in
                      Enum.GetValues(typeof(Card.CardColor)))
             {
-                Deck curDeck = new Deck(Game.GameMode.Classic, color);
+                Deck curDeck = new Deck();
+                    curDeck.SetGameMode(Game.GameMode.Classic, color);
 
                 IsValidDeck(curDeck);
-
-                // If the card of the color is the current color,
-                // the card must be an asset.
-                foreach (Card cur in curDeck.Cards)
-                {
-                    Assert.AreEqual(cur.Color == color, cur.Asset);
-                }
             }
 
-            Deck deck = new Deck(Game.GameMode.Classic, Card.CardColor.Clover);
+            Deck deck = new Deck();
+            deck.SetGameMode(Game.GameMode.Classic, Card.CardColor.Clover);
             // Check the values of the cards
             Card[] cardList = deck.Cards.ToArray();
 
             // Check when the card is Asset
-            Assert.AreEqual(11, Array.Find(cardList,
+            Assert.AreEqual(11, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Ace &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(4, Array.Find(cardList,
+            })));
+            Assert.AreEqual(4, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.King &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(3, Array.Find(cardList,
+            })));
+            Assert.AreEqual(3, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Queen &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(20, Array.Find(cardList,
+            })));
+            Assert.AreEqual(20, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Jack &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(10, Array.Find(cardList,
+            })));
+            Assert.AreEqual(10, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Ten &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(14, Array.Find(cardList,
+            })));
+            Assert.AreEqual(14, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Nine &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
+            })));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Eight &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
+            })));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Seven &&
                                                    p.Color == Card.CardColor.Clover;
-                           }).Value);
+            })));
 
             // Check when the card is not Asset
-            Assert.AreEqual(11, Array.Find(cardList,
+            Assert.AreEqual(11, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Ace &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(4, Array.Find(cardList,
+            })));
+            Assert.AreEqual(4, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.King &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(3, Array.Find(cardList,
+            })));
+            Assert.AreEqual(3, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Queen &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(2, Array.Find(cardList,
+            })));
+            Assert.AreEqual(2, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Jack &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(10, Array.Find(cardList,
+            })));
+            Assert.AreEqual(10, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Ten &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
+            })));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Nine &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
+            })));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Eight &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
-            Assert.AreEqual(0, Array.Find(cardList,
+            })));
+            Assert.AreEqual(0, deck.GetCardValue(Array.Find(cardList,
                            p =>
                            {
                                return p.Type == Card.CardType.Seven &&
                                                    p.Color != Card.CardColor.Clover;
-                           }).Value);
+            })));
         }
 
 

@@ -21,7 +21,7 @@ namespace Coinche.Server.Core
             _players = players;
             //Todo: set gameMode by contract
             _gameMode = Game.GameMode.Classic;
-            _deck = new Deck(_gameMode);
+            _deck = new Deck();
 
             /*if (asset == null)
             {

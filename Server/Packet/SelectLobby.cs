@@ -61,12 +61,6 @@ namespace Coinche.Server.Packet
                 LobbyRoom.Register(connection);
                 connection.SendObject("LobbyInfo", "Joined Lobby " + message + ": there are " + lobby.NbPlayers + " players.");
                 NetworkGame.Register(connection);
-                NetworkGame.AskClientReady(connection);
-                if (lobby.IsFull())
-                {
-                    // TODO: start game here
-                    Console.WriteLine("preparing game");
-                }
             }
             catch (Exception e)
             {

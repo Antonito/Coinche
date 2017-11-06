@@ -82,6 +82,7 @@ namespace Coinche.Server.Packet
             connectInfos.Lobby.RemovePlayer(connection);
             connectInfos.Lobby = null;
             Unregister(connection);
+            NetworkGame.Unregister(connection);
             SelectLobby.Register(connection);
             connection.SendObject("LobbySelect");
         }

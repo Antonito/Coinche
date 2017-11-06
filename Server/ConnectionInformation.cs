@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using Coinche.Server.Utils;
 using NetworkCommsDotNet.Connections;
              
@@ -20,6 +20,11 @@ namespace Coinche.Server
         private readonly SetOnce<string> _pseudo;
 
         /// <summary>
+        /// The memory stream.
+        /// </summary>
+        private readonly MemoryStream _stream;
+
+        /// <summary>
         /// The lobby.
         /// </summary>
         private Lobby _lobby;
@@ -35,17 +40,33 @@ namespace Coinche.Server
             set { _pseudo.Value = value; }
         }
 
+        //TODO: check this value to readonly
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="T:Coinche.Server.ConnectionInformation"/> is game ready.
         /// </summary>
         /// <value><c>true</c> if is game ready; otherwise, <c>false</c>.</value>
         public bool IsGameReady { get; set; } = false;
 
+        //TODO: check this value to readonly
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="T:Coinche.Server.ConnectionInformation"/> is round ready.
         /// </summary>
         /// <value><c>true</c> if is round ready; otherwise, <c>false</c>.</value>
         public bool IsRoundReady { get; set; } = false;
+
+        /// <summary>
+        /// Gets the stream.
+        /// </summary>
+        /// <value>The stream.</value>
+        public MemoryStream Stream
+        {
+            get
+            {
+                _stream.Position = 0;
+                _stream.SetLength(0);
+                return _stream;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the lobby.
@@ -86,6 +107,7 @@ namespace Coinche.Server
             _connection = connection;
             _pseudo = new SetOnce<string>();
             _lobby = null;
+            _stream = new MemoryStream();
         }
     }
 }

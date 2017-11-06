@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 namespace Coinche.Server
 {
-    // Manage all the lobbies
-    // Lobbies are identified by their name
+    /// <summary>
+    /// Manage all the lobbies
+    /// Lobbies are identified by their name
+    /// </summary>
     public static class LobbyManager
     {
         static private readonly List<Lobby> _lobbies = new List<Lobby>();
 
-        // Create a new lobby, if it does not exist already
+        /// <summary>
+        /// Adds a lobby, if it does not exists already.
+        /// </summary>
+        /// <param name="name">Name.</param>
         static public void AddLobby(string name)
         {
             var matchingvalue = _lobbies.FirstOrDefault(l => l.Name == name);
@@ -20,19 +25,30 @@ namespace Coinche.Server
             _lobbies.Add(new Lobby(name));
         }
 
-        // Get a lobby, by name
+        /// <summary>
+        /// Gets the lobby.
+        /// </summary>
+        /// <returns>The lobby.</returns>
+        /// <param name="lobby">Lobby.</param>
         static public Lobby GetLobby(Lobby lobby)
         {
             return _lobbies.FirstOrDefault(l => l.Name == lobby.Name);
         }
 
-        // Get a lobby, by name
+        /// <summary>
+        /// Get a lobby, by name
+        /// </summary>
+        /// <returns>The lobby.</returns>
+        /// <param name="name">Name.</param>
         static public Lobby GetLobby(string name)
         {
             return _lobbies.FirstOrDefault(l => l.Name == name);
         }
 
-        // Delete a lobby, by name
+        /// <summary>
+        /// Delete a lobby, by name
+        /// </summary>
+        /// <param name="name">Name.</param>
         static public void DeleteLobby(string name)
         {
             var matchingvalue = _lobbies.FirstOrDefault(l => l.Name == name);
@@ -42,7 +58,10 @@ namespace Coinche.Server
             }
         }
 
-        // Delete a lobby, by name
+        /// <summary>
+        /// Deletes the lobby.
+        /// </summary>
+        /// <param name="lobby">Lobby.</param>
         static public void DeleteLobby(Lobby lobby)
         {
             _lobbies.Remove(lobby);

@@ -13,9 +13,15 @@ using Coinche.Common;
 
 namespace Coinche.Server
 {
+    /// <summary>  
+    /// Entry point of the application
+    /// </summary> 
     class App
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// Main function
+        /// </summary>
+        static void Main()
         {
             try
             {
@@ -66,15 +72,21 @@ namespace Coinche.Server
             }
         }
 
-        // Add a connection to the ConnectManager, for further use
-        // and register a first packet handler
+        /// <summary>
+        /// Add a connection to the ConnectManager, for further user
+        /// and register a first packet handler.
+        /// </summary>
+        /// <param name="connection">Client's connection</param>
         private static void AddClient(Connection connection)
         {
             ConnectionManager.Add(connection);
             Packet.Welcome.Register(connection);
         }
 
-        // Delete a client from the ConnectManager
+        /// <summary>
+        /// Delete a client from the ConnectManager
+        /// </summary>
+        /// <param name="connection">Connection.</param>
         private static void RemoveClient(Connection connection)
         {
             var connectInfos = ConnectionManager.Get(connection);

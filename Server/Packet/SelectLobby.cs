@@ -4,20 +4,33 @@ using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Server.Packet
 {
-    // Handle lobby creation or selection here
+    /// <summary>
+    /// Handle lobby creation or selection
+    /// </summary>
     public static class SelectLobby
     {
         private static readonly string _type = "SelectLobby";
 
+        /// <summary>
+        /// Register the specified connection.
+        /// </summary>
+        /// <returns>The register.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<string>(_type, Handler);
         }
 
+        /// <summary>
+        /// Unregister the specified connection.
+        /// </summary>
+        /// <returns>The unregister.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_type);
         }
+
 
         private static void Handler(PacketHeader header, Connection connection, string message)
         {

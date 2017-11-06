@@ -2,8 +2,14 @@
 
 namespace Coinche.Server.Core
 {
+    /// <summary>
+    /// Card.
+    /// </summary>
     public sealed class Card
     {
+        /// <summary>
+        /// Card type.
+        /// </summary>
         public enum CardType
         {
             Ace,
@@ -16,6 +22,9 @@ namespace Coinche.Server.Core
             Seven
         };
 
+        /// <summary>
+        /// Card color.
+        /// </summary>
         public enum CardColor
         {
             Clover,
@@ -24,8 +33,10 @@ namespace Coinche.Server.Core
             Pike
         };
 
-        // The values of the cards when playing in standard mode 
-        // and that the card is an asset
+        /// <summary>
+        /// The values of the cards when playing in standard mode 
+        /// and that the card is an asset
+        /// </summary>
         private static readonly Dictionary<CardType, int> cardValueIsAsset =
             new Dictionary<CardType, int> {
             { CardType.Ace, 11 },
@@ -38,8 +49,10 @@ namespace Coinche.Server.Core
             { CardType.Seven, 0 }
         };
 
-        // The values of the cards when playing in standard mode 
-        // and that the card is not an asset
+        /// <summary>
+        /// The values of the cards when playing in standard mode 
+        /// and that the card is not an asset
+        /// </summary>
         private static readonly Dictionary<CardType, int> cardValueIsNotAsset =
             new Dictionary<CardType, int> {
             { CardType.Ace, 11 },
@@ -52,7 +65,9 @@ namespace Coinche.Server.Core
             { CardType.Seven, 0 }
         };
 
-        // The values of the card when playing in "All assets" mode
+        /// <summary>
+        /// The values of the card when playing in "All assets" mode
+        /// </summary>
         private static readonly Dictionary<CardType, int> cardValueAllAssets =
             new Dictionary<CardType, int> {
             { CardType.Ace, 7 },
@@ -65,7 +80,9 @@ namespace Coinche.Server.Core
             { CardType.Seven, 0 }
         };
 
-        // The values of the card when playing in "No asset" mode
+        /// <summary>
+        /// The values of the card when playing in "No asset" mode
+        /// </summary>
         private static readonly Dictionary<CardType, int> cardValueNoAsset =
             new Dictionary<CardType, int> {
             { CardType.Ace, 19 },
@@ -84,12 +101,37 @@ namespace Coinche.Server.Core
         private readonly Game.GameMode _gameMode;
         private readonly CardColor _color;
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <value>The value.</value>
         public int Value { get { return _value; } }
+
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <value>The type.</value>
         public CardType Type { get { return _type; } }
+
+        /// <summary>
+        /// Gets the color.
+        /// </summary>
+        /// <value>The color.</value>
         public CardColor Color { get { return _color; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:Coinche.Server.Core.Card"/> is asset.
+        /// </summary>
+        /// <value><c>true</c> if asset; otherwise, <c>false</c>.</value>
         public bool Asset { get { return _isAsset; } }
 
-        // Initialize a card
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Card"/> class.
+        /// </summary>
+        /// <param name="type">Type.</param>
+        /// <param name="color">Color.</param>
+        /// <param name="isAsset">If set to <c>true</c> is asset.</param>
+        /// <param name="gameMode">Game mode.</param>
         public Card(CardType type, CardColor color, bool isAsset,
                     Game.GameMode gameMode)
         {
@@ -100,7 +142,11 @@ namespace Coinche.Server.Core
             _value = SetCardValue(type);
         }
 
-        // Get the correct card value for the current game mode and card
+        /// <summary>
+        /// Get and set the correct card value for the current game mode and card
+        /// </summary>
+        /// <returns>The card value.</returns>
+        /// <param name="type">Type.</param>
         private int SetCardValue(CardType type)
         {
             Dictionary<CardType, int> valueSet;

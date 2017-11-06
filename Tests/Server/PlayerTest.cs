@@ -6,9 +6,15 @@ using NUnit.Framework;
 
 namespace Server
 {
+    /// <summary>
+    /// Player test.
+    /// </summary>
     [TestFixture]
     public class PlayerTest
     {
+        /// <summary>
+        /// Test to give one card to a player
+        /// </summary>
         [Test]
         public void PlayerAddOneCard()
         {
@@ -30,6 +36,9 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Test to give a full hand to a player
+        /// </summary>
         [Test]
         public void PlayerAddMaxCard()
         {
@@ -52,6 +61,9 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Test to give too many cards to a player
+        /// </summary>
         [Test]
         public void PlayerAddTooManyCard()
         {
@@ -74,6 +86,9 @@ namespace Server
             Assert.AreEqual(true, hasThrown);
         }
 
+        /// <summary>
+        /// Test to give a full hand to a player and then to reset it
+        /// </summary>
         [Test]
         public void PlayerAddMaxCardThenReset()
         {
@@ -98,6 +113,10 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Test to give a full hand to a player, then reset it, 
+        /// and give one card to the player
+        /// </summary>
         [Test]
         public void PlayerAddMaxCardThenResetThenAddOne()
         {
@@ -124,6 +143,10 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Test to give a full hand to a player, then reset it, 
+        /// and give another full hand to the player
+        /// </summary>
         [Test]
         public void PlayerAddMaxCardThenResetThenAddMax()
         {
@@ -153,6 +176,10 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Test to give a full hand to a player, then reset it, 
+        /// and then give too many cards to the player
+        /// </summary>
         [Test]
         public void PlayerAddMaxCardThenResetThenAddTooMany()
         {

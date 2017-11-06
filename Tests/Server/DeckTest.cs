@@ -5,11 +5,15 @@ using NUnit.Framework;
 
 namespace Server
 {
-
+    /// <summary>
+    /// Test deck.
+    /// </summary>
     [TestFixture]
     public class UnitTestDeck
     {
+        /// <summary>
         // Check the validity of a deck for a "No Asset" game mode
+        /// </summary>
         [Test]
         public void NoAssetDeck()
         {
@@ -42,7 +46,9 @@ namespace Server
                                         p => p.Type == Card.CardType.Seven).Value);
         }
 
-        // Check the validity of a deck for a "All Assets" game mode
+        /// <summary>
+        /// Check the validity of a deck for a "All Assets" game mode
+        /// </summary>
         [Test]
         public void AllAssetsDeck()
         {
@@ -75,7 +81,9 @@ namespace Server
                                         p => p.Type == Card.CardType.Seven).Value);
         }
 
-        // Check the validity of all possible decks for a "Classic" game mode
+        /// <summary>
+        /// Check the validity of all possible decks for a "Classic" game mode
+        /// </summary>
         [Test]
         public void ClassicAssetsDeck()
         {
@@ -199,9 +207,13 @@ namespace Server
                            }).Value);
         }
 
-        // Check if a deck contains 32 cards.
-        // Then check if the deck contains 8 cards of each color.
-        // Then check if that there is only one occurence of each card.
+
+        /// <summary>
+        /// Check if a deck contains 32 cards.
+        /// Then check if the deck contains 8 cards of each color.
+        /// Then check if that there is only one occurence of each card.
+        /// </summary>
+        /// <param name="deck">Deck.</param>
         static private void IsValidDeck(Deck deck)
         {
             Assert.AreEqual(32, deck.Cards.Count());

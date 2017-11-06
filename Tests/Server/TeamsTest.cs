@@ -3,9 +3,15 @@ using NUnit.Framework;
 
 namespace Server
 {
+    /// <summary>
+    /// Teams test.
+    /// </summary>
     [TestFixture]
     public class TeamsTest
     {
+        /// <summary>
+        /// Test a team's the initial score.
+        /// </summary>
         [Test]
         public void TeamInitialScore()
         {
@@ -14,6 +20,9 @@ namespace Server
             Assert.AreEqual(0, team.Score);
         }
 
+        /// <summary>
+        /// Test to add score to a team.
+        /// </summary>
         [Test]
         public void TeamAddScore()
         {
@@ -23,6 +32,9 @@ namespace Server
             Assert.AreEqual(200, team.Score);
         }
 
+        /// <summary>
+        /// Test if a team with no score has won
+        /// </summary>
         [Test]
         public void TeamHasNotWonNoScore()
         {
@@ -31,6 +43,9 @@ namespace Server
             Assert.AreEqual(false, team.HasWon());
         }
 
+        /// <summary>
+        /// Test if a team with a small score has won
+        /// </summary>
         [Test]
         public void TeamHasNotWonSmallScore()
         {
@@ -40,6 +55,9 @@ namespace Server
             Assert.AreEqual(false, team.HasWon());
         }
 
+        /// <summary>
+        /// Test if a team with the maximum score has won
+        /// </summary>
         [Test]
         public void TeamHasWonEqualScore()
         {
@@ -49,6 +67,9 @@ namespace Server
             Assert.AreEqual(true, team.HasWon());
         }
 
+        /// <summary>
+        /// Test if a team with a big score has won
+        /// </summary>
         [Test]
         public void TeamHasWonBigScore()
         {

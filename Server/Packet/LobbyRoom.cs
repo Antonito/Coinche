@@ -4,13 +4,20 @@ using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Server.Packet
 {
-    // Handle lobby creation or selection here
+    /// <summary>
+    /// Lobby room.
+    /// </summary>
     public static class LobbyRoom
     {
         private static readonly string _type = "LobbyRoom";
         private static readonly string _messageType = "LobbyRoomMessage";
         private static readonly string _quit = "LobbyRoomQuit";
 
+        /// <summary>
+        /// Register the specified connection.
+        /// </summary>
+        /// <returns>The register.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<string>(_type, Handler);
@@ -18,6 +25,11 @@ namespace Coinche.Server.Packet
             connection.AppendIncomingPacketHandler<string>(_quit, QuitHandler);
         }
 
+        /// <summary>
+        /// Unregister the specified connection.
+        /// </summary>
+        /// <returns>The unregister.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_type);
@@ -33,6 +45,12 @@ namespace Coinche.Server.Packet
             Console.WriteLine("[LobbyRoom - " + room + "] " + pseudo + ": " + message);
         }
 
+        /// <summary>
+        /// Dispatch a message sent by a connection to the other players (chat)
+        /// </summary>
+        /// <param name="header">Header.</param>
+        /// <param name="connection">Connection.</param>
+        /// <param name="message">Message.</param>
         private static void MessageHandler(PacketHeader header, Connection connection, string message)
         {
             var connectInfos = ConnectionManager.Get(connection);
@@ -49,7 +67,12 @@ namespace Coinche.Server.Packet
             }
         }
 
+        /// <summary>
         // Disconnect a client from this room, and returns to the room selection
+        /// </summary>
+        /// <param name="header">Header.</param>
+        /// <param name="connection">Connection.</param>
+        /// <param name="message">Message.</param>
         private static void QuitHandler(PacketHeader header, Connection connection, string message)
         {
             var connectInfos = ConnectionManager.Get(connection);

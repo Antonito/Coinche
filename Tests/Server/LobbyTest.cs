@@ -9,11 +9,16 @@ using NUnit.Framework;
 
 namespace Server
 {
+    /// <summary>
+    /// Lobby test.
+    /// </summary>
     [TestFixture]
     public class LobbyTest
     {
+        /// <summary>
+        /// Tries to create 2 lobbies with different names
+        /// </summary>
         [Test]
-        // Tries to create 2 lobbies with different names
         public void CreateTwoLobbiesDifferentName()
         {
             string lobbyName1 = "toto";
@@ -37,8 +42,10 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Tries to create 2 lobbies with same names
+        /// </summary>
         [Test]
-        // Tries to create 2 lobbies with same names
         public void CreateTwoLobbiesSameName()
         {
             string lobbyName1 = "toto";
@@ -62,8 +69,10 @@ namespace Server
             Assert.AreEqual(true, hasThrown);
         }
 
+        /// <summary>
+        /// Create a lobby and delete it by name
+        /// </summary>
         [Test]
-        // Create a lobby and delete it by name
         public void CreateLobbyAndGetByName()
         {
             string lobbyName1 = "toto";
@@ -74,8 +83,10 @@ namespace Server
             Assert.AreEqual(null, LobbyManager.GetLobby(lobbyName1));
         }
 
+        /// <summary>
+        /// Create a lobby and delete it by value
+        /// </summary>
         [Test]
-        // Create a lobby and delete it by value
         public void CreateLobbyAndGetByValue()
         {
             string lobbyName1 = "toto";
@@ -87,8 +98,10 @@ namespace Server
             Assert.AreEqual(null, LobbyManager.GetLobby(lobbyName1));
         }
 
+        /// <summary>
+        /// Creates the lobby and add one player.
+        /// </summary>
         [Test]
-        // Create a lobby and add 1 player
         public void CreateLobbyAndAddOnePlayer()
         {
             bool hasThrown = false;
@@ -119,8 +132,10 @@ namespace Server
             Assert.AreEqual(false, hasThrown);
         }
 
+        /// <summary>
+        /// Creates a lobby and add one player twice to the same lobby
+        /// </summary>
         [Test]
-        // Create a lobby and add 1 player twice to the same lobby
         public void CreateLobbyAndAddOnePlayerAndSetTwiceLobby()
         {
             bool hasThrown = false;

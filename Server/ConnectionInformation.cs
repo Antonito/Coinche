@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using Coinche.Server.Utils;
 using NetworkCommsDotNet.Connections;
              
@@ -9,6 +9,7 @@ namespace Coinche.Server
     {
         private readonly Connection _connection;
         private readonly SetOnce<string> _pseudo;
+        private readonly MemoryStream _stream;
         private Lobby _lobby;
 
         public string Pseudo
@@ -17,8 +18,18 @@ namespace Coinche.Server
             set { _pseudo.Value = value; }
         }
 
+        //TODO: check this value to readonly
         public bool IsGameReady { get; set; } = false;
         public bool IsRoundReady { get; set; } = false;
+        public MemoryStream Stream
+        {
+            get
+            {
+                _stream.Position = 0;
+                _stream.SetLength(0);
+                return _stream;
+            }
+        }
 
         public Lobby Lobby
         {
@@ -39,6 +50,7 @@ namespace Coinche.Server
             _connection = connection;
             _pseudo = new SetOnce<string>();
             _lobby = null;
+            _stream = new MemoryStream();
         }
     }
 }

@@ -47,8 +47,8 @@ namespace Coinche.Client
         {
             Console.WriteLine(message);
             Unregister(connection);
-            LobbyRoom.Register(connection);
             NetworkGame.Register(connection);
+            LobbyRoom.Register(connection);
 
             // TODO: Move
             while (true)
@@ -58,10 +58,15 @@ namespace Coinche.Client
 
                 if (msg.StartsWith("/quit"))
                 {
+                    NetworkGame.Unregister(connection);
                     connection.SendObject("LobbyRoomQuit");
                     LobbyRoom.Unregister(connection);
                     Lobby.Register(connection);
                     break;
+                }
+                else if (msg.StartsWith("/ready"))
+                {
+                    NetworkGame.SendReady(connection);
                 }
                 else
                 {

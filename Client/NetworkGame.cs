@@ -2,6 +2,8 @@
 using NetworkCommsDotNet.Connections;
 using Coinche.Common.PacketType;
 using NetworkCommsDotNet;
+using ProtoBuf;
+using System.IO;
 
 namespace Coinche.Client
 {
@@ -11,7 +13,7 @@ namespace Coinche.Client
 
         public static void Register(Connection connection)
         {
-            connection.AppendIncomingPacketHandler<StartGame>(_type, StartGameHandler);
+            //connection.AppendIncomingPacketHandler<byte[]>(_type, StartGameHandler);
         }
 
         public static void Unregister(Connection connection)
@@ -19,14 +21,18 @@ namespace Coinche.Client
             connection.RemoveIncomingPacketHandler(_type);
         }
 
-        private static void StartGameHandler(PacketHeader header, Connection connection, StartGame youReady)
+        public static void SendReady(Connection connection)
         {
-            Console.WriteLine("sending ready status for game");
+            Console.WriteLine("sending ready to server");
             StartGame game = new StartGame
             {
                 IsReady = true
             };
-            connection.SendObject(_type, game);
+            //TODO: set the Stream into a 'client' class like in server
+            MemoryStream stream = new MemoryStream();
+            Serializer.Serialize(stream, game);
+            byte[] t = stream.ToArray();
+            connection.SendObject(_type, t);
         }
     }
 }

@@ -29,6 +29,12 @@ namespace Coinche.Server.Core
         static public int MaxScore { get { return _maxScore; } }
 
         /// <summary>
+        /// Gets the players.
+        /// </summary>
+        /// <value>The players.</value>
+        public Player[] Players { get { return _members.ToArray(); } }
+
+        /// <summary>
         /// Gets the current score.
         /// </summary>
         /// <value>The current score.</value>

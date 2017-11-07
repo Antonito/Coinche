@@ -4,8 +4,14 @@ using System.Collections.Generic;
 
 namespace Coinche.Server.Core
 {
+    /// <summary>
+    /// Game.
+    /// </summary>
     public sealed class Game
     {
+        /// <summary>
+        /// Game mode.
+        /// </summary>
         public enum GameMode
         {
             Classic,
@@ -13,11 +19,36 @@ namespace Coinche.Server.Core
             NoAsset
         }
 
+        /// <summary>
+        /// The players.
+        /// </summary>
         private readonly List<Player> _players;
+
+        /// <summary>
+        /// The teams.
+        /// </summary>
         private readonly List<Team> _teams;
 
-        //we store all fold history
+        /// <summary>
+        /// History of folds.
+        /// </summary>
         private readonly List<Fold> _folds;
+
+        /// <summary>
+        /// Gets the number of folds.
+        /// </summary>
+        /// <value>The number of folds.</value>
+        public int NumberOfFolds { get { return _folds.Count(); } }
+
+        // IMPORTANT MUST READ
+        // TODO: Re-organize this.
+        // This class should contain only informations about 1 game,
+        // not looping until a team wins. A team should only be capable of
+        // winning the match after they played several games.
+        //
+        // -> A Game is a few folds.
+        // -> A Match is a few games.
+        // -> The team with >= Team.MaxPScore wins a Match.
 
         public Game(List<Player> players, GameMode mode, Card.CardColor? asset)
         {

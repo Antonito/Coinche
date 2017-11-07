@@ -58,6 +58,8 @@
     <Compile Include="Packet\NetworkGame.cs" />
     <Compile Include="Exceptions\DeckError.cs" />
     <Compile Include="Exceptions\CardError.cs" />
+    <Compile Include="Exceptions\PlayerError.cs" />
+    <Compile Include="Exceptions\ContractError.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

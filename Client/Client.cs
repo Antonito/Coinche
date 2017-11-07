@@ -15,6 +15,8 @@ namespace Coinche.Client
 {
     class Program
     {
+        static public ClientInformation clientInfos = new ClientInformation();
+
         static void Main(string[] args)
         {
             try

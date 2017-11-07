@@ -36,18 +36,17 @@ namespace Coinche.Server.Packet
 
         private static void Handler(PacketHeader header, Connection connection, byte[] game)
         {
+            Console.WriteLine("[Debug] receiving Ready State from a client");
+
             // we get the ConnectInfos to access the client's stream (locally)
             var connectInfos = ConnectionManager.Get(connection);
-            Console.WriteLine("receiving Ready State from a client");
 
-            //TODO: pour linstant on realloue le stream j'arrive pas a le reset
-            MemoryStream stream = new MemoryStream(game);
-            //connectInfos.Stream.Read(game, 0, game.Length);
-            //deserialize the data
+            //Wrtting the serialized data into client's stream.
+            connectInfos.Stream.Write(game, 0, game.Length);
 
-            //TODO: set connectInfos.Stream au lieu de stream
-            StartGame _g = Serializer.Deserialize<StartGame>(stream);
-            Console.WriteLine("[DEBUG] IsReady: {0}", _g.IsReady);
+            //and finllay we deserialize the data
+            StartGame _g = Serializer.Deserialize<StartGame>(connectInfos.Stream);
+
             if (!connectInfos.IsGameReady && _g.IsReady)
             {
                 _gameReadyCount++;
@@ -57,8 +56,11 @@ namespace Coinche.Server.Packet
             }
             if (_gameReadyCount == 4)
             {
+                // We must konw if the game is started or not when a player quit
+                connectInfos.Lobby.IsStarted = true;
+
                 // TODO: game ready lets go
-                Console.WriteLine("game launched");
+                Console.WriteLine("game launched,  time to continue");
             }
         }
     }

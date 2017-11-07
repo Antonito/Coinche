@@ -13,12 +13,17 @@ namespace Coinche.Client
 
         public static void Register(Connection connection)
         {
-            //connection.AppendIncomingPacketHandler<byte[]>(_type, StartGameHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_type, InfoGameHandler);
         }
 
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_type);
+        }
+
+        private static void InfoGameHandler(PacketHeader header, Connection connection, byte[] info)
+        {
+            
         }
 
         public static void SendReady(Connection connection)

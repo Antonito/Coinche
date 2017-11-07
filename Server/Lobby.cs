@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
 using Coinche.Server.Core;
+using Coinche.Server.Utils;
 
 namespace Coinche.Server
 {
@@ -16,6 +17,8 @@ namespace Coinche.Server
         /// </summary>
         private readonly string _name;
 
+        private readonly SetOnce<bool> _isStarted;
+
         /// <summary>
         /// The connections.
         /// </summary>
@@ -26,6 +29,23 @@ namespace Coinche.Server
         /// </summary>
         /// <value>The name.</value>
         public string Name { get { return _name; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:Coinche.Server.Lobby"/> is started.
+        /// </summary>
+        /// <value><c>true</c> if is started; otherwise, <c>false</c>.</value>
+        public bool IsStarted {
+            
+            get
+            {
+                return _isStarted.Value;
+            }
+
+            set
+            {
+                _isStarted.Value = value;
+            }
+        }
 
         /// <summary>
         /// Gets the number of players.
@@ -49,6 +69,7 @@ namespace Coinche.Server
         {
             _name = name;
             _connections = new List<Connection>();
+            _isStarted = new SetOnce<bool>();
         }
 
         /// <summary>

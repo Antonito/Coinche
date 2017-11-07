@@ -32,6 +32,10 @@
     <Reference Include="NetworkCommsDotNet">
       <HintPath>..\packages\NetworkCommsDotNet.3.0.3\lib\NetworkCommsDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Server\DeckTest.cs" />
@@ -39,6 +43,7 @@
     <Compile Include="Server\LobbyTest.cs" />
     <Compile Include="Server\TeamsTest.cs" />
     <Compile Include="Server\PlayerTest.cs" />
+    <Compile Include="Server\SerializeTest.cs" />
     <Compile Include="Server\ContractTest.cs" />
   </ItemGroup>
   <ItemGroup>

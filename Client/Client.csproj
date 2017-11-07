@@ -42,6 +42,7 @@
     <Compile Include="Lobby.cs" />
     <Compile Include="LobbyRoom.cs" />
     <Compile Include="NetworkGame.cs" />
+    <Compile Include="ClientInformation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

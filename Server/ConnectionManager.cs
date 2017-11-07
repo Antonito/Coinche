@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Server

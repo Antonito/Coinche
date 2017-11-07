@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 
@@ -76,9 +77,44 @@ namespace Coinche.Server.Packet
         private static void QuitHandler(PacketHeader header, Connection connection, string message)
         {
             var connectInfos = ConnectionManager.Get(connection);
-            var pseudo = connectInfos.Pseudo;
+
+            try
+            {
+                if (connectInfos.Lobby.IsStarted == false)
+                {
+                    // All others players stay in the lobby because the game is not started yet
+                    Console.WriteLine("[Debug] we disconnect one client");
+                    DisconnectOnePlayer(connection, connectInfos);
+                }
+                else
+                {
+                    // The game is launched, so we kick all players from the lobby
+                    var cos = connectInfos.Lobby.Connection.ToArray();
+                    foreach (var lobbyConnection in cos)
+                    {
+                        Console.WriteLine("we got lobbyConnection");
+                        var lobbyConnectInfos = ConnectionManager.Get(lobbyConnection);
+                        Console.WriteLine("we got lobbyConnectI");
+                        DisconnectOnePlayer(lobbyConnection, lobbyConnectInfos);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Disconnects one player from a lobby.
+        /// </summary>
+        /// <param name="connection">Connection.</param>
+        /// <param name="connectInfos">Connect infos.</param>
+        private static void DisconnectOnePlayer(Connection connection, ConnectionInformation connectInfos)
+        {
             var room = connectInfos.Lobby.Name;
-            Console.WriteLine("[LobbyRoom - " + room + "] " + pseudo + " disconnected.");
+            var pseudo = connectInfos.Pseudo;
+            Console.WriteLine("[LobbyRoom - " + room + "] " + pseudo + " Disconnected.");
             connectInfos.Lobby.RemovePlayer(connection);
             connectInfos.Lobby = null;
             Unregister(connection);

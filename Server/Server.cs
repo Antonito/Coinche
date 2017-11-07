@@ -85,10 +85,13 @@ namespace Coinche.Server
 
         /// <summary>
         /// Delete a client from the ConnectManager
+        /// This method is called is a client exit during a game
+        /// Then all client are kicked from the lobby
         /// </summary>
         /// <param name="connection">Connection.</param>
-        private static void RemoveClient(Connection connection)
+        public static void RemoveClient(Connection connection)
         {
+            Console.WriteLine("[Debug] client closed connection");
             var connectInfos = ConnectionManager.Get(connection);
             if (connectInfos.Lobby != null)
             {

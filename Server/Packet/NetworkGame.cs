@@ -56,6 +56,9 @@ namespace Coinche.Server.Packet
             }
             if (_gameReadyCount == 4)
             {
+                // We must konw if the game is started or not when a player quit
+                connectInfos.Lobby.IsStarted = true;
+
                 // TODO: game ready lets go
                 Console.WriteLine("game launched,  time to continue");
             }

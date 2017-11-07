@@ -33,6 +33,7 @@ namespace Coinche.Client
 
         private static void LobbySelectHandler(PacketHeader header, Connection connection, string message)
         {
+            Program.clientInfos.IsRun = false;
             Connect(connection);
         }
 
@@ -46,23 +47,20 @@ namespace Coinche.Client
         private static void LobbyInfoHandler(PacketHeader header, Connection connection, string message)
         {
             Console.WriteLine(message);
-            Unregister(connection);
+            //Unregister(connection);
             NetworkGame.Register(connection);
             LobbyRoom.Register(connection);
 
             // TODO: Move
-            while (true)
+            Program.clientInfos.IsRun = true;
+            while (Program.clientInfos.IsRun)
             {
                 Console.WriteLine("Send message to lobby: ");
                 string msg = Console.ReadLine();
 
                 if (msg.StartsWith("/quit"))
                 {
-                    NetworkGame.Unregister(connection);
-                    connection.SendObject("LobbyRoomQuit");
-                    LobbyRoom.Unregister(connection);
-                    Lobby.Register(connection);
-                    break;
+                    Program.clientInfos.IsRun = false;
                 }
                 else if (msg.StartsWith("/ready"))
                 {
@@ -73,6 +71,12 @@ namespace Coinche.Client
                     connection.SendObject("LobbyRoomMessage", msg);
                 }
             }
+            Console.WriteLine("quit lobby");
+            NetworkGame.Unregister(connection);
+            connection.SendObject("LobbyRoomQuit");
+            LobbyRoom.Unregister(connection);
+            //Lobby.Register(connection);
+            Console.WriteLine("End and final quit lobby");
         }
     }
 }

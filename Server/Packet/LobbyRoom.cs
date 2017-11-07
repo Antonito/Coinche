@@ -61,10 +61,7 @@ namespace Coinche.Server.Packet
 
             foreach (var lobbyConnection in connectInfos.Lobby.Connection)
             {
-                if (lobbyConnection != connection)
-                {
-                    lobbyConnection.SendObject(_messageType, msg);
-                }
+                lobbyConnection.SendObject(_messageType, msg);
             }
         }
 

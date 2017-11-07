@@ -51,7 +51,8 @@ namespace Coinche.Server.Core
         /// Gets the contract.
         /// </summary>
         /// <value>The contract.</value>
-        public Contract Contract { get { return _contract; } }
+        // TODO: Remove setter ?
+        public Contract Contract { get { return _contract; } set { _contract = value; } }
 
         /// <summary>
         /// Returns the victories.
@@ -114,7 +115,6 @@ namespace Coinche.Server.Core
         {
             _cardsHand.Clear();
             _cardsFold.Clear();
-            _foldsWon = 0;
         }
     }
 }

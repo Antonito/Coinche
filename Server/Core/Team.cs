@@ -13,9 +13,15 @@ namespace Coinche.Server.Core
         private readonly List<Player> _members;
 
         /// <summary>
+        /// The current total score.
+        /// </summary>
+        private int _scoreTotal;
+
+
+        /// <summary>
         /// The current score.
         /// </summary>
-        private int _score;
+        private int _scoreCurrent;
 
         /// <summary>
         /// The maximum score possible.
@@ -35,10 +41,17 @@ namespace Coinche.Server.Core
         public Player[] Players { get { return _members.ToArray(); } }
 
         /// <summary>
+        /// Gets the current total score.
+        /// </summary>
+        /// <value>The current score.</value>
+        public int Score { get { return _scoreTotal; } }
+
+        // TODO: rm setter ?
+        /// <summary>
         /// Gets the current score.
         /// </summary>
         /// <value>The current score.</value>
-        public int Score { get { return _score; } }
+        public int ScoreCurrent { get { return _scoreCurrent; } set { _scoreCurrent = value; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Team"/> class.
@@ -47,7 +60,7 @@ namespace Coinche.Server.Core
         /// <param name="player2">Player2.</param>
         public Team(Player player1, Player player2)
         {
-            _score = 0;
+            _scoreTotal = 0;
             _members = new List<Player> { player1, player2 };
         }
 
@@ -57,7 +70,7 @@ namespace Coinche.Server.Core
         /// <param name="scoreToAdd">Score to add.</param>
         public void AddScore(int scoreToAdd)
         {
-            _score += scoreToAdd;
+            _scoreTotal += scoreToAdd;
         }
 
         /// <summary>
@@ -66,7 +79,7 @@ namespace Coinche.Server.Core
         /// <returns><c>true</c>, if then team has won, <c>false</c> otherwise.</returns>
         public bool HasWon()
         {
-            return _score >= _maxScore;
+            return _scoreTotal >= _maxScore;
         }
     }
 }

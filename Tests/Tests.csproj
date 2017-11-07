@@ -44,6 +44,7 @@
     <Compile Include="Server\TeamsTest.cs" />
     <Compile Include="Server\PlayerTest.cs" />
     <Compile Include="Server\SerializeTest.cs" />
+    <Compile Include="Server\ContractTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

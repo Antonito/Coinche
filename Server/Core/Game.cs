@@ -40,6 +40,12 @@ namespace Coinche.Server.Core
         /// <value>The number of folds.</value>
         public int NumberOfFolds { get { return _folds.Count(); } }
 
+        /// <summary>
+        /// Gets the teams.
+        /// </summary>
+        /// <value>The teams.</value>
+        public Team[] Teams { get { return _teams.ToArray(); } }
+
         // IMPORTANT MUST READ
         // TODO: Re-organize this.
         // This class should contain only informations about 1 game,
@@ -72,15 +78,20 @@ namespace Coinche.Server.Core
             _teams = new List<Team>();
             _teams.Add(new Team(_players[0], _players[1]));
             _teams.Add(new Team(_players[2], _players[3]));
-            while (!_teams[0].HasWon() && !_teams[1].HasWon())
-            {
+        }
+
+        public void Run()
+        {
+            // TODO: Clean
+//            while (!_teams[0].HasWon() && !_teams[1].HasWon())
+  //          {
                 Fold fold = new Fold(_players);
                 fold.Compute();
                 fold.SetResult(_teams);
 
                 //optional
                 _folds.Add(fold);
-            }
+    //        }
             //Game ended
         }
     }

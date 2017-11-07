@@ -53,7 +53,7 @@ namespace Coinche.Server.Core
                 return false;
             }
             // Check if the score is greater 
-            if (toCheck.Score < enemy.Score) 
+            if (toCheck.ScoreCurrent < enemy.ScoreCurrent) 
             {
                 return false;
             }
@@ -78,7 +78,7 @@ namespace Coinche.Server.Core
                 throw new Exceptions.ContractError("Promises should be the same");   
             }
             var promise = team.Players[0].Contract._promise;
-            return team.Score >= (int)promise;
+            return team.ScoreCurrent >= (int)promise;
         }
 
         /// <summary>
@@ -90,7 +90,10 @@ namespace Coinche.Server.Core
         private static bool IsFoldPromiseRespected(Game game, Team team) 
         {
             // Check if promise is Capot
-            if (team.Players[0].Contract._promise == Promise.Capot)
+            if ((team.Players[0].Contract._promise == Promise.Capot && 
+                 team.Players[1].Contract._promise != Promise.General) ||
+                (team.Players[1].Contract._promise == Promise.Capot && 
+                 team.Players[0].Contract._promise != Promise.General))
             {
                 if (team.Players[0].Contract._promise != team.Players[1].Contract._promise)
                 {
@@ -100,7 +103,7 @@ namespace Coinche.Server.Core
             }
 
             // Then promise must be General
-            var player = (team.Players[0].Contract != null) ? team.Players[0] : team.Players[1];
+            var player = (team.Players[0].Contract._promise == Promise.General) ? team.Players[0] : team.Players[1];
 
             if (player.Contract._promise != Promise.General) 
             {

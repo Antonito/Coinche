@@ -62,8 +62,9 @@ namespace Coinche.Server
         {
             get
             {
+                _stream.Flush();
                 _stream.Position = 0;
-                _stream.SetLength(0);
+                //_stream.SetLength(0);
                 return _stream;
             }
         }
@@ -107,7 +108,10 @@ namespace Coinche.Server
             _connection = connection;
             _pseudo = new SetOnce<string>();
             _lobby = null;
-            _stream = new MemoryStream();
+            _stream = new MemoryStream(4096);
+            //_stream.Position = 0;
+            //_stream.SetLength(0);
+            //_stream.Seek(0, SeekOrigin.Begin);
         }
     }
 }

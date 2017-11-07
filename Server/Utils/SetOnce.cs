@@ -33,10 +33,6 @@ namespace Coinche.Server.Utils
         {
             get
             {
-                if (!_hasValue)
-                {
-                    throw new InvalidOperationException("Value not set");
-                }
                 return _value;
             }
             set

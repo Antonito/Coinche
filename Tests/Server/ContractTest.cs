@@ -37,7 +37,8 @@ namespace Server
                 new Player(deck), new Player(deck),
                 new Player(deck), new Player(deck)
                 };
-                game = new Game(players, gameMode, assetColor);
+                //TODO: The implementation of Game() has been changed
+                //game = new Game(players, gameMode, assetColor);
             }
         };
 

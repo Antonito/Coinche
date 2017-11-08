@@ -14,6 +14,9 @@ namespace Coinche.Server.Core
         /// </summary>
         public enum Promise
         {
+            Passe = 0,
+            Coinche = 1,
+            ReCoinche = 2,
             Points80 = 80,
             Points90 = 90,
             Points100 = 100,

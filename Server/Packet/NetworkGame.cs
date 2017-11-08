@@ -52,11 +52,11 @@ namespace Coinche.Server.Packet
                 _gameReadyCount++;
                 connectInfos.IsGameReady = true;
                 Console.WriteLine("{0} is ready", connectInfos.Pseudo);
-                // TODO: send to client ok waiting others
+                // TODO: send to client ok waiting others for beauty purpose
             }
             if (_gameReadyCount == 4)
             {
-                // We must konw if the game is started or not when a player quit
+                // We must konw if the game is started or not when a player quits
                 connectInfos.Lobby.IsStarted = true;
 
                 // TODO: game ready lets go

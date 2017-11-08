@@ -7,7 +7,7 @@ namespace Coinche.Server.Core
     public sealed class Fold
     {
         private readonly List<Player> _players;
-        private Game.GameMode _gameMode;
+        private readonly Game.GameMode _gameMode;
         private Deck _deck;
 
         public Fold(List<Player> players)

@@ -20,7 +20,15 @@ namespace Coinche.Server.Core
         }
 
         /// <summary>
+        /// The actual deck for the current Game.
+        /// </summary>
+        private Deck _deck;
+
+        /// <summary>
         /// The players.
+        /// Even if we have players in teams
+        /// Fold does not have to know about team
+        /// so we only send players without team's notion
         /// </summary>
         private readonly List<Player> _players;
 
@@ -56,43 +64,58 @@ namespace Coinche.Server.Core
         // -> A Match is a few games.
         // -> The team with >= Team.MaxPScore wins a Match.
 
-        public Game(List<Player> players, GameMode mode, Card.CardColor? asset)
+        public Game(List<Team> teams)
         {
-            // A few validity checks
-            if (players.Count() != 4)
+            if (teams.Count != 2)
             {
-                throw new ArgumentException("Invalid number of players (must be 4)");
+                throw new ArgumentException("Invalid number of teams (must be 2)");
             }
-            if (mode != GameMode.Classic && asset != null)
-            {
-                throw new ArgumentException("Asset must be null if GameMode is not classic.");
-            }
-            if (mode == GameMode.Classic && asset == null)
-            {
-                throw new ArgumentException("Asset must not be null if GameMode is classic.");
-            }
-            _players = players;
+            _teams = teams;
+            _players = new List<Player>();
+            _players.AddRange(_teams[0].Players);
+            _players.AddRange(_teams[1].Players);
             _folds = new List<Fold>();
-
-            //while not enought point to terminate the game
-            _teams = new List<Team>();
-            _teams.Add(new Team(_players[0], _players[1]));
-            _teams.Add(new Team(_players[2], _players[3]));
         }
 
         public void Run()
         {
-            // TODO: Clean
-//            while (!_teams[0].HasWon() && !_teams[1].HasWon())
-  //          {
-                Fold fold = new Fold(_players);
-                fold.Compute();
-                fold.SetResult(_teams);
+            DistributeCards();
 
-                //optional
+            //TODO: ask client for Contract's promise
+            // and then get GameMode
+            Contract contract = new Contract(Contract.Promise.Passe);
+
+            // Set the GameMode we get via contract
+            SetGameMode();
+
+            // All player have the same amount of card that's why
+            // we can loop like this.
+            //TODO: or maybe implement IsHandEmpty
+            // but it's logic that the current game is aware of
+            // the number of card in the player hand
+
+            while (_teams[0].Players[0].Hand.Count >= 1)
+            {
+                Fold fold = new Fold(_players);
+                fold.Run();
+
+                //TODO: check if it is necessary
+                // Store the fold history for futur usage
                 _folds.Add(fold);
-    //        }
-            //Game ended
+            }
         }
+
+        private void DistributeCards()
+        {
+            _deck = new Deck();
+            _deck.DistributeCards(_players);
+        }
+
+        private void SetGameMode()
+        {
+            //TODO: set by the contract
+            _deck.SetGameMode(GameMode.Classic);
+        }
+
     }
 }

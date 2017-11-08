@@ -5,7 +5,7 @@ using Coinche.Common.PacketType;
 using NUnit.Framework;
 using ProtoBuf;
 
-namespace Tests.Server
+namespace Server
 {
 
     [TestFixture]

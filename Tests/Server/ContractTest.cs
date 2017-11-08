@@ -443,5 +443,111 @@ namespace Server
             Assert.AreEqual(false, isRespected);
             Assert.AreEqual(false, hasThrown);
         }
+
+        [Test]
+        public void ContractCoincheValid()
+        {
+            bool isRespected = false;
+            bool hasThrown = false;
+
+            try
+            {
+                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+
+                var game = test.game;
+                var team = test.game.Teams;
+                test.Prepare(new Contract(Contract.Promise.Points100, team[0].Players[0]));
+                team[0].ScoreCurrent = 90;
+                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                isRespected = Contract.IsPromiseRespected(game, team[1], team[0]);
+            }
+            catch (Exception)
+            {
+                isRespected = false;
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, isRespected);
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        [Test]
+        public void ContractCoincheNotValid()
+        {
+            bool isRespected = false;
+            bool hasThrown = false;
+
+            try
+            {
+                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+
+                var game = test.game;
+                var team = test.game.Teams;
+                test.Prepare(new Contract(Contract.Promise.Points80, team[0].Players[0]));
+                team[0].ScoreCurrent = 90;
+                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                isRespected = Contract.IsPromiseRespected(game, team[1], team[0]);
+            }
+            catch (Exception)
+            {
+                isRespected = false;
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, isRespected);
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        [Test]
+        public void ContractReCoincheValid()
+        {
+            bool isRespected = false;
+            bool hasThrown = false;
+
+            try
+            {
+                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+
+                var game = test.game;
+                var team = test.game.Teams;
+                test.Prepare(new Contract(Contract.Promise.Points80, team[0].Players[0]));
+                team[0].ScoreCurrent = 90;
+                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                test.game.Contract.ChangeContract(Contract.Promise.ReCoinche, team[0].Players[0], team[1].Players[0]);
+                isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
+            }
+            catch (Exception)
+            {
+                isRespected = false;
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, isRespected);
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        [Test]
+        public void ContractReCoincheNotValid()
+        {
+            bool isRespected = false;
+            bool hasThrown = false;
+
+            try
+            {
+                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+
+                var game = test.game;
+                var team = test.game.Teams;
+                test.Prepare(new Contract(Contract.Promise.Points100, team[0].Players[0]));
+                team[0].ScoreCurrent = 90;
+                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                test.game.Contract.ChangeContract(Contract.Promise.ReCoinche, team[0].Players[0], team[1].Players[0]);
+                isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
+            }
+            catch (Exception)
+            {
+                isRespected = false;
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, isRespected);
+            Assert.AreEqual(false, hasThrown);
+        }
     }
 }

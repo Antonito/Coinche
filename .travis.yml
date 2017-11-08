@@ -1,8 +1,8 @@
 language: csharp
-solution: Coinche.sln
+solution: cardGames.sln
 install:
-  - nuget restore Coinche.sln
+  - nuget restore cardGames.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=Debug Coinche.sln
+  - xbuild /p:Configuration=Debug cardGames.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tests/bin/Debug/Tests.dll

@@ -43,9 +43,11 @@ namespace Server
                 foreach (var p in players) {
                     p.GiveDeck(deck);
                 }
-                teams = new List<Team>();
-                teams.Add(new Team(players[0], players[1]));
-                teams.Add(new Team(players[2], players[3]));
+                teams = new List<Team>
+                {
+                    new Team(players[0], players[1]),
+                    new Team(players[2], players[3])
+                };
                 game = new Game(teams);
             }
 

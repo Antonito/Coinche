@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Linq;
+using System.IO;
 using System.Collections.Generic;
+using ProtoBuf;
+using NetworkCommsDotNet.Connections;
+
+//TODO: Memory stream using, change, unique
 
 namespace Coinche.Server.Core
 {
@@ -188,10 +194,27 @@ namespace Coinche.Server.Core
             {
                 Packet.NetworkContract.Register(player.Connection);
             }
+            DistributeCards();
+
+            // The contract need to be establised here
+            _prepared = false;
+            Contract contract = null;
+            var minimumContractValue = Core.Contract.Promise.Passe;
+            while (!_prepared)
+            {
+                foreach (var player in _players)
+                {
+                    // Ask player to choose something
+                    Task.Run(() => ContractTask(player, (int)minimumContractValue, _players)).Wait();
+                }
+
+                // Check if choosen contrat is valid and final
+                // TODO: rm
+                _prepared = true;
+            }
 
             //TODO: ask client for Contract's promise
             // and then get GameMode   
-            DistributeCards();
             _contract = new Contract(Contract.Promise.Passe, _teams[0].Players[0]);
             _gameMode = GameMode.Classic;
             _prepared = true;
@@ -215,6 +238,38 @@ namespace Coinche.Server.Core
 
             scoreTeam = _players[2].GetPoints() + _players[3].GetPoints();
             _teams[1].AddScore(scoreTeam);
+        }
+
+        static private void ContractTask(Player player, int minimumContractValue, 
+                                         List<Player> players)
+        {
+            MemoryStream stream = new MemoryStream();
+            Common.PacketType.ContractRequest requ = new Common.PacketType.ContractRequest
+            {
+                MinimumValue = (int)minimumContractValue
+            };
+            Serializer.Serialize(stream, requ);
+            var netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
+                                                                             10000, stream.ToArray());
+            MemoryStream streamRes = new MemoryStream(netRes);
+            var res = Serializer.Deserialize<Common.PacketType.ContractResponse>(streamRes);
+
+            // Notify other players of its choice
+            foreach (var curPlayer in players)
+            {
+                if (curPlayer != player)
+                {
+                    Common.PacketType.ContractInfo info = new Common.PacketType.ContractInfo
+                    {
+                        Promise = res.Promise,
+                        Color = res.Color,
+                        Pseudo = ConnectionManager.Get(curPlayer.Connection).Pseudo
+                    };
+                    MemoryStream infoStream = new MemoryStream();
+                    Serializer.Serialize(infoStream, info);
+                    player.Connection.SendObject("ChooseContractInfo", infoStream.ToArray());
+                }
+            }
         }
 
     }

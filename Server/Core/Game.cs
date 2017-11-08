@@ -83,6 +83,7 @@ namespace Coinche.Server.Core
 
             //TODO: ask client for Contract's promise
             // and then get GameMode
+            GameMode mode = GameMode.Classic;
             Contract contract = new Contract(Contract.Promise.Passe);
 
             // Set the GameMode we get via contract
@@ -96,13 +97,20 @@ namespace Coinche.Server.Core
 
             while (_teams[0].Players[0].Hand.Count >= 1)
             {
-                Fold fold = new Fold(_players);
+                Fold fold = new Fold(_players, mode);
                 fold.Run();
 
                 //TODO: check if it is necessary
                 // Store the fold history for futur usage
                 _folds.Add(fold);
             }
+
+            // Set the Game result
+            SetResult();
+
+            //TODO: reset
+            // Reset Player's cards (hand and fold)
+            //player.ResetCards();
         }
 
         private void DistributeCards()
@@ -115,6 +123,15 @@ namespace Coinche.Server.Core
         {
             //TODO: set by the contract
             _deck.SetGameMode(GameMode.Classic);
+        }
+
+        private void SetResult()
+        {
+            int scoreTeam = _players[0].GetPoints() + _players[1].GetPoints();
+            _teams[0].AddScore(scoreTeam);
+
+            scoreTeam = _players[2].GetPoints() + _players[3].GetPoints();
+            _teams[1].AddScore(scoreTeam);
         }
 
     }

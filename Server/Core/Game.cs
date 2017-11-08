@@ -20,6 +20,11 @@ namespace Coinche.Server.Core
         }
 
         /// <summary>
+        /// Is game prepared ?
+        /// </summary>
+        private bool _prepared;
+
+        /// <summary>
         /// The game mode.
         /// </summary>
         private GameMode _gameMode;
@@ -46,6 +51,17 @@ namespace Coinche.Server.Core
         /// History of folds.
         /// </summary>
         private readonly List<Fold> _folds;
+
+        /// <summary>
+        /// The contract.
+        /// </summary>
+        private Contract _contract;
+
+        /// <summary>
+        /// Gets the contract.
+        /// </summary>
+        /// <value>The contract.</value>
+        public Contract Contract { get { return _contract; } }
 
         /// <summary>
         /// Gets the number of folds.
@@ -75,6 +91,7 @@ namespace Coinche.Server.Core
             {
                 throw new ArgumentException("Invalid number of teams (must be 2)");
             }
+            _prepared = false;
             _teams = teams;
             _players = new List<Player>();
             _players.AddRange(_teams[0].Players);
@@ -83,17 +100,41 @@ namespace Coinche.Server.Core
             _deck = new Deck();
         }
 
-        public void Run()
+        /// <summary>
+        /// Prepares the game.
+        /// </summary>
+        /// <param name="gameMode">Game mode.</param>
+        /// <param name="contract">Contract.</param>
+        public void PrepareGame(GameMode gameMode, Contract contract)
         {
             DistributeCards();
+            _contract = contract;
+            _gameMode = gameMode;
+            _prepared = true;
+        }
 
-            //TODO: ask client for Contract's promise
-            // and then get GameMode
-            _gameMode = GameMode.Classic;
-            Contract contract = new Contract(Contract.Promise.Passe);
+        /// <summary>
+        /// Run the game.
+        /// </summary>
+        /// <returns>The run.</returns>
+        /// <param name="play">Useful for unit tests only</param>
+        public void Run(bool play = true)
+        {
+            if (!_prepared)
+            {
+                //TODO: ask client for Contract's promise
+                // and then get GameMode   
+                DistributeCards();
+                _contract = new Contract(Contract.Promise.Passe, _teams[0].Players[0]);
+                _gameMode = GameMode.Classic;
+                _prepared = true;
+            }
 
+            // TODO: ?
+#if false
             // Set the GameMode we get via contract
             SetGameMode();
+#endif
 
             // All player have the same amount of card that's why
             // we can loop like this.
@@ -101,13 +142,23 @@ namespace Coinche.Server.Core
             // but it's logic that the current game is aware of
             // the number of card in the player hand
 
-            while (_teams[0].Players[0].Hand.Count >= 1)
+            if (play)
+            {
+                // This should not be executed during unit tests
+                while (_teams[0].Players[0].Hand.Count >= 1)
+                {
+                    Fold fold = new Fold(_players, _gameMode);
+                    fold.Run();
+
+                    //TODO: check if it is necessary
+                    // Store the fold history for futur usage
+                    _folds.Add(fold);
+                }
+            }
+            else 
             {
                 Fold fold = new Fold(_players, _gameMode);
                 fold.Run();
-
-                //TODO: check if it is necessary
-                // Store the fold history for futur usage
                 _folds.Add(fold);
             }
 
@@ -122,12 +173,6 @@ namespace Coinche.Server.Core
         private void DistributeCards()
         {
             _deck.DistributeCards(_players);
-        }
-
-        private void SetGameMode()
-        {
-            //TODO: set by the contract
-            _deck.SetGameMode(GameMode.Classic);
         }
 
         private void SetResult()

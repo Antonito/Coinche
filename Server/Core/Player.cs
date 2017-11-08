@@ -31,11 +31,6 @@ namespace Coinche.Server.Core
         private int _foldsWon;
 
         /// <summary>
-        /// The contract.
-        /// </summary>
-        private Contract _contract;
-
-        /// <summary>
         /// Gets the hand.
         /// </summary>
         /// <value>The hand.</value>
@@ -46,13 +41,6 @@ namespace Coinche.Server.Core
         /// </summary>
         /// <value>The folds.</value>
         public List<Card> Folds { get { return _cardsFold; } set { _cardsFold.AddRange(value); } }
-
-        /// <summary>
-        /// Gets the contract.
-        /// </summary>
-        /// <value>The contract.</value>
-        // TODO: Remove setter ?
-        public Contract Contract { get { return _contract; } set { _contract = value; } }
 
         /// <summary>
         /// Returns the victories.
@@ -70,7 +58,6 @@ namespace Coinche.Server.Core
             _cardsFold = new List<Card>();
             _deck = deck;
             _foldsWon = 0;
-            _contract = null;
         }
 
         /// <summary>

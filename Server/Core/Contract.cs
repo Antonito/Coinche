@@ -8,7 +8,6 @@ namespace Coinche.Server.Core
     /// </summary>
     public sealed class Contract
     {
-        // TODO: English name ?
         /// <summary>
         /// Promise.
         /// </summary>
@@ -35,9 +34,33 @@ namespace Coinche.Server.Core
         /// </summary>
         private readonly Promise _promise;
 
-        public Contract(Promise promise)
+        /// <summary>
+        /// The owner of the contract.
+        /// </summary>
+        private readonly Player _owner;
+
+        /// <summary>
+        /// The target of the contract, if needed.
+        /// </summary>
+        private readonly Player _target;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Contract"/> class.
+        /// </summary>
+        /// <param name="promise">Promise.</param>
+        /// <param name="owner">Owner.</param>
+        /// <param name="target">Target, if needed (defaults to null).</param>
+        public Contract(Promise promise, Player owner, Player target = null)
         {
+            if ((promise == Promise.Coinche || 
+                 promise == Promise.ReCoinche || 
+                 promise == Promise.General) && target == null)
+            {
+                throw new Exceptions.ContractError("Contract should have a target.");
+            }
             _promise = promise;
+            _owner = owner;
+            _target = target;
         }
 
         /// <summary>
@@ -49,22 +72,28 @@ namespace Coinche.Server.Core
         /// <param name="enemy">Enemy.</param>
         public static bool IsPromiseRespected(Game game, Team toCheck, Team enemy)
         {
-            // Check if a contract is present
-            if (toCheck.Players[0].Contract == null && 
-                toCheck.Players[1].Contract == null)
+            // The contract must be different from Promise.Passe
+            if (game.Contract._promise == Promise.Passe)
             {
-                return false;
+                throw new Exceptions.ContractError("Invalid contract.");
             }
+
             // Check if the score is greater 
-            if (toCheck.ScoreCurrent < enemy.ScoreCurrent) 
+            if (toCheck.ScoreCurrent < enemy.ScoreCurrent || 
+                !toCheck.Players.Contains(game.Contract._owner)) 
             {
                 return false;
             }
+
             // Check contract
-            if (toCheck.Players[0].Contract._promise >= Promise.Points80 && 
-                toCheck.Players[0].Contract._promise <= Promise.Points160) 
+            if (game.Contract._promise >= Promise.Points80 && 
+                game.Contract._promise <= Promise.Points160) 
             {
-                return IsScorePromiseRespected(toCheck);
+                return IsScorePromiseRespected(game, toCheck);
+            }
+            if (game.Contract._promise == Promise.Coinche || game.Contract._promise == Promise.ReCoinche)
+            {
+                return IsCoinchePromiseRespected(game, toCheck);
             }
             return IsFoldPromiseRespected(game, toCheck);
         }
@@ -74,14 +103,24 @@ namespace Coinche.Server.Core
         /// </summary>
         /// <returns><c>true</c>, if score promise was respected, <c>false</c> otherwise.</returns>
         /// <param name="player">Player.</param>
-        private static bool IsScorePromiseRespected(Team team)
+        /// <param name="team">Team.</param>
+        private static bool IsScorePromiseRespected(Game game, Team team)
         {
-            if (team.Players[0].Contract._promise != team.Players[1].Contract._promise) 
-            {
-                throw new Exceptions.ContractError("Promises should be the same");   
-            }
-            var promise = team.Players[0].Contract._promise;
+            var promise = game.Contract._promise;
             return team.ScoreCurrent >= (int)promise;
+        }
+
+        /// <summary>
+        /// Check if a coinche promise is respected
+        /// </summary>
+        /// <returns><c>true</c>, if coinche promise was respected, <c>false</c> otherwise.</returns>
+        /// <param name="game">Game.</param>
+        /// <param name="team">Team.</param>
+        private static bool IsCoinchePromiseRespected(Game game, Team team)
+        {
+            // TODO: List of previous Contracts ?
+            throw new System.NotImplementedException();
+            return false;
         }
 
         /// <summary>
@@ -92,27 +131,19 @@ namespace Coinche.Server.Core
         /// <param name="team">Team.</param>
         private static bool IsFoldPromiseRespected(Game game, Team team) 
         {
+            var contract = game.Contract;
             // Check if promise is Capot
-            if ((team.Players[0].Contract._promise == Promise.Capot && 
-                 team.Players[1].Contract._promise != Promise.General) ||
-                (team.Players[1].Contract._promise == Promise.Capot && 
-                 team.Players[0].Contract._promise != Promise.General))
+            if (contract._promise == Promise.Capot)
             {
-                if (team.Players[0].Contract._promise != team.Players[1].Contract._promise)
-                {
-                    throw new Exceptions.ContractError("Promises should be the same");
-                }
                 return team.Players[0].Victories + team.Players[1].Victories == game.NumberOfFolds;
             }
 
             // Then promise must be General
-            var player = (team.Players[0].Contract._promise == Promise.General) ? team.Players[0] : team.Players[1];
-
-            if (player.Contract._promise != Promise.General) 
+            if (contract._promise != Promise.General) 
             {
                 throw new Exceptions.ContractError("Invalid promise");
             }
-            return player.Victories == game.NumberOfFolds;
+            return contract._target.Victories == game.NumberOfFolds;
         }
     }
 }

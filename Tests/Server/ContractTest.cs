@@ -11,6 +11,8 @@ namespace Server
     [TestFixture]
     public class ContractTest
     {
+        // TODO: Unit test pass, coinche, recoinche
+
         /// <summary>
         /// Game test.
         /// </summary>
@@ -20,6 +22,7 @@ namespace Server
             private readonly Card.CardColor? assetColor;
             private readonly Deck deck;
             private readonly List<Player> players;
+            private readonly List<Team> teams;
             public readonly Game game;
 
             /// <summary>
@@ -32,13 +35,20 @@ namespace Server
                 this.gameMode = gameMode;
                 this.assetColor = assetColor;
                 deck = new Deck();
-                deck.SetGameMode(gameMode, assetColor);                
+                deck.SetGameMode(gameMode, assetColor);
                 players = new List<Player> {
                 new Player(deck), new Player(deck),
                 new Player(deck), new Player(deck)
                 };
-                //TODO: The implementation of Game() has been changed
-                //game = new Game(players, gameMode, assetColor);
+                teams = new List<Team>();
+                teams.Add(new Team(players[0], players[1]));
+                teams.Add(new Team(players[2], players[3]));
+                game = new Game(teams);
+            }
+
+            public void Prepare(Contract contract)
+            {
+                game.PrepareGame(gameMode, contract);
             }
         };
 
@@ -57,10 +67,8 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Points80);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Points80);
+                test.Prepare(new Contract(Contract.Promise.Points80, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
-
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
             }
             catch (Exception)
@@ -87,8 +95,7 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Points100);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Points100);
+                test.Prepare(new Contract(Contract.Promise.Points100, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -100,36 +107,6 @@ namespace Server
             }
             Assert.AreEqual(false, isRespected);
             Assert.AreEqual(false, hasThrown);
-        }
-
-        /// <summary>
-        /// Test if a test contract is invalid.
-        /// </summary>
-        [Test]
-        public void ContractPointInvalid()
-        {
-            bool isRespected = false;
-            bool hasThrown = false;
-
-            try
-            {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
-
-                var game = test.game;
-                var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Points100);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Points80);
-                team[0].ScoreCurrent = 90;
-
-                isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
-            }
-            catch (Exception)
-            {
-                isRespected = false;
-                hasThrown = true;
-            }
-            Assert.AreEqual(false, isRespected);
-            Assert.AreEqual(true, hasThrown);
         }
 
         /// <summary>
@@ -147,14 +124,13 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
+                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
 
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -183,14 +159,13 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
+                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
 
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[1].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -220,13 +195,13 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[1].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[1].Players[0].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -239,6 +214,7 @@ namespace Server
             Assert.AreEqual(false, isRespected);
             Assert.AreEqual(false, hasThrown);
         }
+
 
         /// <summary>
         /// Test if a fold contract Capot is not respected, because of equality
@@ -255,11 +231,11 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[1].Players[0].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -288,9 +264,8 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+                game.Run(false);
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
             }
@@ -301,62 +276,6 @@ namespace Server
             }
             Assert.AreEqual(false, isRespected);
             Assert.AreEqual(false, hasThrown);
-        }
-
-        /// <summary>
-        /// Test if a fold contract Capot is not invalid #1.
-        /// </summary>
-        [Test]
-        public void ContractFoldCapotInvalid1()
-        {
-            bool isRespected = false;
-            bool hasThrown = false;
-
-            try
-            {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
-
-                var game = test.game;
-                var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Points80);
-                isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
-            }
-            catch (Exception)
-            {
-                isRespected = false;
-                hasThrown = true;
-            }
-            Assert.AreEqual(false, isRespected);
-            Assert.AreEqual(true, hasThrown);
-        }
-
-        /// <summary>
-        /// Test if a fold contract Capot is not invalid #2.
-        /// </summary>
-        [Test]
-        public void ContractFoldCapotInvalid2()
-        {
-            bool isRespected = false;
-            bool hasThrown = false;
-
-            try
-            {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
-
-                var game = test.game;
-                var team = test.game.Teams;
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                team[0].Players[0].Contract = new Contract(Contract.Promise.Points80);
-                isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
-            }
-            catch (Exception)
-            {
-                isRespected = false;
-                hasThrown = true;
-            }
-            Assert.AreEqual(false, isRespected);
-            Assert.AreEqual(true, hasThrown);
         }
 
         /// <summary>
@@ -374,11 +293,10 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.General);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -407,11 +325,11 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.General);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+
+                game.Run(false);
                 team[0].Players[1].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[1].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -440,13 +358,13 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.General);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[1].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -475,13 +393,13 @@ namespace Server
 
                 var game = test.game;
                 var team = test.game.Teams;
-                team[0].Players[0].Contract = new Contract(Contract.Promise.General);
-                team[0].Players[1].Contract = new Contract(Contract.Promise.Capot);
-                game.Run();
+                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+
+                game.Run(false);
                 team[0].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[1].Players[0].WinFold();
-                game.Run();
+                game.Run(false);
                 team[0].Players[0].WinFold();
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);

@@ -73,28 +73,10 @@ namespace Coinche.Server.Packet
         /// <param name="message">Message.</param>
         private static void QuitHandler(PacketHeader header, Connection connection, string message)
         {
-            var connectInfos = ConnectionManager.Get(connection);
-
             try
             {
-                if (connectInfos.Lobby.IsStarted == false)
-                {
-                    // All others players stay in the lobby because the game is not started yet
-                    Console.WriteLine("[Debug] we disconnect one client");
-                    DisconnectOnePlayer(connection, connectInfos);
-                }
-                else
-                {
-                    // The game is launched, so we kick all players from the lobby
-                    var cos = connectInfos.Lobby.Connection.ToArray();
-                    foreach (var lobbyConnection in cos)
-                    {
-                        Console.WriteLine("we got lobbyConnection");
-                        var lobbyConnectInfos = ConnectionManager.Get(lobbyConnection);
-                        Console.WriteLine("we got lobbyConnectI");
-                        DisconnectOnePlayer(lobbyConnection, lobbyConnectInfos);
-                    }
-                }
+                var connectInfos = ConnectionManager.Get(connection);
+                connectInfos.Lobby.RemovePlayer(connection);
             }
             catch (Exception e)
             {
@@ -102,6 +84,7 @@ namespace Coinche.Server.Packet
             }
         }
 
+        //TODO: remove this
         /// <summary>
         /// Disconnects one player from a lobby.
         /// </summary>

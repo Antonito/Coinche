@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
 using Coinche.Server.Core;
 using Coinche.Server.Utils;
+using Coinche.Server.Packet;
 
 namespace Coinche.Server
 {
@@ -108,10 +109,28 @@ namespace Coinche.Server
         /// <param name="connection">Connection.</param>
         public void RemovePlayer(Connection connection)
         {
-            _connections.Remove(connection);
-            if (_connections.Count() == 0)
+            var connectInfos = ConnectionManager.Get(connection);
+            var cos = connectInfos.Lobby.Connection.ToArray();
+            foreach (var lobbyConnection in cos)
             {
-                LobbyManager.DeleteLobby(_name);
+                //var connectInfos = ConnectionManager.Get(connection);
+                var pseudo = connectInfos.Pseudo;
+                if ((IsStarted == false && connection == lobbyConnection)
+                    || IsStarted)
+                {
+                    var lobbyConnectInfos = ConnectionManager.Get(lobbyConnection);
+                    Console.WriteLine("[LobbyRoom - " + _name + "] " + pseudo + " disconnected");
+                    _connections.Remove(lobbyConnection);
+                    if (_connections.Count() == 0)
+                    {
+                        LobbyManager.DeleteLobby(_name);
+                    }
+                    lobbyConnectInfos.Lobby = null;
+                    LobbyRoom.Unregister(lobbyConnection);
+                    NetworkGame.Unregister(lobbyConnection);
+                    SelectLobby.Register(lobbyConnection);
+                    lobbyConnection.SendObject("LobbySelect");
+                }
             }
         }
 

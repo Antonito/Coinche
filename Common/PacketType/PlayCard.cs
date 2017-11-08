@@ -1,8 +1,8 @@
-﻿using System;
-using ProtoBuf;
+﻿using ProtoBuf;
 
 namespace Coinche.Common.PacketType
 {
+    // TODO: Use enum
     [ProtoContract]
     public class PlayCard
     {

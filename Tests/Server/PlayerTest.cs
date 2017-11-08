@@ -20,7 +20,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
@@ -45,7 +46,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
@@ -71,7 +73,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(10);
 
@@ -97,7 +100,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
@@ -126,7 +130,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
@@ -137,11 +142,12 @@ namespace Server
                     player.GiveCard(curCard);
                 }
                 player.ResetCards();
+                player.GiveDeck(deck);
                 Assert.AreEqual(0, player.Hand.Count());
                 player.GiveCard(cards.ToArray()[0]);
                 Assert.AreEqual(1, player.Hand.Count());
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 hasThrown = true;
             }
@@ -157,7 +163,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
@@ -168,6 +175,7 @@ namespace Server
                     player.GiveCard(curCard);
                 }
                 player.ResetCards();
+                player.GiveDeck(deck);
                 Assert.AreEqual(0, player.Hand.Count());
                 foreach (var curCard in cards)
                 {
@@ -191,7 +199,8 @@ namespace Server
         {
             Deck deck = new Deck();
             bool hasThrown = false;
-            var player = new Player(deck);
+            var player = new Player(true);
+            player.GiveDeck(deck);
             deck.SetGameMode(Game.GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
@@ -202,6 +211,7 @@ namespace Server
                     player.GiveCard(curCard);
                 }
                 player.ResetCards();
+                player.GiveDeck(deck);
                 Assert.AreEqual(0, player.Hand.Count());
                 cards = deck.Cards.Take(10);
                 foreach (var curCard in cards)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Server.Core
 {
@@ -23,15 +24,28 @@ namespace Coinche.Server.Core
         /// </summary>
         private readonly List<Game> _games;
 
-        public Match()
+        public Match(List<Connection> connections)
         {
-            //TODO: set players and teams
-            _players = new List<Player>();
-            _teams = new List<Team>();
+            if (connections.Count() != 4)
+            {
+                throw new Exceptions.LobbyError("There must be 4 players");
+            }
+            _players = new List<Player>{
+                new Player(),
+                new Player(),
+                new Player(),
+                new Player()
+            };
+            for (var i = 0; i < connections.Count(); ++i)
+            {
+                _players[i].Connection = connections[i];
+            }
+            _teams = new List<Team>
+            {
 
-            //TODO: create players first !!!
-            _teams.Add(new Team(_players[0], _players[1]));
-            _teams.Add(new Team(_players[2], _players[3]));
+                new Team(_players[0], _players[1]),
+                new Team(_players[2], _players[3])
+            };
             _games = new List<Game>();
         }
 
@@ -43,13 +57,13 @@ namespace Coinche.Server.Core
                 Game game = new Game(_teams);
                 game.Run();
 
-                //TODO: check if it is necessary
+                // TODO: check if it is necessary
                 // Store the game history for futur usage
                 _games.Add(game);
             }
         }
 
-        //TODO: return a Team instead of an int ?
+        // TODO: return a Team instead of an int ?
         /// <summary>
         /// Returns the team winner.
         /// </summary>

@@ -17,7 +17,6 @@ namespace Coinche.Server.Core
         /// </summary>
         private int _scoreTotal;
 
-
         /// <summary>
         /// The current score.
         /// </summary>

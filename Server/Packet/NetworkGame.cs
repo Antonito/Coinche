@@ -56,12 +56,19 @@ namespace Coinche.Server.Packet
             }
             if (_gameReadyCount == 4)
             {
-                // We must konw if the game is started or not when a player quits
-                connectInfos.Lobby.IsStarted = true;
-
-                // TODO: game ready lets go
-                Console.WriteLine("game launched,  time to continue");
+                PlayGame(connectInfos.Lobby);
             }
+        }
+
+        private static void PlayGame(Lobby lobby)
+        {
+            // We must konw if the game is started or not when a player quits
+            lobby.IsStarted = true;            
+            Console.WriteLine("game launched,  time to continue");
+
+            var match = new Core.Match(lobby.Connection);
+            match.Run();
+            Console.WriteLine("Match has ended.");
         }
     }
 }

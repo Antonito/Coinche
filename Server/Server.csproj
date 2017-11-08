@@ -61,6 +61,7 @@
     <Compile Include="Exceptions\PlayerError.cs" />
     <Compile Include="Exceptions\ContractError.cs" />
     <Compile Include="Core\Match.cs" />
+    <Compile Include="Packet\NetworkContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

@@ -37,9 +37,12 @@ namespace Server
                 deck = new Deck();
                 deck.SetGameMode(gameMode, assetColor);
                 players = new List<Player> {
-                new Player(deck), new Player(deck),
-                new Player(deck), new Player(deck)
+                new Player(true), new Player(true),
+                new Player(true), new Player(true)
                 };
+                foreach (var p in players) {
+                    p.GiveDeck(deck);
+                }
                 teams = new List<Team>();
                 teams.Add(new Team(players[0], players[1]));
                 teams.Add(new Team(players[2], players[3]));
@@ -51,6 +54,34 @@ namespace Server
                 game.PrepareGame(gameMode, contract);
             }
         };
+
+        /// <summary>
+        /// Test if a contract is invalid
+        /// </summary>
+        [Test]
+        public void ContractInvalid()
+        {
+            bool isRespected = false;
+            bool hasThrown = false;
+
+            try
+            {
+                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+
+                var game = test.game;
+                var team = test.game.Teams;
+                test.Prepare(new Contract(Contract.Promise.Passe, team[0].Players[0]));
+                team[0].ScoreCurrent = 90;
+                isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
+            }
+            catch (Exception)
+            {
+                isRespected = false;
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, isRespected);
+            Assert.AreEqual(true, hasThrown);
+        }
 
         /// <summary>
         /// Test if a test contract is respected.

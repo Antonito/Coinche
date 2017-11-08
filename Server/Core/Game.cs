@@ -98,6 +98,23 @@ namespace Coinche.Server.Core
             _players.AddRange(_teams[1].Players);
             _folds = new List<Fold>();
             _deck = new Deck();
+            foreach (var team in teams) {
+                foreach (var player in team.Players) {
+                    player.GiveDeck(_deck);
+                }
+            }
+        }
+
+        ~Game()
+        {
+            // Prepare players for another game
+            foreach (var team in _teams) 
+            {
+                foreach (var player in team.Players)
+                {
+                    player.ResetCards();
+                }
+            }    
         }
 
         /// <summary>
@@ -122,12 +139,7 @@ namespace Coinche.Server.Core
         {
             if (!_prepared)
             {
-                //TODO: ask client for Contract's promise
-                // and then get GameMode   
-                DistributeCards();
-                _contract = new Contract(Contract.Promise.Passe, _teams[0].Players[0]);
-                _gameMode = GameMode.Classic;
-                _prepared = true;
+                SelectContract();
             }
 
             // TODO: ?
@@ -168,6 +180,27 @@ namespace Coinche.Server.Core
             //TODO: reset
             // Reset Player's cards (hand and fold)
             //player.ResetCards();
+        }
+
+        private void SelectContract()
+        {
+            foreach (var player in _players)
+            {
+                Packet.NetworkContract.Register(player.Connection);
+            }
+
+            //TODO: ask client for Contract's promise
+            // and then get GameMode   
+            DistributeCards();
+            _contract = new Contract(Contract.Promise.Passe, _teams[0].Players[0]);
+            _gameMode = GameMode.Classic;
+            _prepared = true;
+
+            // Unregister Contract's
+            foreach (var player in _players)
+            {
+                Packet.NetworkContract.Unregister(player.Connection);
+            }
         }
 
         private void DistributeCards()

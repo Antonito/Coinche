@@ -1,6 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using ProtoBuf;
+using NetworkCommsDotNet.Connections;
+using Coinche.Common.PacketType;
 
 namespace Coinche.Server.Core
 {
@@ -23,12 +27,17 @@ namespace Coinche.Server.Core
         /// <summary>
         /// The deck.
         /// </summary>
-        private readonly Deck _deck;
+        private Deck _deck;
 
         /// <summary>
         /// The folds won.
         /// </summary>
         private int _foldsWon;
+
+        /// <summary>
+        /// The connection.
+        /// </summary>
+        private Connection _connection;
 
         /// <summary>
         /// Gets the hand.
@@ -49,15 +58,44 @@ namespace Coinche.Server.Core
         public int Victories { get { return _foldsWon; } }
 
         /// <summary>
+        /// Gets or sets the connection.
+        /// </summary>
+        /// <value>The connection.</value>
+        public Connection Connection
+        {
+            get
+            {
+                if (_connection == null)
+                {
+                    throw new Exceptions.PlayerError("Connection is not set.");
+                }
+                return _connection;
+            }
+            set
+            {
+                _connection = value;
+            }
+        }
+
+        // TODO: rm ?
+        private readonly bool _unitTest;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Player"/> class.
         /// </summary>
         /// <param name="deck">Deck.</param>
-        public Player(Deck deck)
+        public Player(bool unitTest = false)
         {
             _cardsHand = new List<Card>();
             _cardsFold = new List<Card>();
-            _deck = deck;
+            _deck = null;
             _foldsWon = 0;
+            _unitTest = unitTest;
+        }
+
+        public void GiveDeck(Deck deck)
+        {
+            _deck = deck;
         }
 
         /// <summary>
@@ -66,6 +104,24 @@ namespace Coinche.Server.Core
         /// <param name="card">Card.</param>
         public void GiveCard(Card card)
         {
+            if (_deck == null)
+            {
+                throw new Exceptions.PlayerError("Player must have a deck associated.");
+            }
+
+            if (!_unitTest)
+            {
+                Console.WriteLine("Giving card to player " + ConnectionManager.Get(_connection).Pseudo + ": " + (int)card.Type + " | " + (int)card.Color);
+                PlayCard cardPck = new PlayCard
+                {
+                    CardValue = (int)card.Type,
+                    CardColor = (int)card.Color
+                };
+                MemoryStream stream = new MemoryStream();
+                Serializer.Serialize(stream, cardPck);
+                _connection.SendObject("PlayerGetGameCard", stream.ToArray());
+            }
+
             _cardsHand.Add(card);
             if (_cardsHand.Count() > 8)
             {
@@ -102,6 +158,8 @@ namespace Coinche.Server.Core
         {
             _cardsHand.Clear();
             _cardsFold.Clear();
+            _foldsWon = 0;
+            _deck = null;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Server
         public void TeamInitialScore()
         {
             Deck deck = new Deck();
-            var team = new Team(new Player(deck), new Player(deck));
+            var team = new Team(new Player(true), new Player(true));
 
             Assert.AreEqual(0, team.Score);
         }
@@ -28,7 +28,7 @@ namespace Server
         public void TeamAddScore()
         {
             Deck deck = new Deck();
-            var team = new Team(new Player(deck), new Player(deck));
+            var team = new Team(new Player(true), new Player(true));
 
             team.AddScore(200);
             Assert.AreEqual(200, team.Score);
@@ -41,7 +41,7 @@ namespace Server
         public void TeamHasNotWonNoScore()
         {
             Deck deck = new Deck();
-            var team = new Team(new Player(deck), new Player(deck));
+            var team = new Team(new Player(true), new Player(true));
 
             Assert.AreEqual(false, team.HasWon());
         }
@@ -53,7 +53,7 @@ namespace Server
         public void TeamHasNotWonSmallScore()
         {
             Deck deck = new Deck();
-            var team = new Team(new Player(deck), new Player(deck));
+            var team = new Team(new Player(true), new Player(true));
 
             team.AddScore(200);
             Assert.AreEqual(false, team.HasWon());
@@ -66,7 +66,7 @@ namespace Server
         public void TeamHasWonEqualScore()
         {
             Deck deck = new Deck();
-            var team = new Team(new Player(deck), new Player(deck));
+            var team = new Team(new Player(true), new Player(true));
 
             team.AddScore(Team.MaxScore);
             Assert.AreEqual(true, team.HasWon());
@@ -79,7 +79,7 @@ namespace Server
         public void TeamHasWonBigScore()
         {
             Deck deck = new Deck();
-            var team = new Team(new Player(deck), new Player(deck));
+            var team = new Team(new Player(true), new Player(true));
 
             team.AddScore(Team.MaxScore + 5000);
             Assert.AreEqual(true, team.HasWon());

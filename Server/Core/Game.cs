@@ -243,15 +243,17 @@ namespace Coinche.Server.Core
         static private void ContractTask(Player player, int minimumContractValue, 
                                          List<Player> players)
         {
-            MemoryStream stream = new MemoryStream();
+            MemoryStream stream = ConnectionManager.Get(player.Connection).Stream;
             Common.PacketType.ContractRequest requ = new Common.PacketType.ContractRequest
             {
-                MinimumValue = (int)minimumContractValue
+                MinimumValue = minimumContractValue
             };
             Serializer.Serialize(stream, requ);
             var netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
                                                                              10000, stream.ToArray());
-            MemoryStream streamRes = new MemoryStream(netRes);
+
+            MemoryStream streamRes = ConnectionManager.Get(player.Connection).Stream;
+            streamRes.Write(netRes, 0, netRes.Count());
             var res = Serializer.Deserialize<Common.PacketType.ContractResponse>(streamRes);
 
             // Notify other players of its choice
@@ -265,7 +267,7 @@ namespace Coinche.Server.Core
                         Color = res.Color,
                         Pseudo = ConnectionManager.Get(curPlayer.Connection).Pseudo
                     };
-                    MemoryStream infoStream = new MemoryStream();
+                    MemoryStream infoStream = ConnectionManager.Get(curPlayer.Connection).Stream;
                     Serializer.Serialize(infoStream, info);
                     player.Connection.SendObject("ChooseContractInfo", infoStream.ToArray());
                 }

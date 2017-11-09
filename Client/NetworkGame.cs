@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Coinche.Client
 {
-    public class NetworkGame
+    public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
         private static readonly string _getCard = "PlayerGetGameCard";

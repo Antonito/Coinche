@@ -117,7 +117,7 @@ namespace Coinche.Server.Core
                     CardValue = (int)card.Type,
                     CardColor = (int)card.Color
                 };
-                MemoryStream stream = new MemoryStream();
+                MemoryStream stream = ConnectionManager.Get(_connection).Stream;
                 Serializer.Serialize(stream, cardPck);
                 _connection.SendObject("PlayerGetGameCard", stream.ToArray());
             }

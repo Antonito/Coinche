@@ -18,13 +18,15 @@ namespace Server
             {
                 IsReady = true
             };
-            MemoryStream stream = new MemoryStream();
-            Serializer.Serialize(stream, g1);
-            byte[] t = stream.ToArray();
-            stream.Flush();
-            stream.Position = 0;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Serializer.Serialize(stream, g1);
+                byte[] t = stream.ToArray();
+                stream.Flush();
+                stream.Position = 0;
 
-            StartGame g2 = Serializer.Deserialize<StartGame>(stream);
+                StartGame g2 = Serializer.Deserialize<StartGame>(stream);   
+            }
             Assert.AreEqual(true, g2.IsReady);
         }
     }

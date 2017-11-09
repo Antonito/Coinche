@@ -113,5 +113,10 @@ namespace Coinche.Server
             //_stream.SetLength(0);
             //_stream.Seek(0, SeekOrigin.Begin);
         }
+
+        ~ConnectionInformation()
+        {
+            _stream.Dispose();
+        }
     }
 }

@@ -5,6 +5,7 @@ using NetworkCommsDotNet.Connections;
 using Coinche.Server.Core;
 using Coinche.Server.Utils;
 using Coinche.Server.Packet;
+using NetworkCommsDotNet;
 
 namespace Coinche.Server
 {
@@ -114,11 +115,11 @@ namespace Coinche.Server
             foreach (var lobbyConnection in cos)
             {
                 //var connectInfos = ConnectionManager.Get(connection);
-                var pseudo = connectInfos.Pseudo;
+                var lobbyConnectInfos = ConnectionManager.Get(lobbyConnection);
+                var pseudo = lobbyConnectInfos.Pseudo;
                 if ((IsStarted == false && connection == lobbyConnection)
                     || IsStarted)
                 {
-                    var lobbyConnectInfos = ConnectionManager.Get(lobbyConnection);
                     Console.WriteLine("[LobbyRoom - " + _name + "] " + pseudo + " disconnected");
                     _connections.Remove(lobbyConnection);
                     if (_connections.Count == 0)
@@ -128,8 +129,12 @@ namespace Coinche.Server
                     lobbyConnectInfos.Lobby = null;
                     LobbyRoom.Unregister(lobbyConnection);
                     NetworkGame.Unregister(lobbyConnection);
-                    SelectLobby.Register(lobbyConnection);
-                    lobbyConnection.SendObject("LobbySelect");
+                    if (lobbyConnection.ConnectionInfo.ConnectionState == ConnectionState.Established)
+                    {
+                        Console.WriteLine("Client: " + pseudo + " is still connected, register it on LobbySelector");
+                        SelectLobby.Register(lobbyConnection);
+                        lobbyConnection.SendObject("LobbySelect");
+                    }
                 }
             }
         }

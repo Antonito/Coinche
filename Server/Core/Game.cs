@@ -4,27 +4,16 @@ using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using ProtoBuf;
-using NetworkCommsDotNet.Connections;
-
-//TODO: Memory stream using, change, unique
 
 namespace Coinche.Server.Core
 {
+    using GameMode = Common.Core.Game.GameMode;
+
     /// <summary>
     /// Game.
     /// </summary>
     public sealed class Game
     {
-        /// <summary>
-        /// Game mode.
-        /// </summary>
-        public enum GameMode
-        {
-            Classic,
-            AllAssets,
-            NoAsset
-        }
-
         /// <summary>
         /// Is game prepared ?
         /// </summary>
@@ -73,23 +62,13 @@ namespace Coinche.Server.Core
         /// Gets the number of folds.
         /// </summary>
         /// <value>The number of folds.</value>
-        public int NumberOfFolds { get { return _folds.Count(); } }
+        public int NumberOfFolds { get { return _folds.Count; } }
 
         /// <summary>
         /// Gets the teams.
         /// </summary>
         /// <value>The teams.</value>
         public Team[] Teams { get { return _teams.ToArray(); } }
-
-        // IMPORTANT MUST READ
-        // TODO: Re-organize this.
-        // This class should contain only informations about 1 game,
-        // not looping until a team wins. A team should only be capable of
-        // winning the match after they played several games.
-        //
-        // -> A Game is a few folds.
-        // -> A Match is a few games.
-        // -> The team with >= Team.MaxPScore wins a Match.
 
         public Game(List<Team> teams)
         {
@@ -145,7 +124,15 @@ namespace Coinche.Server.Core
         {
             if (!_prepared)
             {
-                SelectContract();
+                try
+                {
+                    SelectContract();
+                }
+                catch (Exception)
+                {
+                    // Restart the game if there's an error in Contract
+                    return;
+                }
             }
 
             // TODO: ?
@@ -182,12 +169,11 @@ namespace Coinche.Server.Core
 
             // Set the Game result
             SetResult();
-
-            //TODO: reset
-            // Reset Player's cards (hand and fold)
-            //player.ResetCards();
         }
 
+        /// <summary>
+        /// Selects the contract.
+        /// </summary>
         private void SelectContract()
         {
             foreach (var player in _players)
@@ -198,26 +184,48 @@ namespace Coinche.Server.Core
 
             // The contract need to be establised here
             _prepared = false;
-            Contract contract = null;
-            var minimumContractValue = Core.Contract.Promise.Passe;
+            var minimumContractValue = Common.Core.Contract.Promise.Passe;
+            bool firstLoop = true;
+
             while (!_prepared)
             {
+                var contracts = new List<Tuple<Contract, GameMode>>();
                 foreach (var player in _players)
                 {
                     // Ask player to choose something
-                    Task.Run(() => ContractTask(player, (int)minimumContractValue, _players)).Wait();
+                    Task.Run(() =>
+                    {
+                        bool ret = false;
+                        do
+                        {
+                            ret = ContractTask(player, ref minimumContractValue,
+                                               _players, contracts);
+                        } while (!ret);
+                    }).Wait();
                 }
 
                 // Check if choosen contrat is valid and final
-                // TODO: rm
-                _prepared = true;
+                var nbPassed = contracts.Count(elem => 
+                {
+                    return elem.Item1.Promise == Common.Core.Contract.Promise.Passe;
+                });
+                if (nbPassed >= 3)
+                {
+                    if (firstLoop && nbPassed == 4)
+                    {
+                        throw new Exceptions.ContractError("No contract was choosen");
+                    }
+                    _prepared = true;
+                    // Get the selected contract
+                    var selected = contracts.FirstOrDefault(elem =>
+                    {
+                        return elem.Item1.Promise != Common.Core.Contract.Promise.Passe;
+                    });
+                    _contract = selected.Item1;
+                    _gameMode = selected.Item2;
+                }
+                firstLoop = false;
             }
-
-            //TODO: ask client for Contract's promise
-            // and then get GameMode   
-            _contract = new Contract(Contract.Promise.Passe, _teams[0].Players[0]);
-            _gameMode = GameMode.Classic;
-            _prepared = true;
 
             // Unregister Contract's
             foreach (var player in _players)
@@ -240,8 +248,19 @@ namespace Coinche.Server.Core
             _teams[1].AddScore(scoreTeam);
         }
 
-        static private void ContractTask(Player player, int minimumContractValue, 
-                                         List<Player> players)
+
+        /// <summary>
+        /// Ask a contract to a player
+        /// </summary>
+        /// <returns><c>true</c>, if the player gave a valid contract, <c>false</c> otherwise.</returns>
+        /// <param name="player">Player.</param>
+        /// <param name="minimumContractValue">Minimum contract value.</param>
+        /// <param name="players">Players.</param>
+        /// <param name="contracts">Contracts.</param>
+        static private bool ContractTask(Player player, 
+                                         ref Common.Core.Contract.Promise minimumContractValue, 
+                                         List<Player> players, 
+                                         List<Tuple<Contract, GameMode>> contracts)
         {
             MemoryStream stream = ConnectionManager.Get(player.Connection).Stream;
             Common.PacketType.ContractRequest requ = new Common.PacketType.ContractRequest
@@ -249,29 +268,44 @@ namespace Coinche.Server.Core
                 MinimumValue = minimumContractValue
             };
             Serializer.Serialize(stream, requ);
-            var netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
+            byte[] netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
                                                                              10000, stream.ToArray());
 
-            MemoryStream streamRes = ConnectionManager.Get(player.Connection).Stream;
-            streamRes.Write(netRes, 0, netRes.Count());
-            var res = Serializer.Deserialize<Common.PacketType.ContractResponse>(streamRes);
+            Common.PacketType.ContractResponse res;
+            using (var streamRes = new MemoryStream(netRes))
+            {
+                res = Serializer.Deserialize<Common.PacketType.ContractResponse>(streamRes);
+            }
+
+            if (res.Promise >= Common.Core.Contract.Promise.Points80 && 
+                res.Promise <= Common.Core.Contract.Promise.General)
+            {
+                if (res.Promise > minimumContractValue)
+                {
+                    // Ask for another contract
+                    return false;
+                }
+                minimumContractValue = res.Promise;
+            }
+            contracts.Add(new Tuple<Contract, GameMode>(new Contract(res.Promise, player), res.GameMode));
 
             // Notify other players of its choice
             foreach (var curPlayer in players)
             {
-                if (curPlayer != player)
-                {
+               if (curPlayer != player)
+                 {
                     Common.PacketType.ContractInfo info = new Common.PacketType.ContractInfo
                     {
-                        Promise = res.Promise,
-                        Color = res.Color,
-                        Pseudo = ConnectionManager.Get(curPlayer.Connection).Pseudo
+                       Promise = res.Promise,
+                       Color = res.Color,
+                       Pseudo = ConnectionManager.Get(curPlayer.Connection).Pseudo
                     };
                     MemoryStream infoStream = ConnectionManager.Get(curPlayer.Connection).Stream;
                     Serializer.Serialize(infoStream, info);
                     player.Connection.SendObject("ChooseContractInfo", infoStream.ToArray());
-                }
+                 }
             }
+            return true;
         }
 
     }

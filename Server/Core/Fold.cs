@@ -5,10 +5,12 @@ using static Coinche.Server.Core.Game;
 
 namespace Coinche.Server.Core
 {
+    using GameMode = Coinche.Common.Core.Game.GameMode;
+
     public sealed class Fold
     {
         private readonly List<Player> _players;
-        private readonly Game.GameMode _gameMode;
+        private readonly GameMode _gameMode;
         private Deck _deck;
 
         public Fold(List<Player> players, GameMode gameMode)

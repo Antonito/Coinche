@@ -7,6 +7,8 @@ using System.IO;
 
 namespace Coinche.Client
 {
+    using Promise = Common.Core.Contract.Promise;
+
     public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
@@ -45,32 +47,13 @@ namespace Coinche.Client
                               contract.Promise + " | " + contract.Color);
         }
 
-        // TODO: rm
-        public enum Promise
-        {
-            Passe = 0,
-            Coinche = 1,
-            ReCoinche = 2,
-            Points80 = 80,
-            Points90 = 90,
-            Points100 = 100,
-            Points110 = 110,
-            Points120 = 120,
-            Points130 = 130,
-            Points140 = 140,
-            Points150 = 150,
-            Points160 = 160,
-            Capot = 250,
-            General = 500
-        };
-
         private static void ChooseContractHandler(PacketHeader header, Connection connection, byte[] info)
         {
             MemoryStream stream = new MemoryStream(info);
             var contract = Serializer.Deserialize<ContractRequest>(stream);
-            foreach (var e in Enum.GetValues(typeof(Promise)))
+            foreach (Promise e in Enum.GetValues(typeof(Promise)))
             {
-                if ((int)e == 0 || (int)e >= contract.MinimumValue)
+                if (e == 0 || e >= contract.MinimumValue)
                 {
                     Console.WriteLine(e.ToString() + " -> " + (int)e);
                 }
@@ -79,15 +62,16 @@ namespace Coinche.Client
             // TODO
             Console.WriteLine("Contract: ");
 
-            var promise = "150";
+            var promise = Promise.Points150;
             MemoryStream streamResp = new MemoryStream();
             ContractResponse resp = new ContractResponse
             {
-                Promise = int.Parse(promise),
-                Color = 0
+                Promise = promise,
+                Color = Common.Core.Cards.CardColor.Clover
             };
             Serializer.Serialize(streamResp, resp);
             connection.SendObject("ChooseContractResp", streamResp.ToArray());
+            Console.WriteLine("Response sent !");
         }
 
         // TODO: rm ???

@@ -1,32 +1,32 @@
-﻿using System;
-using ProtoBuf;
+﻿using ProtoBuf;
 
 namespace Coinche.Common.PacketType
 {
-    // TODO: Use enum
     [ProtoContract]
-    public class ContractResponse
+    public sealed class ContractResponse
     {
         [ProtoMember(1)]
-        public int Promise { get; set; }
+        public Core.Contract.Promise Promise { get; set; }
         [ProtoMember(2)]
-        public int Color { get; set; }
+        public Core.Cards.CardColor Color { get; set; }
+        [ProtoMember(3)]
+        public Core.Game.GameMode GameMode { get; set; }
     }
 
     [ProtoContract]
-    public class ContractRequest
+    public sealed class ContractRequest
     {
         [ProtoMember(1)]
-        public int MinimumValue { get; set; }
+        public Core.Contract.Promise MinimumValue { get; set; }
     }
 
     [ProtoContract]
-    public class ContractInfo
+    public sealed class ContractInfo
     {
         [ProtoMember(1)]
-        public int Promise { get; set; }
+        public Core.Contract.Promise Promise { get; set; }
         [ProtoMember(2)]
-        public int Color { get; set; }
+        public Core.Cards.CardColor Color { get; set; }
         [ProtoMember(3)]
         public string Pseudo { get; set; }
     }

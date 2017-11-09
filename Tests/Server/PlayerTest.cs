@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 namespace Server
 {
+    using GameMode = Coinche.Common.Core.Game.GameMode;
+
     /// <summary>
     /// Player test.
     /// </summary>
@@ -22,7 +24,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
             try
@@ -48,7 +50,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
             try
@@ -75,7 +77,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(10);
 
             try
@@ -102,7 +104,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
             try
@@ -112,7 +114,7 @@ namespace Server
                     player.GiveCard(curCard);
                 }
                 player.ResetCards();
-                Assert.AreEqual(0, player.Hand.Count());
+                Assert.AreEqual(0, player.Hand.Count);
             }
             catch (Exception)
             {
@@ -132,7 +134,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(1);
 
             try
@@ -143,11 +145,11 @@ namespace Server
                 }
                 player.ResetCards();
                 player.GiveDeck(deck);
-                Assert.AreEqual(0, player.Hand.Count());
+                Assert.AreEqual(0, player.Hand.Count);
                 player.GiveCard(cards.ToArray()[0]);
-                Assert.AreEqual(1, player.Hand.Count());
+                Assert.AreEqual(1, player.Hand.Count);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 hasThrown = true;
             }
@@ -165,7 +167,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
             try
@@ -176,12 +178,12 @@ namespace Server
                 }
                 player.ResetCards();
                 player.GiveDeck(deck);
-                Assert.AreEqual(0, player.Hand.Count());
+                Assert.AreEqual(0, player.Hand.Count);
                 foreach (var curCard in cards)
                 {
                     player.GiveCard(curCard);
                 }
-                Assert.AreEqual(8, player.Hand.Count());
+                Assert.AreEqual(8, player.Hand.Count);
             }
             catch (Exception)
             {
@@ -201,7 +203,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(Game.GameMode.AllAssets);
+            deck.SetGameMode(GameMode.AllAssets);
             var cards = deck.Cards.Take(8);
 
             try
@@ -212,7 +214,7 @@ namespace Server
                 }
                 player.ResetCards();
                 player.GiveDeck(deck);
-                Assert.AreEqual(0, player.Hand.Count());
+                Assert.AreEqual(0, player.Hand.Count);
                 cards = deck.Cards.Take(10);
                 foreach (var curCard in cards)
                 {

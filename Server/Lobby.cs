@@ -52,7 +52,7 @@ namespace Coinche.Server
         /// Gets the number of players.
         /// </summary>
         /// <value>The nb players.</value>
-        public int NbPlayers { get { return _connections.Count(); } }
+        public int NbPlayers { get { return _connections.Count; } }
 
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Coinche.Server
                     var lobbyConnectInfos = ConnectionManager.Get(lobbyConnection);
                     Console.WriteLine("[LobbyRoom - " + _name + "] " + pseudo + " disconnected");
                     _connections.Remove(lobbyConnection);
-                    if (_connections.Count() == 0)
+                    if (_connections.Count == 0)
                     {
                         LobbyManager.DeleteLobby(_name);
                     }
@@ -140,7 +140,7 @@ namespace Coinche.Server
         /// <returns><c>true</c>, if lobby is full, <c>false</c> otherwise.</returns>
         public bool IsFull()
         {
-            return _connections.Count() == 4;
+            return _connections.Count == 4;
         }
     }
 }

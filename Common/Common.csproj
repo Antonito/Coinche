@@ -43,12 +43,16 @@
     <Compile Include="PacketType\EndRound.cs" />
     <Compile Include="PacketType\StartGame.cs" />
     <Compile Include="PacketType\StartRound.cs" />
+    <Compile Include="Core\Card.cs" />
+    <Compile Include="Core\Contract.cs" />
+    <Compile Include="Core\Game.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="PacketType\" />
+    <Folder Include="Core\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

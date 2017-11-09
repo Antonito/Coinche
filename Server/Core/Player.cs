@@ -123,7 +123,7 @@ namespace Coinche.Server.Core
             }
 
             _cardsHand.Add(card);
-            if (_cardsHand.Count() > 8)
+            if (_cardsHand.Count > 8)
             {
                 throw new ArgumentException("Added too many cards");
             }

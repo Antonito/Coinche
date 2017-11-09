@@ -26,8 +26,8 @@ namespace Server
                 stream.Position = 0;
 
                 StartGame g2 = Serializer.Deserialize<StartGame>(stream);   
+                Assert.AreEqual(true, g2.IsReady);
             }
-            Assert.AreEqual(true, g2.IsReady);
         }
     }
 }

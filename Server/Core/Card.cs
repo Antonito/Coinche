@@ -2,37 +2,15 @@
 
 namespace Coinche.Server.Core
 {
+    using CardType = Coinche.Common.Core.Cards.CardType;
+    using CardColor = Coinche.Common.Core.Cards.CardColor;
+    using GameMode = Coinche.Common.Core.Game.GameMode;
+
     /// <summary>
     /// Card.
     /// </summary>
     public sealed class Card
     {
-        /// <summary>
-        /// Card type.
-        /// </summary>
-        public enum CardType
-        {
-            Ace,
-            King,
-            Queen,
-            Jack,
-            Ten,
-            Nine,
-            Eight,
-            Seven
-        };
-
-        /// <summary>
-        /// Card color.
-        /// </summary>
-        public enum CardColor
-        {
-            Clover,
-            Tile,
-            Heart,
-            Pike
-        };
-
         /// <summary>
         /// The values of the cards when playing in standard mode 
         /// and that the card is an asset
@@ -134,14 +112,14 @@ namespace Coinche.Server.Core
         /// <returns>The card value.</returns>
         /// <param name="card">Card.</param>
         /// <param name="gameMode">Game mode.</param>
-        public static int GetCardValue(Card card, Game.GameMode gameMode)
+        public static int GetCardValue(Card card, GameMode gameMode)
         {
             Dictionary<CardType, int> valueSet;
 
-            if (gameMode == Game.GameMode.Classic) {
+            if (gameMode == GameMode.Classic) {
                 throw new Exceptions.CardError("GameMode cannot be Classic");
             }
-            if (gameMode == Game.GameMode.AllAssets) {
+            if (gameMode == GameMode.AllAssets) {
                 valueSet = cardValueAllAssets;
             }
             else {
@@ -157,11 +135,11 @@ namespace Coinche.Server.Core
         /// <param name="card">Card.</param>
         /// <param name="gameMode">Game mode.</param>
         /// <param name="asset">Asset.</param>
-        public static int GetCardValue(Card card, Game.GameMode gameMode, CardColor asset)
+        public static int GetCardValue(Card card, GameMode gameMode, CardColor asset)
         {
             Dictionary<CardType, int> valueSet;
 
-            if (gameMode != Game.GameMode.Classic)
+            if (gameMode != GameMode.Classic)
             {
                 throw new Exceptions.CardError("GameMode must be Classic");
             }

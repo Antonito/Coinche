@@ -5,6 +5,10 @@ using NUnit.Framework;
 
 namespace Server
 {
+    using CardColor = Coinche.Common.Core.Cards.CardColor;
+    using Promise = Coinche.Common.Core.Contract.Promise;
+    using GameMode = Coinche.Common.Core.Game.GameMode;
+
     /// <summary>
     /// Contract test.
     /// </summary>
@@ -18,8 +22,8 @@ namespace Server
         /// </summary>
         private class GameTest
         {
-            private readonly Game.GameMode gameMode;
-            private readonly Card.CardColor? assetColor;
+            private readonly GameMode gameMode;
+            private readonly CardColor? assetColor;
             private readonly Deck deck;
             private readonly List<Player> players;
             private readonly List<Team> teams;
@@ -30,7 +34,7 @@ namespace Server
             /// </summary>
             /// <param name="gameMode">Game mode.</param>
             /// <param name="assetColor">Asset color.</param>
-            public GameTest(Game.GameMode gameMode, Card.CardColor assetColor)
+            public GameTest(GameMode gameMode, CardColor assetColor)
             {
                 this.gameMode = gameMode;
                 this.assetColor = assetColor;
@@ -68,11 +72,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Passe, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Passe, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
             }
@@ -96,11 +100,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Points80, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Points80, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
             }
@@ -124,11 +128,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Points100, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Points100, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -153,11 +157,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Capot, team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[0].WinFold();
@@ -188,11 +192,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Capot, team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[0].WinFold();
@@ -224,11 +228,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Capot, team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[0].WinFold();
@@ -260,11 +264,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Capot, team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[0].WinFold();
@@ -293,11 +297,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Capot, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Capot, team[0].Players[0]));
                 game.Run(false);
 
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
@@ -322,11 +326,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+                test.Prepare(new Contract(Promise.General, team[0].Players[0], team[0].Players[0]));
                 game.Run(false);
                 team[0].Players[0].WinFold();
                 game.Run(false);
@@ -354,11 +358,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+                test.Prepare(new Contract(Promise.General, team[0].Players[0], team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[1].WinFold();
@@ -387,11 +391,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+                test.Prepare(new Contract(Promise.General, team[0].Players[0], team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[0].WinFold();
@@ -422,11 +426,11 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.General, team[0].Players[0], team[0].Players[0]));
+                test.Prepare(new Contract(Promise.General, team[0].Players[0], team[0].Players[0]));
 
                 game.Run(false);
                 team[0].Players[0].WinFold();
@@ -454,13 +458,13 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Points100, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Points100, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
-                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                test.game.Contract.ChangeContract(Promise.Coinche, team[1].Players[0], team[0].Players[0]);
                 isRespected = Contract.IsPromiseRespected(game, team[1], team[0]);
             }
             catch (Exception)
@@ -480,13 +484,13 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Points80, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Points80, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
-                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                test.game.Contract.ChangeContract(Promise.Coinche, team[1].Players[0], team[0].Players[0]);
                 isRespected = Contract.IsPromiseRespected(game, team[1], team[0]);
             }
             catch (Exception)
@@ -506,14 +510,14 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Points80, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Points80, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
-                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
-                test.game.Contract.ChangeContract(Contract.Promise.ReCoinche, team[0].Players[0], team[1].Players[0]);
+                test.game.Contract.ChangeContract(Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                test.game.Contract.ChangeContract(Promise.ReCoinche, team[0].Players[0], team[1].Players[0]);
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
             }
             catch (Exception)
@@ -533,14 +537,14 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(Game.GameMode.Classic, Card.CardColor.Heart);
+                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
-                test.Prepare(new Contract(Contract.Promise.Points100, team[0].Players[0]));
+                test.Prepare(new Contract(Promise.Points100, team[0].Players[0]));
                 team[0].ScoreCurrent = 90;
-                test.game.Contract.ChangeContract(Contract.Promise.Coinche, team[1].Players[0], team[0].Players[0]);
-                test.game.Contract.ChangeContract(Contract.Promise.ReCoinche, team[0].Players[0], team[1].Players[0]);
+                test.game.Contract.ChangeContract(Promise.Coinche, team[1].Players[0], team[0].Players[0]);
+                test.game.Contract.ChangeContract(Promise.ReCoinche, team[0].Players[0], team[1].Players[0]);
                 isRespected = Contract.IsPromiseRespected(game, team[0], team[1]);
             }
             catch (Exception)

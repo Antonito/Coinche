@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Coinche.Server.Core
 {
+    using CardType = Coinche.Common.Core.Cards.CardType;
+    using CardColor = Coinche.Common.Core.Cards.CardColor;
+    using GameMode = Coinche.Common.Core.Game.GameMode;
+
     /// <summary>
     /// Deck.
     /// </summary>
@@ -23,12 +27,12 @@ namespace Coinche.Server.Core
         /// <summary>
         /// The game mode.
         /// </summary>
-        private Game.GameMode? _gameMode;
+        private GameMode? _gameMode;
 
         /// <summary>
         /// The color of the asset.
         /// </summary>
-        private Card.CardColor? _assetColor;
+        private CardColor? _assetColor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Deck"/> class.
@@ -44,14 +48,14 @@ namespace Coinche.Server.Core
         /// Sets the game mode.
         /// </summary>
         /// <param name="gameMode">Game mode.</param>
-        public void SetGameMode(Game.GameMode gameMode, 
-                                Card.CardColor? assetColor = null)
+        public void SetGameMode(GameMode gameMode, 
+                                CardColor? assetColor = null)
         {
-            if (assetColor == null && gameMode == Game.GameMode.Classic)
+            if (assetColor == null && gameMode == GameMode.Classic)
             {
                 throw new Exceptions.DeckError("GameMode cannot be Classic");
             }
-            else if (assetColor != null && gameMode != Game.GameMode.Classic) {
+            else if (assetColor != null && gameMode != GameMode.Classic) {
                 throw new Exceptions.DeckError("GameMode must be Classic");
             }
             _gameMode = gameMode;
@@ -68,13 +72,13 @@ namespace Coinche.Server.Core
             if (_gameMode == null) {
                 throw new Exceptions.DeckError("GameMode must be set");
             }
-            if (_gameMode == Game.GameMode.Classic) {
+            if (_gameMode == GameMode.Classic) {
                 if (_assetColor == null) {
                     throw new Exceptions.DeckError("Asset color must be set");
                 } 
-                return Card.GetCardValue(card, (Game.GameMode)_gameMode, (Card.CardColor)_assetColor);
+                return Card.GetCardValue(card, (GameMode)_gameMode, (CardColor)_assetColor);
             }
-            return Card.GetCardValue(card, (Game.GameMode)_gameMode);
+            return Card.GetCardValue(card, (GameMode)_gameMode);
         }
 
         /// <summary>
@@ -87,7 +91,7 @@ namespace Coinche.Server.Core
             {
                 throw new Exceptions.DeckError("GameMode should not be set");
             }
-            if (players.Count() != 4)
+            if (players.Count != 4)
             {
                 throw new ArgumentException("Invalid number of players, must be 4.");
             }
@@ -128,11 +132,11 @@ namespace Coinche.Server.Core
         {
             List<Card> cards = new List<Card>();
 
-            foreach (Card.CardColor color in
-                     Enum.GetValues(typeof(Card.CardColor)))
+            foreach (CardColor color in
+                     Enum.GetValues(typeof(CardColor)))
             {
-                foreach (Card.CardType type in
-                         Enum.GetValues(typeof(Card.CardType)))
+                foreach (CardType type in
+                         Enum.GetValues(typeof(CardType)))
                 {
                     cards.Add(new Card(type, color));
                 }

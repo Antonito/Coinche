@@ -26,7 +26,7 @@ namespace Coinche.Server.Core
 
         public Match(List<Connection> connections)
         {
-            if (connections.Count() != 4)
+            if (connections.Count != 4)
             {
                 throw new Exceptions.LobbyError("There must be 4 players");
             }
@@ -36,7 +36,7 @@ namespace Coinche.Server.Core
                 new Player(),
                 new Player()
             };
-            for (var i = 0; i < connections.Count(); ++i)
+            for (var i = 0; i < connections.Count; ++i)
             {
                 _players[i].Connection = connections[i];
             }
@@ -55,6 +55,7 @@ namespace Coinche.Server.Core
             while (!_teams[0].HasWon() && !_teams[1].HasWon())
             {
                 Game game = new Game(_teams);
+
                 game.Run();
 
                 // TODO: check if it is necessary

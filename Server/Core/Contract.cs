@@ -1,35 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Coinche.Server.Core
 {
+    using Promise = Common.Core.Contract.Promise;
+
     /// <summary>
     /// Contract.
     /// </summary>
     public sealed class Contract
     {
-        /// <summary>
-        /// Promise.
-        /// </summary>
-        public enum Promise
-        {
-            Passe = 0,
-            Coinche = 1,
-            ReCoinche = 2,
-            Points80 = 80,
-            Points90 = 90,
-            Points100 = 100,
-            Points110 = 110,
-            Points120 = 120,
-            Points130 = 130,
-            Points140 = 140,
-            Points150 = 150,
-            Points160 = 160,
-            Capot = 250,
-            General = 500
-        };
-
         /// <summary>
         /// Contract Data.
         /// </summary>
@@ -54,7 +34,16 @@ namespace Coinche.Server.Core
             public Player Target { get; set; }
         };
 
+        /// <summary>
+        /// The history of Datas.
+        /// </summary>
         private readonly Stack<Data> _history;
+
+        /// <summary>
+        /// Gets the promise.
+        /// </summary>
+        /// <value>The promise.</value>
+        public Promise Promise { get { return _history.Peek().Promise; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Contract"/> class.
@@ -113,7 +102,8 @@ namespace Coinche.Server.Core
             {
                 return IsScorePromiseRespected(game, toCheck, enemy);
             }
-            if (promiseData.Promise == Promise.Coinche || promiseData.Promise == Promise.ReCoinche)
+            if (promiseData.Promise == Promise.Coinche || 
+                promiseData.Promise == Promise.ReCoinche)
             {
                 return IsCoinchePromiseRespected(game, toCheck);
             }
@@ -155,7 +145,7 @@ namespace Coinche.Server.Core
 
             if (promiseData.Promise == Promise.Coinche)
             {
-                if (game.Contract._history.Count() < 2)
+                if (game.Contract._history.Count < 2)
                 {
                     throw new Exceptions.ContractError("Invalid promise.");
                 }
@@ -165,7 +155,7 @@ namespace Coinche.Server.Core
             }
 
             if (promiseData.Promise != Promise.ReCoinche ||
-                game.Contract._history.Count() < 3)
+                game.Contract._history.Count < 3)
             {
                 throw new Exceptions.ContractError("Invalid promise.");
             }
@@ -184,6 +174,7 @@ namespace Coinche.Server.Core
         {
             var promiseData = game.Contract._history.Peek();
             var contract = game.Contract;
+
             // Check if promise is Capot
             if (promiseData.Promise == Promise.Capot)
             {

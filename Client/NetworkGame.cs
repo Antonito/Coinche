@@ -44,7 +44,7 @@ namespace Coinche.Client
             MemoryStream stream = new MemoryStream(info);
             var contract = Serializer.Deserialize<ContractInfo>(stream);
             Console.WriteLine("Player " + contract.Pseudo + " chose " + 
-                              contract.Promise + " | " + contract.Color);
+                              contract.Promise.ToString() + " | " + contract.GameMode.ToString());
         }
 
         private static void ChooseContractHandler(PacketHeader header, Connection connection, byte[] info)
@@ -67,7 +67,7 @@ namespace Coinche.Client
             ContractResponse resp = new ContractResponse
             {
                 Promise = promise,
-                Color = Common.Core.Cards.CardColor.Clover
+                GameMode = Common.Core.Game.GameMode.ClassicClover
             };
             Serializer.Serialize(streamResp, resp);
             connection.SendObject("ChooseContractResp", streamResp.ToArray());

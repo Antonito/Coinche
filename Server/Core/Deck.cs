@@ -51,11 +51,11 @@ namespace Coinche.Server.Core
         public void SetGameMode(GameMode gameMode, 
                                 CardColor? assetColor = null)
         {
-            if (assetColor == null && gameMode == GameMode.Classic)
+            if (assetColor == null && gameMode <= GameMode.ClassicPike)
             {
                 throw new Exceptions.DeckError("GameMode cannot be Classic");
             }
-            else if (assetColor != null && gameMode != GameMode.Classic) {
+            else if (assetColor != null && gameMode > GameMode.ClassicPike) {
                 throw new Exceptions.DeckError("GameMode must be Classic");
             }
             _gameMode = gameMode;
@@ -72,7 +72,7 @@ namespace Coinche.Server.Core
             if (_gameMode == null) {
                 throw new Exceptions.DeckError("GameMode must be set");
             }
-            if (_gameMode == GameMode.Classic) {
+            if (_gameMode <= GameMode.ClassicPike) {
                 if (_assetColor == null) {
                     throw new Exceptions.DeckError("Asset color must be set");
                 } 

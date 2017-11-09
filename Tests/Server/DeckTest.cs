@@ -109,7 +109,7 @@ namespace Server
 
             try
             {
-                deck.SetGameMode(GameMode.Classic);
+                deck.SetGameMode(GameMode.ClassicClover);
             }
             catch (Exception)
             {
@@ -169,7 +169,7 @@ namespace Server
 
             try
             {
-                deck.SetGameMode(GameMode.Classic, CardColor.Clover);
+                deck.SetGameMode(GameMode.ClassicClover, CardColor.Clover);
             }
             catch (Exception)
             {
@@ -250,13 +250,13 @@ namespace Server
                      Enum.GetValues(typeof(CardColor)))
             {
                 Deck curDeck = new Deck();
-                    curDeck.SetGameMode(GameMode.Classic, color);
+                    curDeck.SetGameMode(GameMode.ClassicClover, color);
 
                 IsValidDeck(curDeck);
             }
 
             Deck deck = new Deck();
-            deck.SetGameMode(GameMode.Classic, CardColor.Clover);
+            deck.SetGameMode(GameMode.ClassicClover, CardColor.Clover);
             // Check the values of the cards
             Card[] cardList = deck.Cards.ToArray();
 

@@ -116,7 +116,7 @@ namespace Coinche.Server.Core
         {
             Dictionary<CardType, int> valueSet;
 
-            if (gameMode == GameMode.Classic) {
+            if (gameMode <= GameMode.ClassicPike) {
                 throw new Exceptions.CardError("GameMode cannot be Classic");
             }
             if (gameMode == GameMode.AllAssets) {
@@ -139,7 +139,7 @@ namespace Coinche.Server.Core
         {
             Dictionary<CardType, int> valueSet;
 
-            if (gameMode != GameMode.Classic)
+            if (gameMode > GameMode.ClassicPike)
             {
                 throw new Exceptions.CardError("GameMode must be Classic");
             }

@@ -72,7 +72,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -100,7 +100,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -128,7 +128,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -157,7 +157,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -192,7 +192,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -228,7 +228,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -264,7 +264,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -297,7 +297,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -326,7 +326,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -358,7 +358,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -391,7 +391,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -426,7 +426,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -458,7 +458,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -484,7 +484,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -510,7 +510,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;
@@ -537,7 +537,7 @@ namespace Server
 
             try
             {
-                GameTest test = new GameTest(GameMode.Classic, CardColor.Heart);
+                GameTest test = new GameTest(GameMode.ClassicHeart, CardColor.Heart);
 
                 var game = test.game;
                 var team = test.game.Teams;

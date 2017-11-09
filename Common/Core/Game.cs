@@ -5,7 +5,10 @@
     /// </summary>
     public enum GameMode
     {
-        Classic,
+        ClassicClover,
+        ClassicTile,
+        ClassicHeart,
+        ClassicPike,
         AllAssets,
         NoAsset
     }

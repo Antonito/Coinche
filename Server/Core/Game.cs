@@ -135,15 +135,9 @@ namespace Coinche.Server.Core
                 }
             }
 
-            // TODO: ?
-#if false
-            // Set the GameMode we get via contract
-            SetGameMode();
-#endif
-
             // All player have the same amount of card that's why
             // we can loop like this.
-            //TODO: or maybe implement IsHandEmpty
+            // TODO: or maybe implement IsHandEmpty
             // but it's logic that the current game is aware of
             // the number of card in the player hand
 
@@ -155,7 +149,7 @@ namespace Coinche.Server.Core
                     Fold fold = new Fold(_players, _gameMode);
                     fold.Run();
 
-                    //TODO: check if it is necessary
+                    // TODO: check if it is necessary
                     // Store the fold history for futur usage
                     _folds.Add(fold);
                 }
@@ -297,7 +291,7 @@ namespace Coinche.Server.Core
                     Common.PacketType.ContractInfo info = new Common.PacketType.ContractInfo
                     {
                        Promise = res.Promise,
-                       Color = res.Color,
+                       GameMode = res.GameMode,
                        Pseudo = ConnectionManager.Get(curPlayer.Connection).Pseudo
                     };
                     MemoryStream infoStream = ConnectionManager.Get(curPlayer.Connection).Stream;

@@ -8,8 +8,6 @@ namespace Coinche.Common.PacketType
         [ProtoMember(1)]
         public Core.Contract.Promise Promise { get; set; }
         [ProtoMember(2)]
-        public Core.Cards.CardColor Color { get; set; }
-        [ProtoMember(3)]
         public Core.Game.GameMode GameMode { get; set; }
     }
 
@@ -26,7 +24,7 @@ namespace Coinche.Common.PacketType
         [ProtoMember(1)]
         public Core.Contract.Promise Promise { get; set; }
         [ProtoMember(2)]
-        public Core.Cards.CardColor Color { get; set; }
+        public Core.Game.GameMode GameMode { get; set; }
         [ProtoMember(3)]
         public string Pseudo { get; set; }
     }

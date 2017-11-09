@@ -11,11 +11,13 @@ namespace Coinche.Client
     {
         private static readonly string _type = "NetWorkGame";
         private static readonly string _getCard = "PlayerGetGameCard";
+        private static readonly string _selectLobby = "SelectLobbyNetwork";
 
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<byte[]>(_type, InfoGameHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_getCard, GetCardHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_selectLobby, SelectLobbyHandler);
         }
 
         public static void Unregister(Connection connection)
@@ -26,6 +28,12 @@ namespace Coinche.Client
 
         private static void InfoGameHandler(PacketHeader header, Connection connection, byte[] info)
         {
+        }
+
+        private static void SelectLobbyHandler(PacketHeader header, Connection connection, byte[] info)
+        {
+            Console.WriteLine("Contract: ");
+            var contract = Console.ReadLine();
         }
 
         private static void GetCardHandler(PacketHeader header, Connection connection, byte[] info)

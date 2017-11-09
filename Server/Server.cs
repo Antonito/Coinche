@@ -91,9 +91,11 @@ namespace Coinche.Server
         /// <param name="connection">Connection.</param>
         public static void RemoveClient(Connection connection)
         {
-            // TODO: Disconnect other players from room if needed
-            Console.WriteLine("[Debug] client closed connection");
+            connection.CloseConnection(true);
+
             var connectInfos = ConnectionManager.Get(connection);
+            var pseudo = connectInfos.Pseudo;
+            Console.WriteLine("Client: " + pseudo + " left.");
             if (connectInfos.Lobby != null)
             {
                 // Disconnect client from the current lobby

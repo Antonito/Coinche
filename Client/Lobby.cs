@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 
@@ -9,6 +10,7 @@ namespace Coinche.Client
         private static readonly string _infos = "LobbyInfo";
         private static readonly string _err = "LobbyError";
         private static readonly string _select = "LobbySelect";
+        private static readonly Mutex mutex = new Mutex();
 
         public static void Register(Connection connection)
         {
@@ -26,8 +28,14 @@ namespace Coinche.Client
 
         public static void Connect(Connection connection)
         {
+            mutex.WaitOne();
             Console.WriteLine("Which lobby do you want to join ?");
-            string msg = Console.ReadLine();
+            bool success = false;
+            string msg;
+            do
+            {
+                success = Reader.TryReadLine(out msg, 100);
+            } while (!success);
             connection.SendObject("SelectLobby", msg);
         }
 
@@ -53,10 +61,17 @@ namespace Coinche.Client
 
             // TODO: Move
             Program.clientInfos.IsRun = true;
+            Console.WriteLine("Send message to lobby: ");
             while (Program.clientInfos.IsRun)
             {
-                Console.WriteLine("Send message to lobby: ");
-                string msg = Console.ReadLine();
+                string msg;
+                bool success = Reader.TryReadLine(out msg, 100);
+                if (!success)
+                    continue;
+                else
+                {
+                    Console.WriteLine("Send message to lobby: ");
+                }
 
                 if (msg.StartsWith("/quit"))
                 {
@@ -71,12 +86,11 @@ namespace Coinche.Client
                     connection.SendObject("LobbyRoomMessage", msg);
                 }
             }
-            Console.WriteLine("quit lobby");
             NetworkGame.Unregister(connection);
             connection.SendObject("LobbyRoomQuit");
             LobbyRoom.Unregister(connection);
             //Lobby.Register(connection);
-            Console.WriteLine("End and final quit lobby");
+            mutex.ReleaseMutex();
         }
     }
 }

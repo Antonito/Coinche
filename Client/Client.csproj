@@ -46,6 +46,7 @@
     <Compile Include="ClientInformation.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="AskUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

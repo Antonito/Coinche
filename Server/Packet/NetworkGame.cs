@@ -14,11 +14,21 @@ namespace Coinche.Server.Packet
         private static readonly string _type = "NetWorkGame";
         private static int _gameReadyCount = 0;
 
+        /// <summary>
+        /// Register the specified connection.
+        /// </summary>
+        /// <returns>The register.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<byte[]>(_type, Handler);
         }
 
+        /// <summary>
+        /// Unregister the specified connection.
+        /// </summary>
+        /// <returns>The unregister.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Unregister(Connection connection)
         {
             var connectInfos = ConnectionManager.Get(connection);
@@ -31,6 +41,13 @@ namespace Coinche.Server.Packet
             connection.RemoveIncomingPacketHandler(_type);
         }
 
+        /// <summary>
+        /// Handle the specified header, connection and game.
+        /// </summary>
+        /// <returns>The handler.</returns>
+        /// <param name="header">Header.</param>
+        /// <param name="connection">Connection.</param>
+        /// <param name="game">Game.</param>
         private static void Handler(PacketHeader header, Connection connection, byte[] game)
         {
             Console.WriteLine("[Debug] receiving Ready State from a client");
@@ -57,6 +74,10 @@ namespace Coinche.Server.Packet
             }
         }
 
+        /// <summary>
+        /// Plays the game.
+        /// </summary>
+        /// <param name="lobby">Lobby.</param>
         private static void PlayGame(Lobby lobby)
         {
             // We must konw if the game is started or not when a player quits

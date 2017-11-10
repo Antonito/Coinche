@@ -22,6 +22,10 @@ namespace Coinche.Server.Core
         /// </summary>
         private readonly List<Game> _games;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Match"/> class.
+        /// </summary>
+        /// <param name="connections">Connections.</param>
         public Match(List<Connection> connections)
         {
             if (connections.Count != 4)
@@ -47,6 +51,9 @@ namespace Coinche.Server.Core
             _games = new List<Game>();
         }
 
+        /// <summary>
+        /// Run this instance.
+        /// </summary>
         public void Run()
         {
             Console.WriteLine("Starting Match between both teams");

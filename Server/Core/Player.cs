@@ -95,6 +95,10 @@ namespace Coinche.Server.Core
             Score = 0;
         }
 
+        /// <summary>
+        /// Gives the deck.
+        /// </summary>
+        /// <param name="deck">Deck.</param>
         public void GiveDeck(Deck deck)
         {
             _deck = deck;
@@ -161,6 +165,10 @@ namespace Coinche.Server.Core
             _cardsHand.Remove(cur);
         }
 
+        /// <summary>
+        /// Check if has an asset
+        /// </summary>
+        /// <returns><c>true</c>, if asset was had, <c>false</c> otherwise.</returns>
         public bool HaveAsset()
         {
             return _cardsHand.Any(_deck.IsCardAsset);
@@ -178,6 +186,11 @@ namespace Coinche.Server.Core
             }) == 1;
         }
 
+        /// <summary>
+        /// Check if has a card of the color
+        /// </summary>
+        /// <returns><c>true</c>, if color was had, <c>false</c> otherwise.</returns>
+        /// <param name="color">Color.</param>
         public bool HaveColor(Common.Core.Cards.CardColor color)
         {
             return _cardsHand.Any(c => 

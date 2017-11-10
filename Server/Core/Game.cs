@@ -71,6 +71,10 @@ namespace Coinche.Server.Core
         /// <value>The teams.</value>
         public Team[] Teams { get { return _teams.ToArray(); } }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Game"/> class.
+        /// </summary>
+        /// <param name="teams">Teams.</param>
         public Game(List<Team> teams)
         {
             if (teams.Count != 2)
@@ -251,11 +255,17 @@ namespace Coinche.Server.Core
             }
         }
 
+        /// <summary>
+        /// Distributes the cards.
+        /// </summary>
         private void DistributeCards()
         {
             _deck.DistributeCards(_players);
         }
 
+        /// <summary>
+        /// Sets the result.
+        /// </summary>
         private void SetResult()
         {
             int scoreTeam = _players[0].Score + _players[1].Score;

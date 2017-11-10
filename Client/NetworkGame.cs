@@ -100,8 +100,14 @@ namespace Coinche.Client
             }
 
             Promise promise = AskUser.AskPromise(contract);
-            GameMode gameMode = AskUser.AskGameMode();
+            GameMode gameMode = GameMode.ClassicClover;
 
+            if (promise != Promise.Passe || promise != Promise.Coinche
+                || promise != Promise.ReCoinche)
+            {
+                gameMode = AskUser.AskGameMode();
+            }
+           
             using (MemoryStream streamResp = new MemoryStream())
             {
                 ContractResponse resp = new ContractResponse

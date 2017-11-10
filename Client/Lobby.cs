@@ -10,7 +10,8 @@ namespace Coinche.Client
         private static readonly string _infos = "LobbyInfo";
         private static readonly string _err = "LobbyError";
         private static readonly string _select = "LobbySelect";
-        private static readonly Mutex mutex = new Mutex();
+        //private static readonly Mutex mutex = new Mutex();
+        private static bool _isGameStarted = false;
 
         public static void Register(Connection connection)
         {
@@ -28,7 +29,7 @@ namespace Coinche.Client
 
         public static void Connect(Connection connection)
         {
-            mutex.WaitOne();
+            //mutex.WaitOne();
             Console.WriteLine("Which lobby do you want to join ?");
             bool success = false;
             string msg;
@@ -41,6 +42,9 @@ namespace Coinche.Client
 
         private static void LobbySelectHandler(PacketHeader header, Connection connection, string message)
         {
+            NetworkGame.Unregister(connection);
+            connection.SendObject("LobbyRoomQuit");
+            LobbyRoom.Unregister(connection);
             Program.clientInfos.IsRun = false;
             Connect(connection);
         }
@@ -80,17 +84,23 @@ namespace Coinche.Client
                 else if (msg.StartsWith("/ready"))
                 {
                     NetworkGame.SendReady(connection);
+                    _isGameStarted = true;
+                    Program.clientInfos.IsRun = false;
                 }
                 else
                 {
                     connection.SendObject("LobbyRoomMessage", msg);
                 }
             }
-            NetworkGame.Unregister(connection);
-            connection.SendObject("LobbyRoomQuit");
-            LobbyRoom.Unregister(connection);
-            //Lobby.Register(connection);
-            mutex.ReleaseMutex();
+            Console.WriteLine("END WHILE");
+            if (!_isGameStarted)
+            {
+                NetworkGame.Unregister(connection);
+                connection.SendObject("LobbyRoomQuit");
+                LobbyRoom.Unregister(connection);
+                //Lobby.Register(connection);
+                //mutex.ReleaseMutex();
+            }
         }
     }
 }

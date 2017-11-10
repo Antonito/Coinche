@@ -83,21 +83,24 @@ namespace Coinche.Client
                 Console.Write(">");
                 bool success = false;
                 string userInput;
-                do
+                while (!success)
                 {
-                    success = Reader.TryReadLine(out userInput, 100);
-                    if (success)
+                    //success = Reader.TryReadLine(out userInput, 100);
+                    Console.WriteLine("BEFORE");
+                    userInput = Console.ReadLine();
+                    userInput = Console.ReadLine();
+                    Console.WriteLine("AFTER");
+                    if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
                     {
-                        if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
-                        {
-                            promise = ((Promise)Int32.Parse(userInput));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Wrong choice\n>");
-                        }
+                        promise = ((Promise)Int32.Parse(userInput));
+                        success = true;
                     }
-                } while (!success);
+                    else
+                    {
+                        Console.WriteLine("Wrong choice\n>");
+                    }
+                }
+                   
             }
 
             {
@@ -123,6 +126,7 @@ namespace Coinche.Client
                         else
                         {
                             Console.WriteLine("Wrong choice\n>");
+                            success = false;
                         }
                     }
                 } while (!success);

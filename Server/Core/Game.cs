@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using ProtoBuf;
+using System.Threading;
 
 namespace Coinche.Server.Core
 {
@@ -128,9 +129,10 @@ namespace Coinche.Server.Core
                 {
                     SelectContract();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     // Restart the game if there's an error in Contract
+                    Console.WriteLine(e.Message);
                     return;
                 }
             }
@@ -184,18 +186,32 @@ namespace Coinche.Server.Core
             while (!_prepared)
             {
                 var contracts = new List<Tuple<Contract, GameMode>>();
-                foreach (var player in _players)
+                try
                 {
-                    // Ask player to choose something
-                    Task.Run(() =>
+                    foreach (var player in _players)
                     {
-                        bool ret = false;
-                        do
+                        // Ask player to choose something
+                        Task.Run(() =>
                         {
-                            ret = ContractTask(player, ref minimumContractValue,
-                                               _players, contracts);
-                        } while (!ret);
-                    }).Wait();
+                            bool ret = false;
+                            do
+                            {
+                                try
+                                {
+                                    ret = ContractTask(player, ref minimumContractValue,
+                                                       _players, contracts);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("TRY ContractTask: " + e.Message);
+                                }
+                            } while (!ret);
+                        }).Wait();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("TRY FOREACH: " + e.Message);
                 }
 
                 // Check if choosen contrat is valid and final
@@ -263,7 +279,7 @@ namespace Coinche.Server.Core
             };
             Serializer.Serialize(stream, requ);
             byte[] netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
-                                                                             10000, stream.ToArray());
+                                                                             Timeout.Infinite, stream.ToArray());
 
             Common.PacketType.ContractResponse res;
             using (var streamRes = new MemoryStream(netRes))

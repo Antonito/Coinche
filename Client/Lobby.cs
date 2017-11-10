@@ -94,7 +94,6 @@ namespace Coinche.Client
                     connection.SendObject("LobbyRoomMessage", msg);
                 }
             }
-            Console.WriteLine("END WHILE");
             if (!_isGameStarted)
             {
                 NetworkGame.Unregister(connection);

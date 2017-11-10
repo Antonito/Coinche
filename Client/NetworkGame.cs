@@ -131,21 +131,20 @@ namespace Coinche.Client
                 string userInput;
                 while (!success)
                 {
-                    //success = Reader.TryReadLine(out userInput, 100);
-                    Console.WriteLine("BEFORE");
-                    userInput = Console.ReadLine();
-                    Console.WriteLine("AFTER");
-                    if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
+                    success = Reader.TryReadLine(out userInput, 100);
+                    if (success)
                     {
-                        promise = ((Promise)Int32.Parse(userInput));
-                        success = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Wrong choice\n>");
+                        if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
+                        {
+                            promise = ((Promise)Int32.Parse(userInput));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong choice\n>");
+                            success = false;
+                        }
                     }
                 }
-                   
             }
 
             {
@@ -154,6 +153,7 @@ namespace Coinche.Client
                 foreach (GameMode e in Enum.GetValues(typeof(GameMode)))
                 {
                     Console.WriteLine(menuCount + ") " + e.ToString());
+                    menuCount++;
                 }
 
                 Console.Write(">");

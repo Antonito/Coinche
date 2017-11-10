@@ -77,7 +77,9 @@ namespace Coinche.Server.Core
             }
         }
 
-        // TODO: rm ?
+        /// <summary>
+        /// Is unit testing ?
+        /// </summary>
         private readonly bool _unitTest;
 
         /// <summary>

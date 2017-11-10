@@ -203,10 +203,6 @@ namespace Coinche.Server.Core
         /// </summary>
         private void SelectContract()
         {
-            foreach (var player in _players)
-            {
-                Packet.NetworkContract.Register(player.Connection);
-            }
             DistributeCards();
 
             // The contract need to be establised here
@@ -252,12 +248,6 @@ namespace Coinche.Server.Core
                     _gameMode = selected.Item2;
                 }
                 firstLoop = false;
-            }
-
-            // Unregister Contract's
-            foreach (var player in _players)
-            {
-                Packet.NetworkContract.Unregister(player.Connection);
             }
         }
 

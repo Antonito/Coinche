@@ -40,19 +40,11 @@ namespace Coinche.Server
             set { _pseudo.Value = value; }
         }
 
-        //TODO: check this value to readonly
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="T:Coinche.Server.ConnectionInformation"/> is game ready.
         /// </summary>
         /// <value><c>true</c> if is game ready; otherwise, <c>false</c>.</value>
-        public bool IsGameReady { get; set; } = false;
-
-        //TODO: check this value to readonly
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="T:Coinche.Server.ConnectionInformation"/> is round ready.
-        /// </summary>
-        /// <value><c>true</c> if is round ready; otherwise, <c>false</c>.</value>
-        public bool IsRoundReady { get; set; } = false;
+        public bool IsGameReady { get; set; }
 
         /// <summary>
         /// Gets the stream.
@@ -64,7 +56,6 @@ namespace Coinche.Server
             {
                 _stream.Flush();
                 _stream.Position = 0;
-                //_stream.SetLength(0);
                 return _stream;
             }
         }
@@ -105,13 +96,11 @@ namespace Coinche.Server
         /// <param name="connection">Connection.</param>
         public ConnectionInformation(Connection connection)
         {
+            IsGameReady = false;
             _connection = connection;
             _pseudo = new SetOnce<string>();
             _lobby = null;
             _stream = new MemoryStream(4096);
-            //_stream.Position = 0;
-            //_stream.SetLength(0);
-            //_stream.Seek(0, SeekOrigin.Begin);
         }
 
         ~ConnectionInformation()

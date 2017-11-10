@@ -16,10 +16,7 @@ namespace Coinche.Server.Packet
 
         public static void Register(Connection connection)
         {
-            // TODO: 
-            //SendReceiveOptions customSendReceiveOptions = new SendReceiveOptions<ProtobufSerializer>();
             connection.AppendIncomingPacketHandler<byte[]>(_type, Handler);
-
         }
 
         public static void Unregister(Connection connection)

@@ -4,6 +4,7 @@ using Coinche.Common.PacketType;
 using NetworkCommsDotNet;
 using ProtoBuf;
 using System.IO;
+using Coinche.Common.Core.Game;
 
 namespace Coinche.Client
 {
@@ -56,24 +57,83 @@ namespace Coinche.Client
             {
                 contract = Serializer.Deserialize<ContractRequest>(stream);
             }
-            foreach (Promise e in Enum.GetValues(typeof(Promise)))
+
+            Promise promise = Promise.Points150;
+            GameMode gameMode = Common.Core.Game.GameMode.ClassicClover;
+
             {
-                if (e == 0 || e >= contract.MinimumValue)
+                Console.WriteLine("Choose between the following promise:");
+                foreach (Promise e in Enum.GetValues(typeof(Promise)))
                 {
-                    Console.WriteLine(e.ToString() + " -> " + (int)e);
+                    if (e == 0 || e >= contract.MinimumValue)
+                    {
+                        //Console.WriteLine(e.ToString() + " -> " + (int)e);
+                        if (e == Promise.General)
+                        {
+                            Console.WriteLine((int)e);
+                        }
+                        else
+                        {
+                            Console.Write((int)e + ", ");
+
+                        }
+                    }
                 }
+
+                Console.Write(">");
+                bool success = false;
+                string userInput;
+                do
+                {
+                    success = Reader.TryReadLine(out userInput, 100);
+                    if (success)
+                    {
+                        if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
+                        {
+                            promise = ((Promise)Int32.Parse(userInput));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong choice\n>");
+                        }
+                    }
+                } while (!success);
             }
 
-            // TODO
-            Console.WriteLine("Contract: ");
+            {
+                Console.WriteLine("Choose between the following game mode:");
+                int menuCount = 0;
+                foreach (GameMode e in Enum.GetValues(typeof(GameMode)))
+                {
+                    Console.WriteLine(menuCount + ") " + e.ToString());
+                }
 
-            var promise = Promise.Points150;
+                Console.Write(">");
+                bool success = false;
+                string userInput;
+                do
+                {
+                    success = Reader.TryReadLine(out userInput, 100);
+                    if (success)
+                    {
+                        if (Enum.IsDefined(typeof(GameMode), Int32.Parse(userInput)))
+                        {
+                            gameMode = ((GameMode)Int32.Parse(userInput));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong choice\n>");
+                        }
+                    }
+                } while (!success);
+            }
+           
             using (MemoryStream streamResp = new MemoryStream())
             {
                 ContractResponse resp = new ContractResponse
                 {
                     Promise = promise,
-                    GameMode = Common.Core.Game.GameMode.ClassicClover
+                    GameMode = gameMode
                 };
                 Serializer.Serialize(streamResp, resp);
                 connection.SendObject("ChooseContractResp", streamResp.ToArray());

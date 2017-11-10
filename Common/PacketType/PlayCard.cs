@@ -2,13 +2,12 @@
 
 namespace Coinche.Common.PacketType
 {
-    // TODO: Use enum
     [ProtoContract]
     public class PlayCard
     {
         [ProtoMember(1)]
-        public int CardValue { get; set; }
+        public Core.Cards.CardType CardValue { get; set; }
         [ProtoMember(2)]
-        public int CardColor { get; set; }
+        public Core.Cards.CardColor CardColor { get; set; }
     }
 }

@@ -82,6 +82,21 @@ namespace Coinche.Server.Core
         }
 
         /// <summary>
+        /// Check if a card is an asset
+        /// </summary>
+        /// <returns><c>true</c>, if card is an asset, <c>false</c> otherwise.</returns>
+        /// <param name="card">Card.</param>
+        public bool IsCardAsset(Card card)
+        {
+            if (_gameMode >= GameMode.ClassicClover && _gameMode <= GameMode.ClassicPike)
+            {
+                return card.Color == _assetColor;
+            }
+            // Then gameMode must be AllAsset or NoAsset
+            return (_gameMode == GameMode.AllAssets);
+        }
+
+        /// <summary>
         /// Distributes the cards.
         /// </summary>
         /// <param name="players">Players.</param>

@@ -137,27 +137,19 @@ namespace Coinche.Server.Core
 
             // All player have the same amount of card that's why
             // we can loop like this.
-            // TODO: or maybe implement IsHandEmpty
-            // but it's logic that the current game is aware of
-            // the number of card in the player hand
-
             if (play)
             {
                 // This should not be executed during unit tests
-                while (_teams[0].Players[0].Hand.Count >= 1)
+                while (!_teams[0].Players[0].IsHandEmpty)
                 {
-                    Fold fold = new Fold(_players, _gameMode);
+                    Fold fold = new Fold(_players, _gameMode, _deck);
                     fold.Run();
-
-                    // TODO: check if it is necessary
-                    // Store the fold history for futur usage
                     _folds.Add(fold);
                 }
             }
             else 
             {
-                Fold fold = new Fold(_players, _gameMode);
-                fold.Run();
+                Fold fold = new Fold(_players, _gameMode, _deck);
                 _folds.Add(fold);
             }
 
@@ -235,10 +227,10 @@ namespace Coinche.Server.Core
 
         private void SetResult()
         {
-            int scoreTeam = _players[0].GetPoints() + _players[1].GetPoints();
+            int scoreTeam = _players[0].Score + _players[1].Score;
             _teams[0].AddScore(scoreTeam);
 
-            scoreTeam = _players[2].GetPoints() + _players[3].GetPoints();
+            scoreTeam = _players[2].Score + _players[3].Score;
             _teams[1].AddScore(scoreTeam);
         }
 

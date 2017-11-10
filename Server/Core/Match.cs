@@ -7,8 +7,6 @@ namespace Coinche.Server.Core
 {
     public class Match
     {
-        //TODO: is pertinent to set SetOnce on collection type like list ?
-
         /// <summary>
         /// The players.
         /// </summary>
@@ -58,7 +56,6 @@ namespace Coinche.Server.Core
 
                 game.Run();
 
-                // TODO: check if it is necessary
                 // Store the game history for futur usage
                 _games.Add(game);
             }

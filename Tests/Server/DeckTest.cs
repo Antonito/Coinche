@@ -59,66 +59,6 @@ namespace Server
         }
 
         /// <summary>
-        /// Test to set an invalid game mode to a deck #1
-        /// </summary>
-        [Test]
-        public void WrongGameModeSet1()
-        {
-            Deck deck = new Deck();
-            bool hasThrown = false;
-
-            try
-            {
-                deck.SetGameMode(GameMode.NoAsset, CardColor.Clover);
-            }
-            catch (Exception)
-            {
-                hasThrown = true;
-            }
-            Assert.AreEqual(true, hasThrown);
-        }
-
-        /// <summary>
-        /// Test to set an invalid game mode to a deck #2
-        /// </summary>
-        [Test]
-        public void WrongGameModeSet2()
-        {
-            Deck deck = new Deck();
-            bool hasThrown = false;
-
-            try
-            {
-                deck.SetGameMode(GameMode.AllAssets, CardColor.Clover);
-            }
-            catch (Exception)
-            {
-                hasThrown = true;
-            }
-            Assert.AreEqual(true, hasThrown);
-        }
-
-        /// <summary>
-        /// Test to set an invalid game mode to a deck #3
-        /// </summary>
-        [Test]
-        public void WrongGameModeSet3()
-        {
-            Deck deck = new Deck();
-            bool hasThrown = false;
-
-            try
-            {
-                deck.SetGameMode(GameMode.ClassicClover);
-            }
-            catch (Exception)
-            {
-                hasThrown = true;
-            }
-            Assert.AreEqual(true, hasThrown);
-        }
-
-        /// <summary>
         /// Test to set a valid game mode to a deck #1
         /// </summary>
         [Test]
@@ -169,7 +109,7 @@ namespace Server
 
             try
             {
-                deck.SetGameMode(GameMode.ClassicClover, CardColor.Clover);
+                deck.SetGameMode(GameMode.ClassicClover);
             }
             catch (Exception)
             {
@@ -246,17 +186,8 @@ namespace Server
         [Test]
         public void ClassicAssetsDeck()
         {
-            foreach (CardColor color in
-                     Enum.GetValues(typeof(CardColor)))
-            {
-                Deck curDeck = new Deck();
-                    curDeck.SetGameMode(GameMode.ClassicClover, color);
-
-                IsValidDeck(curDeck);
-            }
-
             Deck deck = new Deck();
-            deck.SetGameMode(GameMode.ClassicClover, CardColor.Clover);
+            deck.SetGameMode(GameMode.ClassicClover);
             // Check the values of the cards
             Card[] cardList = deck.Cards.ToArray();
 

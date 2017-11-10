@@ -37,7 +37,7 @@ namespace Server
                 this.gameMode = gameMode;
                 this.assetColor = assetColor;
                 deck = new Deck();
-                deck.SetGameMode(gameMode, assetColor);
+                deck.SetGameMode(gameMode);
                 players = new List<Player> {
                 new Player(true), new Player(true),
                 new Player(true), new Player(true)

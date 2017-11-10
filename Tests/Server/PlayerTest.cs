@@ -295,7 +295,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            deck.SetGameMode(GameMode.ClassicPike);
             var cards = deck.Cards.Take(1);
 
             try
@@ -320,7 +320,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            deck.SetGameMode(GameMode.ClassicPike);
             var cards = deck.Cards.Take(1);
 
             try
@@ -345,7 +345,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            deck.SetGameMode(GameMode.ClassicPike);
             var cards = deck.Cards.Take(1);
             var card1 = new Card(CardType.Eight, CardColor.Clover);
             var card2 = new Card(CardType.Eight, CardColor.Pike);
@@ -373,7 +373,7 @@ namespace Server
             bool hasThrown = false;
             var player = new Player(true);
             player.GiveDeck(deck);
-            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            deck.SetGameMode(GameMode.ClassicPike);
             var cards = deck.Cards.Take(1);
             var card1 = new Card(CardType.Eight, CardColor.Clover);
             var card2 = new Card(CardType.Eight, CardColor.Pike);

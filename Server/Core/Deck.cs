@@ -48,18 +48,31 @@ namespace Coinche.Server.Core
         /// Sets the game mode.
         /// </summary>
         /// <param name="gameMode">Game mode.</param>
-        public void SetGameMode(GameMode gameMode, 
-                                CardColor? assetColor = null)
+        public void SetGameMode(GameMode gameMode)
         {
-            if (assetColor == null && gameMode <= GameMode.ClassicPike)
-            {
-                throw new Exceptions.DeckError("GameMode cannot be Classic");
-            }
-            else if (assetColor != null && gameMode > GameMode.ClassicPike) {
-                throw new Exceptions.DeckError("GameMode must be Classic");
-            }
             _gameMode = gameMode;
-            _assetColor = assetColor;
+            switch (gameMode)
+            {
+                case GameMode.ClassicPike:
+                    _assetColor = CardColor.Pike;
+                    break;
+
+                case GameMode.ClassicTile:
+                    _assetColor = CardColor.Tile;
+                    break;
+
+                case GameMode.ClassicHeart:
+                    _assetColor = CardColor.Heart;
+                    break;
+
+                case GameMode.ClassicClover:
+                    _assetColor = CardColor.Clover;
+                    break;
+
+                default:
+                    _assetColor = null;
+                    break;
+            }
         }
 
         /// <summary>

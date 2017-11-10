@@ -47,6 +47,7 @@ namespace Coinche.Server.Core
             _gameMode = gameMode;
             _deck = deck;
             _cards = new List<Card>();
+            _deck.SetGameMode(gameMode);
         }
 
         /// <summary>
@@ -102,29 +103,37 @@ namespace Coinche.Server.Core
                 Card cur = new Card(res.CardValue, res.CardColor);
                 if (player.HaveCard(cur))
                 {
-                    if (player.HaveColor(_cards.First().Color))
+                    if (_cards.Count != 0)
                     {
-                        if (cur.Color != _cards.First().Color)
+                        if (player.HaveColor(_cards.First().Color))
                         {
-                            throw new Exceptions.CardError("Player must follow the color, when possible");   
+                            if (cur.Color != _cards.First().Color)
+                            {
+                                throw new Exceptions.CardError("Player must follow the color, when possible");
+                            }
                         }
-                    }
-                    else if (player.HaveAsset())
-                    {
-                        if (mustPlayAsset && _deck.IsCardAsset(cur) &&
-                            _deck.GetCardValue(cur) > _deck.GetCardValue(_cards.Last()) ||
-                            !_deck.IsCardAsset(cur))
+                        else if (player.HaveAsset())
                         {
-                            throw new Exceptions.CardError("Player must play an asset.");   
+                            if (mustPlayAsset && _deck.IsCardAsset(cur) &&
+                                _deck.GetCardValue(cur) > _deck.GetCardValue(_cards.Last()) ||
+                                !_deck.IsCardAsset(cur))
+                            {
+                                throw new Exceptions.CardError("Player must play an asset.");
+                            }
                         }
                     }
                     _cards.Add(cur);
                     player.PlayCard(cur);
                     ret = true;
                 }
+                else
+                {
+                    throw new Exceptions.CardError("Player does not have this card.");
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine("FoldError: " + e.Message);
                 player.Connection.SendObject("InvalidCard");
                 ret = false;
             }

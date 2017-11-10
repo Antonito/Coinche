@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
 using Coinche.Common.PacketType;
 using NetworkCommsDotNet;
@@ -13,6 +15,7 @@ namespace Coinche.Client
     public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
+        private static readonly string _newGame = "NewGame";
         private static readonly string _getCard = "PlayerGetGameCard";
         private static readonly string _selectLobby = "SelectLobbyNetwork";
         private static readonly string _chooseContract = "ChooseContract";
@@ -21,9 +24,13 @@ namespace Coinche.Client
         private static readonly string _invalidCard = "InvalidCard";
         private static readonly string _endFold = "EndFold";
 
+        private static List<Card> _cards;
+        private static List<Card> _cardsPlayed;
+
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<byte[]>(_type, InfoGameHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_newGame, NewGameHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_getCard, GetCardHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_selectLobby, SelectLobbyHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_chooseContract, ChooseContractHandler);
@@ -36,6 +43,7 @@ namespace Coinche.Client
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_type);
+            connection.RemoveIncomingPacketHandler(_newGame);
             connection.RemoveIncomingPacketHandler(_getCard);
             connection.RemoveIncomingPacketHandler(_selectLobby);
             connection.RemoveIncomingPacketHandler(_chooseContract);
@@ -47,6 +55,14 @@ namespace Coinche.Client
 
         private static void InfoGameHandler(PacketHeader header, Connection connection, byte[] info)
         {
+        }
+
+        private static void NewGameHandler(PacketHeader header, Connection connection, byte[] info)
+        {
+            _cards = new List<Card>();
+            _cardsPlayed = new List<Card>();
+            Console.WriteLine("Starting new game");
+            connection.SendObject("NewGameOK");
         }
 
         private static void EndFoldHandler(PacketHeader header, Connection connection, byte[] info)
@@ -62,20 +78,49 @@ namespace Coinche.Client
 
         private static void InvalidCardHandler(PacketHeader header, Connection connection, byte[] info)
         {
-            // TODO
             Console.WriteLine("You cannot play this card.");
+            _cards.Add(_cardsPlayed.Last());
+            _cardsPlayed.Remove(_cardsPlayed.Last());
         }
 
         private static void GiveCardHandler(PacketHeader header, Connection connection, byte[] info)
         {
+            Console.WriteLine("Number of cards: " + _cards.Count);
+            for (var i = 0; i < _cards.Count; ++i)
+            {
+                Console.WriteLine(i + ") " + _cards[i].Value.ToString() + " - " + _cards[i].Color.ToString());
+            }
+            bool valid = false;
+            int choice = 0;
+            do
+            {
+                try
+                {
+                    Console.WriteLine("Please select a card: ");
+                    var cardChoice = Console.ReadLine();
+                    choice = int.Parse(cardChoice);
+                    if (choice < 0 || choice >= _cards.Count)
+                    {
+                        throw new IndexOutOfRangeException("Invalid input");
+                    }
+                    valid = true;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Invalid input.");
+                }
+            } while (!valid);
+
+
             using (var stream = new MemoryStream())
             {
-                // TODO: Ask for card
                 PlayCard card = new PlayCard
                 {
-                    CardValue = Common.Core.Cards.CardType.Ace,
-                    CardColor = Common.Core.Cards.CardColor.Clover
+                    CardValue = _cards[choice].Value,
+                    CardColor = _cards[choice].Color
                 };
+                _cardsPlayed.Add(_cards[choice]);
+                _cards.RemoveAt(choice);
                 Serializer.Serialize(stream, card);
                 connection.SendObject("GiveCard", stream.ToArray());
             }
@@ -200,6 +245,7 @@ namespace Coinche.Client
             {
                 var card = Serializer.Deserialize<PlayCard>(stream);
                 Console.WriteLine("Got: " + card.CardValue + " | " + card.CardColor);
+                _cards.Add(new Card(card.CardValue, card.CardColor));
             }
 
         }

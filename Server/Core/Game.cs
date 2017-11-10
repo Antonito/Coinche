@@ -139,6 +139,13 @@ namespace Coinche.Server.Core
         {
             if (!_prepared)
             {
+                foreach (var player in _players)
+                {
+                    Task.Run(() => 
+                    {
+                        player.Connection.SendReceiveObject<byte[]>("NewGame", "NewGameOK", Timeout.Infinite);
+                    }).Wait();
+                }
                 try
                 {
                     SelectContract();

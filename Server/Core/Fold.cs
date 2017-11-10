@@ -36,11 +36,6 @@ namespace Coinche.Server.Core
         private readonly List<Card> _cards;
 
         /// <summary>
-        /// The contract.
-        /// </summary>
-        private readonly Contract _contract;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Fold"/> class.
         /// </summary>
         /// <param name="players">Players.</param>

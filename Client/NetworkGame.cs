@@ -99,83 +99,9 @@ namespace Coinche.Client
                 contract = Serializer.Deserialize<ContractRequest>(stream);
             }
 
-            Promise promise = Promise.Points150;
-            GameMode gameMode = Common.Core.Game.GameMode.ClassicClover;
+            Promise promise = AskUser.AskPromise(contract);
+            GameMode gameMode = AskUser.AskGameMode();
 
-            {
-                Console.WriteLine("Choose between the following promise:");
-                foreach (Promise e in Enum.GetValues(typeof(Promise)))
-                {
-                    if (e == 0 || e >= contract.MinimumValue)
-                    {
-                        //Console.WriteLine(e.ToString() + " -> " + (int)e);
-                        if (e == Promise.General)
-                        {
-                            Console.WriteLine((int)e);
-                        }
-                        else
-                        {
-                            Console.Write((int)e + ", ");
-
-                        }
-                    }
-                }
-
-                Console.Write(">");
-                // clearing the input buffer before asking something to user
-                while (Console.KeyAvailable)
-                {
-                    Console.ReadKey(false);
-                }
-                bool success = false;
-                string userInput;
-                while (!success)
-                {
-                    success = Reader.TryReadLine(out userInput, 100);
-                    if (success)
-                    {
-                        if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
-                        {
-                            promise = ((Promise)Int32.Parse(userInput));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Wrong choice\n>");
-                            success = false;
-                        }
-                    }
-                }
-            }
-
-            {
-                Console.WriteLine("Choose between the following game mode:");
-                int menuCount = 0;
-                foreach (GameMode e in Enum.GetValues(typeof(GameMode)))
-                {
-                    Console.WriteLine(menuCount + ") " + e.ToString());
-                    menuCount++;
-                }
-
-                Console.Write(">");
-                bool success = false;
-                string userInput;
-                do
-                {
-                    success = Reader.TryReadLine(out userInput, 100);
-                    if (success)
-                    {
-                        if (Enum.IsDefined(typeof(GameMode), Int32.Parse(userInput)))
-                        {
-                            gameMode = ((GameMode)Int32.Parse(userInput));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Wrong choice\n>");
-                            success = false;
-                        }
-                    }
-                } while (!success);
-            }
            
             using (MemoryStream streamResp = new MemoryStream())
             {

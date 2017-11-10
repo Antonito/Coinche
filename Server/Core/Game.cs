@@ -141,7 +141,7 @@ namespace Coinche.Server.Core
             {
                 foreach (var player in _players)
                 {
-                    Task.Run(() => 
+                    Task.Run(() =>
                     {
                         player.Connection.SendReceiveObject<byte[]>("NewGame", "NewGameOK", Timeout.Infinite);
                     }).Wait();
@@ -186,6 +186,7 @@ namespace Coinche.Server.Core
 
                     _folds.Add(fold);
                 }
+                Console.WriteLine("Game ended");
             }
             else
             {
@@ -336,11 +337,11 @@ namespace Coinche.Server.Core
             if (res.Promise > Common.Core.Contract.Promise.ReCoinche)
             {
                 Console.WriteLine("Received Contract: " + res.Promise.ToString() +
-                     " " + res.GameMode.ToString());   
+                     " " + res.GameMode.ToString());
             }
             else
             {
-                Console.WriteLine("Received Contract: " + res.Promise.ToString());      
+                Console.WriteLine("Received Contract: " + res.Promise.ToString());
             }
 
             if (res.Promise >= Common.Core.Contract.Promise.Points80 &&
@@ -353,7 +354,22 @@ namespace Coinche.Server.Core
                 }
                 minimumContractValue = res.Promise;
             }
-            contracts.Add(new Tuple<Contract, GameMode>(new Contract(res.Promise, player), res.GameMode));
+            Player target = null;
+            if (res.Promise == Common.Core.Contract.Promise.Coinche || 
+                res.Promise == Common.Core.Contract.Promise.General)
+            {
+                target = player;
+            }
+            else if (res.Promise == Common.Core.Contract.Promise.Coinche || 
+                     res.Promise == Common.Core.Contract.Promise.ReCoinche)
+            {
+                var lastValidContract = contracts.LastOrDefault(c => 
+                {
+                    return c.Item1.Promise != Common.Core.Contract.Promise.Passe;
+                });
+                target = players[contracts.IndexOf(lastValidContract)];
+            }
+            contracts.Add(new Tuple<Contract, GameMode>(new Contract(res.Promise, player, target), res.GameMode));
 
             // Notify other players of its choice
             foreach (var curPlayer in players)

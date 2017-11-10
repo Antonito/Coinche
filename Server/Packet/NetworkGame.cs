@@ -81,12 +81,17 @@ namespace Coinche.Server.Packet
         private static void PlayGame(Lobby lobby)
         {
             // We must konw if the game is started or not when a player quits
-            lobby.IsStarted = true;            
-            Console.WriteLine("game launched,  time to continue");
+            lobby.IsStarted = true;
 
-            var match = new Core.Match(lobby.Connection);
-            match.Run();
-            Console.WriteLine("Match has ended.");
+            try
+            {
+                var match = new Core.Match(lobby.Connection);
+                match.Run();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[LobbyRoom - " + lobby.Name + "] Match has ended.");
+            }
         }
     }
 }

@@ -334,7 +334,7 @@ namespace Coinche.Server.Core
             if (res.Promise >= Common.Core.Contract.Promise.Points80 &&
                 res.Promise <= Common.Core.Contract.Promise.General)
             {
-                if (res.Promise < minimumContractValue)
+                if (res.Promise <= minimumContractValue)
                 {
                     // Ask for another contract
                     return false;

@@ -54,8 +54,8 @@ namespace Coinche.Client
             using (var stream = new MemoryStream(info))
             {
                 var res = Serializer.Deserialize<EndRound>(stream);
-                Console.WriteLine("Winner: " + res.WinnerTeam + 
-                                  " (" + res.WinnerPoint + ") | Loser: " + 
+                Console.WriteLine("Winner: " + res.WinnerTeam +
+                                  " (" + res.WinnerPoint + ") | Loser: " +
                                   res.LoserPoint);
             }
         }
@@ -71,7 +71,7 @@ namespace Coinche.Client
             using (var stream = new MemoryStream())
             {
                 // TODO: Ask for card
-                PlayCard card = new PlayCard 
+                PlayCard card = new PlayCard
                 {
                     CardValue = Common.Core.Cards.CardType.Ace,
                     CardColor = Common.Core.Cards.CardColor.Clover
@@ -102,7 +102,6 @@ namespace Coinche.Client
             Promise promise = AskUser.AskPromise(contract);
             GameMode gameMode = AskUser.AskGameMode();
 
-           
             using (MemoryStream streamResp = new MemoryStream())
             {
                 ContractResponse resp = new ContractResponse

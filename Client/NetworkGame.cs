@@ -41,16 +41,21 @@ namespace Coinche.Client
 
         private static void ChooseContractInfoHandler(PacketHeader header, Connection connection, byte[] info)
         {
-            MemoryStream stream = new MemoryStream(info);
-            var contract = Serializer.Deserialize<ContractInfo>(stream);
-            Console.WriteLine("Player " + contract.Pseudo + " chose " + 
-                              contract.Promise.ToString() + " | " + contract.GameMode.ToString());
+            using (MemoryStream stream = new MemoryStream(info))
+            {
+                var contract = Serializer.Deserialize<ContractInfo>(stream);
+                Console.WriteLine("Player " + contract.Pseudo + " chose " +
+                                  contract.Promise.ToString() + " | " + contract.GameMode.ToString());
+            }
         }
 
         private static void ChooseContractHandler(PacketHeader header, Connection connection, byte[] info)
         {
-            MemoryStream stream = new MemoryStream(info);
-            var contract = Serializer.Deserialize<ContractRequest>(stream);
+            ContractRequest contract;
+            using (MemoryStream stream = new MemoryStream(info))
+            {
+                contract = Serializer.Deserialize<ContractRequest>(stream);
+            }
             foreach (Promise e in Enum.GetValues(typeof(Promise)))
             {
                 if (e == 0 || e >= contract.MinimumValue)
@@ -63,15 +68,17 @@ namespace Coinche.Client
             Console.WriteLine("Contract: ");
 
             var promise = Promise.Points150;
-            MemoryStream streamResp = new MemoryStream();
-            ContractResponse resp = new ContractResponse
+            using (MemoryStream streamResp = new MemoryStream())
             {
-                Promise = promise,
-                GameMode = Common.Core.Game.GameMode.ClassicClover
-            };
-            Serializer.Serialize(streamResp, resp);
-            connection.SendObject("ChooseContractResp", streamResp.ToArray());
-            Console.WriteLine("Response sent !");
+                ContractResponse resp = new ContractResponse
+                {
+                    Promise = promise,
+                    GameMode = Common.Core.Game.GameMode.ClassicClover
+                };
+                Serializer.Serialize(streamResp, resp);
+                connection.SendObject("ChooseContractResp", streamResp.ToArray());
+                Console.WriteLine("Response sent !");
+            }
         }
 
         // TODO: rm ???
@@ -85,9 +92,11 @@ namespace Coinche.Client
         {
             Console.WriteLine("Receiving card...");
 
-            MemoryStream stream = new MemoryStream(info);
-            var card = Serializer.Deserialize<PlayCard>(stream);
-            Console.WriteLine("Got: " + card.CardValue + " | " + card.CardColor);
+            using (MemoryStream stream = new MemoryStream(info))
+            {
+                var card = Serializer.Deserialize<PlayCard>(stream);
+                Console.WriteLine("Got: " + card.CardValue + " | " + card.CardColor);
+            }
 
         }
 
@@ -99,10 +108,12 @@ namespace Coinche.Client
                 IsReady = true
             };
             //TODO: set the Stream into a 'client' class like in server
-            MemoryStream stream = new MemoryStream();
-            Serializer.Serialize(stream, game);
-            byte[] t = stream.ToArray();
-            connection.SendObject(_type, t);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                Serializer.Serialize(stream, game);
+                byte[] t = stream.ToArray();
+                connection.SendObject(_type, t);
+            }
         }
     }
 }

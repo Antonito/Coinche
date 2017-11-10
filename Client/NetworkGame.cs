@@ -81,13 +81,17 @@ namespace Coinche.Client
                 }
 
                 Console.Write(">");
+                // clearing the input buffer before asking something to user
+                while (Console.KeyAvailable)
+                {
+                    Console.ReadKey(false);
+                }
                 bool success = false;
                 string userInput;
                 while (!success)
                 {
                     //success = Reader.TryReadLine(out userInput, 100);
                     Console.WriteLine("BEFORE");
-                    userInput = Console.ReadLine();
                     userInput = Console.ReadLine();
                     Console.WriteLine("AFTER");
                     if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))

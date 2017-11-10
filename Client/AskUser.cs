@@ -20,11 +20,19 @@ namespace Coinche.Client
         {
             Promise promise = Promise.Points150;
             Console.WriteLine("Choose between the following promises:");
+            List<int> promiseList = new List<int>();
             foreach (Promise e in Enum.GetValues(typeof(Promise)))
             {
-                if (e == 0 || e > contract.MinimumValue)
+                if (contract.MinimumValue == 0 && e != Promise.Coinche
+                    && e != Promise.ReCoinche)
                 {
                     Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
+                    promiseList.Add((int)e);
+                }
+                else if (contract.MinimumValue != 0)
+                {
+                    Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
+                    promiseList.Add((int)e);
                 }
             }
 
@@ -47,10 +55,14 @@ namespace Coinche.Client
                             throw new IndexOutOfRangeException("Invalid promise");
                         }
                         promise = ((Promise)Int32.Parse(userInput));
+                        if (!promiseList.Contains((int)promise))
+                        {
+                            throw new IndexOutOfRangeException("Invalid promise");
+                        }
                     }
                     catch (Exception)
                     {
-                        Console.WriteLine("Wrong choice\n> ");
+                        Console.Write("Wrong choice\n> ");
                         success = false;                        
                     }
                 }
@@ -90,7 +102,7 @@ namespace Coinche.Client
                     }
                     catch (Exception)
                     {
-                        Console.WriteLine("Wrong choice\n> ");
+                        Console.Write("Wrong choice\n> ");
                         success = false;
                     }
                 }
@@ -123,20 +135,19 @@ namespace Coinche.Client
                 {
                     try
                     {
-                        choice = int.Parse(userInput);
-                        if (choice >= 0 && choice < cards.Count)
+                        choice = Int32.Parse(userInput);
+                        if (choice < 0 || choice >= cards.Count)
                         {
-                            success = true;
+                            throw new IndexOutOfRangeException("Invalid Card");
                         }
                     }
                     catch (Exception)
                     {
                         success = false;
-                        Console.WriteLine("Wrong choice\n> ");
+                        Console.Write("Wrong choice\n> ");
                     }
                 }
             } while (!success && Lobby.IsGameStarted);
-            Console.WriteLine("END ASKCARD");
             return choice;
         }
     }

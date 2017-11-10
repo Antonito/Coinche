@@ -51,7 +51,10 @@ namespace Coinche.Client
 
         public List<Card> GetCards()
         {
-            return _cards;
+            lock (thisLock)
+            {
+                return _cards;
+            }
         }
 
         public CardType GetCardType(int index)

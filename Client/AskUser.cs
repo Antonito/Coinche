@@ -27,7 +27,7 @@ namespace Coinche.Client
             }
             bool success = false;
             string userInput;
-            while (!success)
+            do
             {
                 success = Reader.TryReadLine(out userInput, 100);
                 if (success)
@@ -42,7 +42,7 @@ namespace Coinche.Client
                         success = false;
                     }
                 }
-            }
+            } while (!success && Lobby.IsGameStarted) ;
             return promise;
         }
 
@@ -75,7 +75,7 @@ namespace Coinche.Client
                         success = false;
                     }
                 }
-            } while (!success);
+            } while (!success && Lobby.IsGameStarted);
 
             return gameMode;
         }

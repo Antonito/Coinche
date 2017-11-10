@@ -11,7 +11,7 @@ namespace Coinche.Client
         private static readonly string _err = "LobbyError";
         private static readonly string _select = "LobbySelect";
         //private static readonly Mutex mutex = new Mutex();
-        private static bool _isGameStarted;
+        public static bool IsGameStarted;
 
         public static void Register(Connection connection)
         {
@@ -45,7 +45,7 @@ namespace Coinche.Client
             NetworkGame.Unregister(connection);
             connection.SendObject("LobbyRoomQuit");
             LobbyRoom.Unregister(connection);
-            Lobby.Register(connection);
+            //Lobby.Register(connection);
             Program.clientInfos.IsRun = false;
             Connect(connection);
         }
@@ -60,13 +60,13 @@ namespace Coinche.Client
         private static void LobbyInfoHandler(PacketHeader header, Connection connection, string message)
         {
             Console.WriteLine(message);
-            Unregister(connection);
+            //Unregister(connection);
             NetworkGame.Register(connection);
             LobbyRoom.Register(connection);
 
             // TODO: Move
             Program.clientInfos.IsRun = true;
-            _isGameStarted = false;
+            IsGameStarted = false;
             Console.WriteLine("Send message to lobby: ");
             while (Program.clientInfos.IsRun)
             {
@@ -86,7 +86,7 @@ namespace Coinche.Client
                 else if (msg.StartsWith("/ready"))
                 {
                     NetworkGame.SendReady(connection);
-                    _isGameStarted = true;
+                    IsGameStarted = true;
                     Program.clientInfos.IsRun = false;
                 }
                 else
@@ -94,12 +94,12 @@ namespace Coinche.Client
                     connection.SendObject("LobbyRoomMessage", msg);
                 }
             }
-            if (!_isGameStarted)
+            if (!IsGameStarted)
             {
                 NetworkGame.Unregister(connection);
                 connection.SendObject("LobbyRoomQuit");
                 LobbyRoom.Unregister(connection);
-                Lobby.Register(connection);
+                //Lobby.Register(connection);
                 //mutex.ReleaseMutex();
             }
         }

@@ -15,8 +15,6 @@ namespace Server
     [TestFixture]
     public class ContractTest
     {
-        // TODO: Unit test pass, coinche, recoinche
-
         /// <summary>
         /// Game test.
         /// </summary>

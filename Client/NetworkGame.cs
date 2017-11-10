@@ -17,6 +17,9 @@ namespace Coinche.Client
         private static readonly string _selectLobby = "SelectLobbyNetwork";
         private static readonly string _chooseContract = "ChooseContract";
         private static readonly string _chooseContractInfo = "ChooseContractInfo";
+        private static readonly string _giveCard = "GiveMeCard";
+        private static readonly string _invalidCard = "InvalidCard";
+        private static readonly string _endFold = "EndFold";
 
         public static void Register(Connection connection)
         {
@@ -25,6 +28,9 @@ namespace Coinche.Client
             connection.AppendIncomingPacketHandler<byte[]>(_selectLobby, SelectLobbyHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_chooseContract, ChooseContractHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_chooseContractInfo, ChooseContractInfoHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_giveCard, GiveCardHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_invalidCard, InvalidCardHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_endFold, EndFoldHandler);
         }
 
         public static void Unregister(Connection connection)
@@ -34,10 +40,45 @@ namespace Coinche.Client
             connection.RemoveIncomingPacketHandler(_selectLobby);
             connection.RemoveIncomingPacketHandler(_chooseContract);
             connection.RemoveIncomingPacketHandler(_chooseContractInfo);
+            connection.RemoveIncomingPacketHandler(_giveCard);
+            connection.RemoveIncomingPacketHandler(_invalidCard);
+            connection.RemoveIncomingPacketHandler(_endFold);
         }
 
         private static void InfoGameHandler(PacketHeader header, Connection connection, byte[] info)
         {
+        }
+
+        private static void EndFoldHandler(PacketHeader header, Connection connection, byte[] info)
+        {
+            using (var stream = new MemoryStream(info))
+            {
+                var res = Serializer.Deserialize<EndRound>(stream);
+                Console.WriteLine("Winner: " + res.WinnerTeam + 
+                                  " (" + res.WinnerPoint + ") | Loser: " + 
+                                  res.LoserPoint);
+            }
+        }
+
+        private static void InvalidCardHandler(PacketHeader header, Connection connection, byte[] info)
+        {
+            // TODO
+            Console.WriteLine("You cannot play this card.");
+        }
+
+        private static void GiveCardHandler(PacketHeader header, Connection connection, byte[] info)
+        {
+            using (var stream = new MemoryStream())
+            {
+                // TODO: Ask for card
+                PlayCard card = new PlayCard 
+                {
+                    CardValue = Common.Core.Cards.CardType.Ace,
+                    CardColor = Common.Core.Cards.CardColor.Clover
+                };
+                Serializer.Serialize(stream, card);
+                connection.SendObject("GiveCard", stream.ToArray());
+            }
         }
 
         private static void ChooseContractInfoHandler(PacketHeader header, Connection connection, byte[] info)

@@ -32,6 +32,13 @@ namespace Coinche.Server.Packet
         }
 
 
+        /// <summary>
+        /// Handle the specified header, connection and message.
+        /// </summary>
+        /// <returns>The handler.</returns>
+        /// <param name="header">Header.</param>
+        /// <param name="connection">Connection.</param>
+        /// <param name="message">Message.</param>
         private static void Handler(PacketHeader header, Connection connection, string message)
         {
             var connectInfos = ConnectionManager.Get(connection);

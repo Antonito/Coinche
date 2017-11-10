@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using Coinche.Server.Core;
 using NUnit.Framework;
 
 namespace Server
 {
     using GameMode = Coinche.Common.Core.Game.GameMode;
+    using CardColor = Coinche.Common.Core.Cards.CardColor;
+    using CardType = Coinche.Common.Core.Cards.CardType;
 
     /// <summary>
     /// Player test.
@@ -226,6 +227,168 @@ namespace Server
                 hasThrown = true;
             }
             Assert.AreEqual(true, hasThrown);
+        }
+
+        /// <summary>
+        /// Check if a player have an asset in all asset mode
+        /// </summary>
+        [Test]
+        public void PlayerHaveAssetAllAssets()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+            var player = new Player(true);
+            player.GiveDeck(deck);
+            deck.SetGameMode(GameMode.AllAssets);
+            var cards = deck.Cards.Take(1);
+
+            try
+            {
+                foreach (var curCard in cards)
+                {
+                    player.GiveCard(curCard);
+                }
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, player.HaveAsset());
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Check if a player have an asset in no asset mode
+        /// </summary>
+        [Test]
+        public void PlayerHaveAssetNoAssets()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+            var player = new Player(true);
+            player.GiveDeck(deck);
+            deck.SetGameMode(GameMode.NoAsset);
+            var cards = deck.Cards.Take(1);
+
+            try
+            {
+                foreach (var curCard in cards)
+                {
+                    player.GiveCard(curCard);
+                }
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, player.HaveAsset());
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Check if a player have an asset in classic Pike mode (OK)
+        /// </summary>
+        [Test]
+        public void PlayerHaveAssetClassicPike()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+            var player = new Player(true);
+            player.GiveDeck(deck);
+            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            var cards = deck.Cards.Take(1);
+
+            try
+            {
+                player.GiveCard(new Card(CardType.Eight, CardColor.Pike));
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, player.HaveAsset());
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Check if a player have an asset in classic Pike mode (KO)
+        /// </summary>
+        [Test]
+        public void PlayerHaveAssetClassicNoPike()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+            var player = new Player(true);
+            player.GiveDeck(deck);
+            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            var cards = deck.Cards.Take(1);
+
+            try
+            {
+                player.GiveCard(new Card(CardType.Eight, CardColor.Clover));
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(false, player.HaveAsset());
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Check if a player has a card of color
+        /// </summary>
+        [Test]
+        public void PlayerHaveColor()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+            var player = new Player(true);
+            player.GiveDeck(deck);
+            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            var cards = deck.Cards.Take(1);
+            var card1 = new Card(CardType.Eight, CardColor.Clover);
+            var card2 = new Card(CardType.Eight, CardColor.Pike);
+
+            try
+            {
+                player.GiveCard(card1);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, player.HaveColor(CardColor.Clover));
+            Assert.AreEqual(false, player.HaveColor(CardColor.Pike));
+            Assert.AreEqual(false, hasThrown);
+        }
+
+        /// <summary>
+        /// Check if a player has a card
+        /// </summary>
+        [Test]
+        public void PlayerHaveCard()
+        {
+            Deck deck = new Deck();
+            bool hasThrown = false;
+            var player = new Player(true);
+            player.GiveDeck(deck);
+            deck.SetGameMode(GameMode.ClassicPike, CardColor.Pike);
+            var cards = deck.Cards.Take(1);
+            var card1 = new Card(CardType.Eight, CardColor.Clover);
+            var card2 = new Card(CardType.Eight, CardColor.Pike);
+
+            try
+            {
+                player.GiveCard(card1);
+            }
+            catch (Exception)
+            {
+                hasThrown = true;
+            }
+            Assert.AreEqual(true, player.HaveCard(card1));
+            Assert.AreEqual(false, player.HaveCard(card2));
+            Assert.AreEqual(false, hasThrown);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Coinche.Server.Core
         /// <summary>
         /// Play.
         /// </summary>
-        public void Run()
+        public void Run(out Player winner)
         {
             bool mustPlayAsset = false;
             bool isFirstLap = true;
@@ -76,21 +76,11 @@ namespace Coinche.Server.Core
             }
 
             var maxIndex = FindMaxCardIndex();
-            var winner = _players[maxIndex];
+            winner = _players[maxIndex];
             var points = _cards.Sum(c => _deck.GetCardValue(c));
 
             winner.Score = points;
             winner.WinFold();
-
-            // Notify all the players
-        }
-
-        private void NotifyOfWinner(Player winner)
-        {
-            foreach (var player in _players)
-            {
-                // TODO:
-            }
         }
 
         /// <summary>
@@ -109,20 +99,33 @@ namespace Coinche.Server.Core
                     res = Serializer.Deserialize<Common.PacketType.PlayCard>(stream);
                 }
 
-                // TODO: Check if asset is greater than the last one
                 Card cur = new Card(res.CardValue, res.CardColor);
                 if (player.HaveCard(cur))
                 {
-                    if (!mustPlayAsset || !player.HaveAsset() || (mustPlayAsset && _deck.IsCardAsset(cur)))
+                    if (player.HaveColor(_cards.First().Color))
                     {
-                        _cards.Add(cur);
-                        player.PlayCard(cur);
-                        ret = true;
+                        if (cur.Color != _cards.First().Color)
+                        {
+                            throw new Exceptions.CardError("Player must follow the color, when possible");   
+                        }
                     }
+                    else if (player.HaveAsset())
+                    {
+                        if (mustPlayAsset && _deck.IsCardAsset(cur) &&
+                            _deck.GetCardValue(cur) > _deck.GetCardValue(_cards.Last()) ||
+                            !_deck.IsCardAsset(cur))
+                        {
+                            throw new Exceptions.CardError("Player must play an asset.");   
+                        }
+                    }
+                    _cards.Add(cur);
+                    player.PlayCard(cur);
+                    ret = true;
                 }
             }
             catch (Exception)
             {
+                player.Connection.SendObject("InvalidCard");
                 ret = false;
             }
             return ret;

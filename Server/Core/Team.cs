@@ -45,7 +45,6 @@ namespace Coinche.Server.Core
         /// <value>The current score.</value>
         public int Score { get { return _scoreTotal; } }
 
-        // TODO: rm setter ?
         /// <summary>
         /// Gets the current score.
         /// </summary>
@@ -70,6 +69,7 @@ namespace Coinche.Server.Core
         public void AddScore(int scoreToAdd)
         {
             _scoreTotal += scoreToAdd;
+            ScoreCurrent = 0;
         }
 
         /// <summary>

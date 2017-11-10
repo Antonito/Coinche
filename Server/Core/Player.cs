@@ -8,7 +8,6 @@ using Coinche.Common.PacketType;
 
 namespace Coinche.Server.Core
 {
-    // TODO: We must re-create a new set of Player each time a Deck is created
     /// <summary>
     /// Player.
     /// </summary>
@@ -78,7 +77,9 @@ namespace Coinche.Server.Core
             }
         }
 
-        // TODO: rm ?
+        /// <summary>
+        /// Is unit testing ?
+        /// </summary>
         private readonly bool _unitTest;
 
         /// <summary>
@@ -94,6 +95,10 @@ namespace Coinche.Server.Core
             Score = 0;
         }
 
+        /// <summary>
+        /// Gives the deck.
+        /// </summary>
+        /// <param name="deck">Deck.</param>
         public void GiveDeck(Deck deck)
         {
             _deck = deck;
@@ -156,9 +161,14 @@ namespace Coinche.Server.Core
         public void PlayCard(Card card)
         {
             var cur = _cardsHand.FirstOrDefault(c => c.Color == card.Color && c.Type == card.Type);
+            Score += _deck.GetCardValue(cur);
             _cardsHand.Remove(cur);
         }
 
+        /// <summary>
+        /// Check if has an asset
+        /// </summary>
+        /// <returns><c>true</c>, if asset was had, <c>false</c> otherwise.</returns>
         public bool HaveAsset()
         {
             return _cardsHand.Any(_deck.IsCardAsset);
@@ -174,6 +184,19 @@ namespace Coinche.Server.Core
             {
                 return c.Color == card.Color && c.Type == card.Type;
             }) == 1;
+        }
+
+        /// <summary>
+        /// Check if has a card of the color
+        /// </summary>
+        /// <returns><c>true</c>, if color was had, <c>false</c> otherwise.</returns>
+        /// <param name="color">Color.</param>
+        public bool HaveColor(Common.Core.Cards.CardColor color)
+        {
+            return _cardsHand.Any(c => 
+            {
+                return c.Color == color;
+            });
         }
     }
 }

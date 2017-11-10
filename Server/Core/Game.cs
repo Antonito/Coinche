@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections.Generic;
 using ProtoBuf;
 using System.Threading;
+using Coinche.Server.Utils;
 
 namespace Coinche.Server.Core
 {
@@ -71,6 +72,10 @@ namespace Coinche.Server.Core
         /// <value>The teams.</value>
         public Team[] Teams { get { return _teams.ToArray(); } }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Coinche.Server.Core.Game"/> class.
+        /// </summary>
+        /// <param name="teams">Teams.</param>
         public Game(List<Team> teams)
         {
             if (teams.Count != 2)
@@ -142,10 +147,28 @@ namespace Coinche.Server.Core
             if (play)
             {
                 // This should not be executed during unit tests
+                List<Player> playerOrder = _players;
                 while (!_teams[0].Players[0].IsHandEmpty)
                 {
-                    Fold fold = new Fold(_players, _gameMode, _deck);
-                    fold.Run();
+                    Fold fold = new Fold(playerOrder, _gameMode, _deck);
+                    fold.Run(out Player winner);
+                    SetResult();
+
+                    var team = (_teams[0].Players.Contains(winner)) ? _teams[0] : _teams[1];
+                    var enemy = (team == _teams[0]) ? _teams[1] : _teams[0];
+
+                    // Check if contract was filled
+                    bool respected = Contract.IsPromiseRespected(this, team, enemy);
+                    _contract.UpdateRespected(winner);
+                    team.AddScore(winner.Score);
+                    enemy.AddScore(enemy.ScoreCurrent);
+
+                    // Notify all the players
+                    NotifyEndGame(winner.Score, team, enemy);
+
+                    // Update player's turn
+                    playerOrder = playerOrder.ShiftRight(playerOrder.IndexOf(winner));
+
                     _folds.Add(fold);
                 }
             }
@@ -154,9 +177,31 @@ namespace Coinche.Server.Core
                 Fold fold = new Fold(_players, _gameMode, _deck);
                 _folds.Add(fold);
             }
+        }
 
-            // Set the Game result
-            SetResult();
+        /// <summary>
+        /// Notifies the end of a game.
+        /// </summary>
+        /// <param name="score">Score.</param>
+        /// <param name="winner">Winner.</param>
+        /// <param name="loser">Loser.</param>
+        private void NotifyEndGame(int score, Team winner, Team loser)
+        {
+            Common.PacketType.EndRound res = new Common.PacketType.EndRound
+            {
+                WinnerTeam = _teams.IndexOf(winner),
+                WinnerPoint = winner.Score,
+                LoserPoint = loser.Score
+            };
+
+            foreach (var player in _players)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Serializer.Serialize(stream, res);
+                    player.Connection.SendObject("EndFold", stream.ToArray());       
+                }
+            }
         }
 
         /// <summary>
@@ -164,10 +209,6 @@ namespace Coinche.Server.Core
         /// </summary>
         private void SelectContract()
         {
-            foreach (var player in _players)
-            {
-                Packet.NetworkContract.Register(player.Connection);
-            }
             DistributeCards();
 
             // The contract need to be establised here
@@ -228,26 +269,26 @@ namespace Coinche.Server.Core
                 }
                 firstLoop = false;
             }
-
-            // Unregister Contract's
-            foreach (var player in _players)
-            {
-                Packet.NetworkContract.Unregister(player.Connection);
-            }
         }
 
+        /// <summary>
+        /// Distributes the cards.
+        /// </summary>
         private void DistributeCards()
         {
             _deck.DistributeCards(_players);
         }
 
+        /// <summary>
+        /// Sets the result.
+        /// </summary>
         private void SetResult()
         {
             int scoreTeam = _players[0].Score + _players[1].Score;
-            _teams[0].AddScore(scoreTeam);
+            _teams[0].ScoreCurrent = scoreTeam;
 
             scoreTeam = _players[2].Score + _players[3].Score;
-            _teams[1].AddScore(scoreTeam);
+            _teams[1].ScoreCurrent = scoreTeam;
         }
 
 

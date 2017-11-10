@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ProtoBuf;
+using NetworkCommsDotNet;
 
 namespace Coinche.Server.Core
 {
@@ -134,7 +135,7 @@ namespace Coinche.Server.Core
             catch (Exception e)
             {
                 Console.WriteLine("FoldError: " + e.Message);
-                player.Connection.SendObject("InvalidCard");
+                player.Connection.SendObject("InvalidCard");                    
                 ret = false;
             }
             return ret;

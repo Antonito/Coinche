@@ -9,7 +9,7 @@ namespace Coinche.Client
 {
     public class ClientInformation
     {
-        private Object thisLock = new Object();
+        private readonly Object thisLock = new Object();
 
         private readonly List<Card> _cards;
         private readonly List<Card> _cardsPlayed;

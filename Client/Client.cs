@@ -52,6 +52,10 @@ namespace Coinche.Client
                     Thread.Sleep(500);
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             finally
             {

@@ -20,11 +20,6 @@ namespace Coinche.Server.Core
         private readonly List<Card> _cardsHand;
 
         /// <summary>
-        /// The folds (cards).
-        /// </summary>
-        private readonly List<Card> _cardsFold;
-
-        /// <summary>
         /// The deck.
         /// </summary>
         private Deck _deck;
@@ -46,16 +41,22 @@ namespace Coinche.Server.Core
         public List<Card> Hand { get { return _cardsHand; } }
 
         /// <summary>
-        /// Gets or sets the folds.
+        /// Gets or sets the score.
         /// </summary>
-        /// <value>The folds.</value>
-        public List<Card> Folds { get { return _cardsFold; } set { _cardsFold.AddRange(value); } }
+        /// <value>The score.</value>
+        public int Score { get; set; }
 
         /// <summary>
         /// Returns the victories.
         /// </summary>
         /// <value>The victories.</value>
         public int Victories { get { return _foldsWon; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="T:Coinche.Server.Core.Player"/> hand is empty.
+        /// </summary>
+        /// <value><c>true</c> if hand is empty; otherwise, <c>false</c>.</value>
+        public bool IsHandEmpty { get { return Hand.Count == 0; } }
 
         /// <summary>
         /// Gets or sets the connection.
@@ -87,10 +88,10 @@ namespace Coinche.Server.Core
         public Player(bool unitTest = false)
         {
             _cardsHand = new List<Card>();
-            _cardsFold = new List<Card>();
             _deck = null;
             _foldsWon = 0;
             _unitTest = unitTest;
+            Score = 0;
         }
 
         public void GiveDeck(Deck deck)
@@ -114,8 +115,8 @@ namespace Coinche.Server.Core
                 Console.WriteLine("Giving card to player " + ConnectionManager.Get(_connection).Pseudo + ": " + (int)card.Type + " | " + (int)card.Color);
                 PlayCard cardPck = new PlayCard
                 {
-                    CardValue = (int)card.Type,
-                    CardColor = (int)card.Color
+                    CardValue = card.Type,
+                    CardColor = card.Color
                 };
                 MemoryStream stream = ConnectionManager.Get(_connection).Stream;
                 Serializer.Serialize(stream, cardPck);
@@ -127,20 +128,6 @@ namespace Coinche.Server.Core
             {
                 throw new ArgumentException("Added too many cards");
             }
-        }
-
-        /// <summary>
-        /// Gets the points.
-        /// </summary>
-        /// <returns>The points.</returns>
-        public int GetPoints()
-        {
-            int points = 0;
-            foreach (var card in _cardsFold)
-            {
-                points += _deck.GetCardValue(card);
-            }
-            return points;
         }
 
         /// <summary>
@@ -157,9 +144,36 @@ namespace Coinche.Server.Core
         public void ResetCards()
         {
             _cardsHand.Clear();
-            _cardsFold.Clear();
             _foldsWon = 0;
             _deck = null;
+            Score = 0;
+        }
+
+        /// <summary>
+        /// Play the card.
+        /// </summary>
+        /// <param name="card">Card.</param>
+        public void PlayCard(Card card)
+        {
+            var cur = _cardsHand.FirstOrDefault(c => c.Color == card.Color && c.Type == card.Type);
+            _cardsHand.Remove(cur);
+        }
+
+        public bool HaveAsset()
+        {
+            return _cardsHand.Any(_deck.IsCardAsset);
+        }
+
+        /// <summary>
+        /// Check if the player has the card
+        /// </summary>
+        /// <returns><c>true</c>, if player has the card, <c>false</c> otherwise.</returns>
+        public bool HaveCard(Card card)
+        {
+            return _cardsHand.Count(c => 
+            {
+                return c.Color == card.Color && c.Type == card.Type;
+            }) == 1;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using ProtoBuf;
+using Coinche.Server.Utils;
 
 namespace Coinche.Server.Core
 {
@@ -140,11 +141,12 @@ namespace Coinche.Server.Core
             if (play)
             {
                 // This should not be executed during unit tests
+                List<Player> playerOrder = _players;
                 while (!_teams[0].Players[0].IsHandEmpty)
                 {
-                    Fold fold = new Fold(_players, _gameMode, _deck);
-                    Player winner = null;
-                    fold.Run(out winner);
+                    Fold fold = new Fold(playerOrder, _gameMode, _deck);
+                    fold.Run(out Player winner);
+                    SetResult();
 
                     var team = (_teams[0].Players.Contains(winner)) ? _teams[0] : _teams[1];
                     var enemy = (team == _teams[0]) ? _teams[1] : _teams[0];
@@ -153,10 +155,14 @@ namespace Coinche.Server.Core
                     bool respected = Contract.IsPromiseRespected(this, team, enemy);
                     _contract.UpdateRespected(winner);
                     team.AddScore(winner.Score);
+                    enemy.AddScore(enemy.ScoreCurrent);
 
                     // Notify all the players
                     NotifyEndGame(winner.Score, team, enemy);
-                                  
+
+                    // Update player's turn
+                    playerOrder = playerOrder.ShiftRight(playerOrder.IndexOf(winner));
+
                     _folds.Add(fold);
                 }
             }
@@ -165,9 +171,6 @@ namespace Coinche.Server.Core
                 Fold fold = new Fold(_players, _gameMode, _deck);
                 _folds.Add(fold);
             }
-
-            // Set the Game result
-            SetResult();
         }
 
         /// <summary>
@@ -266,10 +269,10 @@ namespace Coinche.Server.Core
         private void SetResult()
         {
             int scoreTeam = _players[0].Score + _players[1].Score;
-            _teams[0].AddScore(scoreTeam);
+            _teams[0].ScoreCurrent = scoreTeam;
 
             scoreTeam = _players[2].Score + _players[3].Score;
-            _teams[1].AddScore(scoreTeam);
+            _teams[1].ScoreCurrent = scoreTeam;
         }
 
 

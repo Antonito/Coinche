@@ -155,6 +155,7 @@ namespace Coinche.Server.Core
         public void PlayCard(Card card)
         {
             var cur = _cardsHand.FirstOrDefault(c => c.Color == card.Color && c.Type == card.Type);
+            Score += _deck.GetCardValue(cur);
             _cardsHand.Remove(cur);
         }
 
@@ -173,6 +174,14 @@ namespace Coinche.Server.Core
             {
                 return c.Color == card.Color && c.Type == card.Type;
             }) == 1;
+        }
+
+        public bool HaveColor(Common.Core.Cards.CardColor color)
+        {
+            return _cardsHand.Any(c => 
+            {
+                return c.Color == color;
+            });
         }
     }
 }

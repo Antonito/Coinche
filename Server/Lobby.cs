@@ -60,7 +60,6 @@ namespace Coinche.Server
         /// Gets the list of players.
         /// </summary>
         /// <value>The connection.</value>
-        // TODO: Improve with something using yield ?
         public List<Connection> Connection { get { return _connections; }}
 
         /// <summary>

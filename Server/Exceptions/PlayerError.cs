@@ -1,6 +1,5 @@
 ﻿namespace Coinche.Server.Exceptions
 {
-    // TODO: Rm ?
     /// <summary>
     /// LobbyError exception
     /// </summary>

@@ -4,8 +4,6 @@ using NetworkCommsDotNet.Connections;
 
 namespace Coinche.Client
 {
-    // TODO: Implement packets for commands such as selecting team,
-    // adding AIs ...ect
     public static class LobbyRoom
     {
         private static readonly string _message = "LobbyRoomMessage";

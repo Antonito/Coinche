@@ -63,6 +63,7 @@
     <Compile Include="Exceptions\ContractError.cs" />
     <Compile Include="Core\Match.cs" />
     <Compile Include="Packet\NetworkContract.cs" />
+    <Compile Include="Utils\ShiftList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />

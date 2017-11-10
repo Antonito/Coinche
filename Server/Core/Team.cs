@@ -70,6 +70,7 @@ namespace Coinche.Server.Core
         public void AddScore(int scoreToAdd)
         {
             _scoreTotal += scoreToAdd;
+            ScoreCurrent = 0;
         }
 
         /// <summary>

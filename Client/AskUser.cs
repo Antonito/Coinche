@@ -108,7 +108,7 @@ namespace Coinche.Client
                     }
                 }
             } while (!success && Lobby.IsGameStarted);
-
+            Console.WriteLine("END ASKCARD");
             return choice;
         }
     }

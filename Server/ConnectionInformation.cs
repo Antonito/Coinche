@@ -20,11 +20,6 @@ namespace Coinche.Server
         private readonly SetOnce<string> _pseudo;
 
         /// <summary>
-        /// The memory stream.
-        /// </summary>
-        private readonly MemoryStream _stream;
-
-        /// <summary>
         /// The lobby.
         /// </summary>
         private Lobby _lobby;
@@ -45,20 +40,6 @@ namespace Coinche.Server
         /// </summary>
         /// <value><c>true</c> if is game ready; otherwise, <c>false</c>.</value>
         public bool IsGameReady { get; set; }
-
-        /// <summary>
-        /// Gets the stream.
-        /// </summary>
-        /// <value>The stream.</value>
-        public MemoryStream Stream
-        {
-            get
-            {
-                _stream.Flush();
-                _stream.Position = 0;
-                return _stream;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the lobby.
@@ -100,12 +81,6 @@ namespace Coinche.Server
             _connection = connection;
             _pseudo = new SetOnce<string>();
             _lobby = null;
-            _stream = new MemoryStream(4096);
-        }
-
-        ~ConnectionInformation()
-        {
-            _stream.Dispose();
         }
     }
 }

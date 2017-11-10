@@ -316,15 +316,17 @@ namespace Coinche.Server.Core
                                          List<Player> players,
                                          List<Tuple<Contract, GameMode>> contracts)
         {
-            MemoryStream stream = ConnectionManager.Get(player.Connection).Stream;
-            Common.PacketType.ContractRequest requ = new Common.PacketType.ContractRequest
+            byte[] netRes;
+            using (MemoryStream stream = new MemoryStream())
             {
-                MinimumValue = minimumContractValue
-            };
-            Serializer.Serialize(stream, requ);
-            byte[] netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
-                                                                             Timeout.Infinite, stream.ToArray());
-
+                Common.PacketType.ContractRequest requ = new Common.PacketType.ContractRequest
+                {
+                    MinimumValue = minimumContractValue
+                };
+                Serializer.Serialize(stream, requ);
+                netRes = player.Connection.SendReceiveObject<byte[], byte[]>("ChooseContract", "ChooseContractResp",
+                                                                                 Timeout.Infinite, stream.ToArray());
+            }
             Common.PacketType.ContractResponse res;
             using (var streamRes = new MemoryStream(netRes))
             {

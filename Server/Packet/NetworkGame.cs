@@ -55,22 +55,22 @@ namespace Coinche.Server.Packet
             // we get the ConnectInfos to access the client's stream (locally)
             var connectInfos = ConnectionManager.Get(connection);
 
-            //Wrtting the serialized data into client's stream.
-            connectInfos.Stream.Write(game, 0, game.Length);
-
-            //and finllay we deserialize the data
-            StartGame _g = Serializer.Deserialize<StartGame>(connectInfos.Stream);
-
-            if (!connectInfos.IsGameReady && _g.IsReady)
+            using (MemoryStream stream = new MemoryStream(game))
             {
-                _gameReadyCount++;
-                connectInfos.IsGameReady = true;
-                Console.WriteLine("{0} is ready", connectInfos.Pseudo);
-                // TODO: send to client ok waiting others for beauty purpose
-            }
-            if (_gameReadyCount == 4)
-            {
-                PlayGame(connectInfos.Lobby);
+                //and finllay we deserialize the data
+                StartGame _g = Serializer.Deserialize<StartGame>(stream);
+
+                if (!connectInfos.IsGameReady && _g.IsReady)
+                {
+                    _gameReadyCount++;
+                    connectInfos.IsGameReady = true;
+                    Console.WriteLine("{0} is ready", connectInfos.Pseudo);
+                    // TODO: send to client ok waiting others for beauty purpose
+                }
+                if (_gameReadyCount == 4)
+                {
+                    PlayGame(connectInfos.Lobby);
+                }
             }
         }
 

@@ -43,7 +43,6 @@
     <Compile Include="PacketType\PlayCard.cs" />
     <Compile Include="PacketType\EndRound.cs" />
     <Compile Include="PacketType\StartGame.cs" />
-    <Compile Include="PacketType\StartRound.cs" />
     <Compile Include="Core\Card.cs" />
     <Compile Include="Core\Contract.cs" />
     <Compile Include="Core\Game.cs" />

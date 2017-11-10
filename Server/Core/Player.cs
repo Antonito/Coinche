@@ -8,7 +8,6 @@ using Coinche.Common.PacketType;
 
 namespace Coinche.Server.Core
 {
-    // TODO: We must re-create a new set of Player each time a Deck is created
     /// <summary>
     /// Player.
     /// </summary>

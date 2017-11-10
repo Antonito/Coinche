@@ -143,7 +143,20 @@ namespace Coinche.Server.Core
                 while (!_teams[0].Players[0].IsHandEmpty)
                 {
                     Fold fold = new Fold(_players, _gameMode, _deck);
-                    fold.Run();
+                    Player winner = null;
+                    fold.Run(out winner);
+
+                    var team = (_teams[0].Players.Contains(winner)) ? _teams[0] : _teams[1];
+                    var enemy = (team == _teams[0]) ? _teams[1] : _teams[0];
+
+                    // Check if contract was filled
+                    bool respected = Contract.IsPromiseRespected(this, team, enemy);
+                    _contract.UpdateRespected(winner);
+                    team.AddScore(winner.Score);
+
+                    // Notify all the players
+                    NotifyEndGame(winner.Score, team, enemy);
+                                  
                     _folds.Add(fold);
                 }
             }
@@ -155,6 +168,31 @@ namespace Coinche.Server.Core
 
             // Set the Game result
             SetResult();
+        }
+
+        /// <summary>
+        /// Notifies the end of a game.
+        /// </summary>
+        /// <param name="score">Score.</param>
+        /// <param name="winner">Winner.</param>
+        /// <param name="loser">Loser.</param>
+        private void NotifyEndGame(int score, Team winner, Team loser)
+        {
+            Common.PacketType.EndRound res = new Common.PacketType.EndRound
+            {
+                WinnerTeam = _teams.IndexOf(winner),
+                WinnerPoint = winner.Score,
+                LoserPoint = loser.Score
+            };
+
+            foreach (var player in _players)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    Serializer.Serialize(stream, res);
+                    player.Connection.SendObject("EndFold", stream.ToArray());       
+                }
+            }
         }
 
         /// <summary>

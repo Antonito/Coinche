@@ -188,5 +188,42 @@ namespace Coinche.Server.Core
             }
             return promiseData.Target.Victories == game.NumberOfFolds;
         }
+
+        /// <summary>
+        /// Updates the score of a player who respected a contract.
+        /// </summary>
+        /// <param name="winner">Winner.</param>
+        public void UpdateRespected(Player winner)
+        {
+            var promise = _history.Peek().Promise;
+
+            switch (promise)
+            {
+                case Promise.Coinche:
+                    _history.Pop();
+                    UpdateRespected(winner);
+                    winner.Score *= 2;
+                    break;
+
+                case Promise.ReCoinche:
+                    _history.Pop();
+                    UpdateRespected(winner);
+                    winner.Score *= 4;
+                    break;
+
+                case Promise.Capot:
+                    winner.Score += 250;
+                    break;
+
+                case Promise.General:
+                    winner.Score += 500;
+                    break;
+
+                default:
+                    winner.Score += (int)promise;
+                    break;
+            }
+
+        }
     }
 }

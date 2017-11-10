@@ -117,7 +117,9 @@ namespace Coinche.Server.Core
 
             if (!_unitTest)
             {
-                Console.WriteLine("Giving card to player " + ConnectionManager.Get(_connection).Pseudo + ": " + (int)card.Type + " | " + (int)card.Color);
+                Console.WriteLine("Giving card to player " + 
+                                  ConnectionManager.Get(_connection).Pseudo + ": " + 
+                                  card.Type.ToString() + " | " + card.Color.ToString());
                 PlayCard cardPck = new PlayCard
                 {
                     CardValue = card.Type,

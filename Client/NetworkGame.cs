@@ -147,12 +147,16 @@ namespace Coinche.Client
             Promise promise = AskUser.AskPromise(contract);
             GameMode gameMode = GameMode.ClassicClover;
 
-            if (promise != Promise.Passe || promise != Promise.Coinche
-                || promise != Promise.ReCoinche)
+            if (promise != Promise.Passe && promise != Promise.Coinche
+                && promise != Promise.ReCoinche)
             {
                 gameMode = AskUser.AskGameMode();
             }
            
+            if (!Lobby.IsGameStarted)
+            {
+                return;
+            }
             using (MemoryStream streamResp = new MemoryStream())
             {
                 ContractResponse resp = new ContractResponse

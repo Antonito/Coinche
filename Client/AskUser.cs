@@ -13,7 +13,7 @@ namespace Coinche.Client
             Console.WriteLine("Choose between the following promise:");
             foreach (Promise e in Enum.GetValues(typeof(Promise)))
             {
-                if (e == 0 || e >= contract.MinimumValue)
+                if (e == 0 || e > contract.MinimumValue)
                 {
                     Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
                 }

@@ -54,8 +54,8 @@ namespace Coinche.Client
             using (var stream = new MemoryStream(info))
             {
                 var res = Serializer.Deserialize<EndRound>(stream);
-                Console.WriteLine("Winner: " + res.WinnerTeam + 
-                                  " (" + res.WinnerPoint + ") | Loser: " + 
+                Console.WriteLine("Winner: " + res.WinnerTeam +
+                                  " (" + res.WinnerPoint + ") | Loser: " +
                                   res.LoserPoint);
             }
         }
@@ -71,7 +71,7 @@ namespace Coinche.Client
             using (var stream = new MemoryStream())
             {
                 // TODO: Ask for card
-                PlayCard card = new PlayCard 
+                PlayCard card = new PlayCard
                 {
                     CardValue = Common.Core.Cards.CardType.Ace,
                     CardColor = Common.Core.Cards.CardColor.Clover
@@ -102,47 +102,43 @@ namespace Coinche.Client
             Promise promise = Promise.Points150;
             GameMode gameMode = Common.Core.Game.GameMode.ClassicClover;
 
+            Console.WriteLine("Choose between the following promise:");
+            foreach (Promise e in Enum.GetValues(typeof(Promise)))
             {
-                Console.WriteLine("Choose between the following promise:");
-                foreach (Promise e in Enum.GetValues(typeof(Promise)))
+                if (e == Promise.Passe || e >= contract.MinimumValue)
                 {
-                    if (e == 0 || e >= contract.MinimumValue)
+                    if (e == Promise.General)
                     {
-                        //Console.WriteLine(e.ToString() + " -> " + (int)e);
-                        if (e == Promise.General)
-                        {
-                            Console.WriteLine((int)e);
-                        }
-                        else
-                        {
-                            Console.Write((int)e + ", ");
+                        Console.WriteLine((int)e);
+                    }
+                    else
+                    {
+                        Console.Write((int)e + ", ");
 
-                        }
                     }
                 }
+            }
 
-                Console.Write(">");
-                // clearing the input buffer before asking something to user
-                while (Console.KeyAvailable)
+            Console.Write(">");
+            // clearing the input buffer before asking something to user
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey(false);
+            }
+            bool success = false;
+            while (!success)
+            {
+                success = Reader.TryReadLine(out string userInput, 100);
+                if (success)
                 {
-                    Console.ReadKey(false);
-                }
-                bool success = false;
-                string userInput;
-                while (!success)
-                {
-                    success = Reader.TryReadLine(out userInput, 100);
-                    if (success)
+                    if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
                     {
-                        if (Enum.IsDefined(typeof(Promise), Int32.Parse(userInput)))
-                        {
-                            promise = ((Promise)Int32.Parse(userInput));
-                        }
-                        else
-                        {
-                            Console.WriteLine("Wrong choice\n>");
-                            success = false;
-                        }
+                        promise = ((Promise)Int32.Parse(userInput));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong choice\n>");
+                        success = false;
                     }
                 }
             }
@@ -157,11 +153,10 @@ namespace Coinche.Client
                 }
 
                 Console.Write(">");
-                bool success = false;
-                string userInput;
+                success = false;
                 do
                 {
-                    success = Reader.TryReadLine(out userInput, 100);
+                    success = Reader.TryReadLine(out string userInput, 100);
                     if (success)
                     {
                         if (Enum.IsDefined(typeof(GameMode), Int32.Parse(userInput)))
@@ -176,7 +171,7 @@ namespace Coinche.Client
                     }
                 } while (!success);
             }
-           
+
             using (MemoryStream streamResp = new MemoryStream())
             {
                 ContractResponse resp = new ContractResponse

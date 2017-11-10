@@ -85,32 +85,12 @@ namespace Coinche.Client
 
         private static void GiveCardHandler(PacketHeader header, Connection connection, byte[] info)
         {
-            Console.WriteLine("Number of cards: " + _cards.Count);
-            for (var i = 0; i < _cards.Count; ++i)
-            {
-                Console.WriteLine(i + ") " + _cards[i].Value.ToString() + " - " + _cards[i].Color.ToString());
-            }
-            bool valid = false;
-            int choice = 0;
-            do
-            {
-                try
-                {
-                    Console.WriteLine("Please select a card: ");
-                    var cardChoice = Console.ReadLine();
-                    choice = int.Parse(cardChoice);
-                    if (choice < 0 || choice >= _cards.Count)
-                    {
-                        throw new IndexOutOfRangeException("Invalid input");
-                    }
-                    valid = true;
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Invalid input.");
-                }
-            } while (!valid);
+            int choice = AskUser.AskCard(_cards);
 
+            if (!Lobby.IsGameStarted)
+            {
+                return;
+            }
 
             using (var stream = new MemoryStream())
             {
@@ -147,12 +127,16 @@ namespace Coinche.Client
             Promise promise = AskUser.AskPromise(contract);
             GameMode gameMode = GameMode.ClassicClover;
 
-            if (promise != Promise.Passe || promise != Promise.Coinche
-                || promise != Promise.ReCoinche)
+            if (promise != Promise.Passe && promise != Promise.Coinche
+                && promise != Promise.ReCoinche)
             {
                 gameMode = AskUser.AskGameMode();
             }
            
+            if (!Lobby.IsGameStarted)
+            {
+                return;
+            }
             using (MemoryStream streamResp = new MemoryStream())
             {
                 ContractResponse resp = new ContractResponse
@@ -193,7 +177,6 @@ namespace Coinche.Client
             {
                 IsReady = true
             };
-            //TODO: set the Stream into a 'client' class like in server
             using (MemoryStream stream = new MemoryStream())
             {
                 Serializer.Serialize(stream, game);

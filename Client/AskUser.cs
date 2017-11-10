@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Coinche.Common.Core.Contract;
 using Coinche.Common.Core.Game;
 using Coinche.Common.PacketType;
@@ -13,7 +14,7 @@ namespace Coinche.Client
             Console.WriteLine("Choose between the following promise:");
             foreach (Promise e in Enum.GetValues(typeof(Promise)))
             {
-                if (e == 0 || e >= contract.MinimumValue)
+                if (e == 0 || e > contract.MinimumValue)
                 {
                     Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
                 }
@@ -78,6 +79,37 @@ namespace Coinche.Client
             } while (!success && Lobby.IsGameStarted);
 
             return gameMode;
+        }
+
+        public static int AskCard(List<Card> cards)
+        {
+            int choice = 0;
+
+            Console.WriteLine("Number of cards: " + cards.Count);
+            for (var i = 0; i < cards.Count; ++i)
+            {
+                Console.WriteLine(i + ") " + cards[i].Value.ToString() + " - " + cards[i].Color.ToString());
+            }
+
+            Console.Write(">");
+            bool success = false;
+            string userInput;
+            do
+            {
+                success = Reader.TryReadLine(out userInput, 100);
+                if (success)
+                {
+                    choice = Int32.Parse(userInput);
+                    if (choice < 0 || choice >= cards.Count)
+
+                    {
+                        Console.WriteLine("Wrong choice\n>");
+                        success = false;
+                    }
+                }
+            } while (!success && Lobby.IsGameStarted);
+
+            return choice;
         }
     }
 }

@@ -231,6 +231,7 @@ namespace Coinche.Server.Core
             var minimumContractValue = Common.Core.Contract.Promise.Passe;
             bool firstLoop = true;
 
+            var previousContracts = new List<Tuple<Contract, GameMode>>();
             while (!_prepared)
             {
                 var contracts = new List<Tuple<Contract, GameMode>>();
@@ -246,6 +247,14 @@ namespace Coinche.Server.Core
                                                _players, contracts);
                         } while (!ret);
                     }).Wait();
+                    if (!firstLoop && contracts.Count(elem =>
+                    {
+                        return elem.Item1.Promise == Common.Core.Contract.Promise.Passe;
+                    }) == 3)
+                    {
+                        contracts.Add(previousContracts[3]);
+                        break;
+                    }
                 }
 
                 // Check if choosen contrat is valid and final
@@ -268,6 +277,7 @@ namespace Coinche.Server.Core
                     _contract = selected.Item1;
                     _gameMode = selected.Item2;
                 }
+                previousContracts = contracts;
                 firstLoop = false;
             }
         }

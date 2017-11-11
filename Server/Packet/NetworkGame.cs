@@ -12,7 +12,6 @@ namespace Coinche.Server.Packet
     public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
-        private static readonly string _winner = "MatchWinner";
         private static int _gameReadyCount = 0;
 
         /// <summary>

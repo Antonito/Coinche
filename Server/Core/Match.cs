@@ -45,8 +45,8 @@ namespace Coinche.Server.Core
             _teams = new List<Team>
             {
 
-                new Team(_players[0], _players[1]),
-                new Team(_players[2], _players[3])
+                new Team(_players[0], _players[2]),
+                new Team(_players[1], _players[3])
             };
             _games = new List<Game>();
         }

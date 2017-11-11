@@ -182,7 +182,11 @@ namespace Coinche.Server.Core
                     NotifyEndGame(winner.Score, team, enemy);
 
                     // Update player's turn
-                    playerOrder = playerOrder.ShiftRight(playerOrder.IndexOf(winner));
+                    while (playerOrder.IndexOf(winner) != 0)
+                    {
+                        playerOrder = playerOrder.ShiftRight(1);
+                    }
+
 
                     _folds.Add(fold);
                 }

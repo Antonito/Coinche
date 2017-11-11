@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
 using System.IO;

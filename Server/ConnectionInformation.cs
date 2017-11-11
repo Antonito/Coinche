@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Coinche.Server.Utils;
+﻿using Coinche.Server.Utils;
 using NetworkCommsDotNet.Connections;
              
 namespace Coinche.Server

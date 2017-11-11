@@ -1,10 +1,8 @@
 ﻿using System;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
-using NetworkCommsDotNet.Tools;
 using Coinche.Common.PacketType;
 using ProtoBuf;
-using NetworkCommsDotNet.DPSBase;
 using System.IO;
 
 namespace Coinche.Server.Packet

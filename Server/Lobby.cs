@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
-using Coinche.Server.Core;
 using Coinche.Server.Utils;
 using Coinche.Server.Packet;
 using NetworkCommsDotNet;

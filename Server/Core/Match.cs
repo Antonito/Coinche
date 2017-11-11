@@ -68,13 +68,23 @@ namespace Coinche.Server.Core
             }
         }
 
-        //TODO: use this ? send to all player who won the match ?
-        //      and maybe trigger the SelectLobby ?
+
+        /// <summary>
+        /// Returns the team winner id.
+        /// </summary>
+        /// <returns>The winner.</returns>
+        public int WinnerId()
+        {
+            if (_teams[0].HasWon())
+                return 0;
+            return 1;
+        }
+
         /// <summary>
         /// Returns the team winner.
         /// </summary>
-        /// <returns>The winner.</returns>
-        public Team Winner()
+        /// <returns>The team.</returns>
+        public Team WinnerTeam()
         {
             if (_teams[0].HasWon())
                 return _teams[0];

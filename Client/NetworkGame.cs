@@ -23,6 +23,8 @@ namespace Coinche.Client
         private static readonly string _giveCard = "GiveMeCard";
         private static readonly string _invalidCard = "InvalidCard";
         private static readonly string _endFold = "EndFold";
+        private static readonly string _winner = "MatchWinner";
+
 
         public static void Register(Connection connection)
         {
@@ -33,6 +35,7 @@ namespace Coinche.Client
             connection.AppendIncomingPacketHandler<byte[]>(_giveCard, GiveCardHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_invalidCard, InvalidCardHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_endFold, EndFoldHandler);
+            connection.AppendIncomingPacketHandler<byte[]>(_winner, WinnerHandler);
         }
 
         public static void Unregister(Connection connection)
@@ -168,5 +171,18 @@ namespace Coinche.Client
                 connection.SendObject(_type, t);
             }
         }
+
+        private static void WinnerHandler(PacketHeader header, Connection connection, byte[] winner)
+        {
+            using (MemoryStream stream = new MemoryStream(winner))
+            {
+                MatchWinner matchWinner = Serializer.Deserialize<MatchWinner>(stream);
+                Console.WriteLine("Team {0} won ({1}, {2})",
+                                  matchWinner.TeamWinner,
+                                  matchWinner.PseudoA,
+                                  matchWinner.PseudoB);
+            }
+        }
+
     }
 }

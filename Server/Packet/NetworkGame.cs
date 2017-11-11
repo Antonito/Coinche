@@ -12,6 +12,7 @@ namespace Coinche.Server.Packet
     public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
+        private static readonly string _winner = "MatchWinner";
         private static int _gameReadyCount = 0;
 
         /// <summary>
@@ -86,6 +87,23 @@ namespace Coinche.Server.Packet
             {
                 var match = new Core.Match(lobby.Connection);
                 match.Run();
+                var team = match.WinnerTeam();
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    MatchWinner win = new MatchWinner()
+                    {
+                        TeamWinner = match.WinnerId(),
+                        PseudoA = ConnectionManager.Get(team.Players[0].Connection).Pseudo,
+                        PseudoB = ConnectionManager.Get(team.Players[1].Connection).Pseudo
+                    };
+                    Serializer.Serialize(stream, win);
+                    foreach (var connection in lobby.Connection)
+                    {
+                        connection.SendObject("MatchWinner", stream.ToArray());
+                        lobby.RemovePlayer(connection);
+                        connection.SendObject("LobbySelect");
+                    }
+                }
             }
             catch (Exception)
             {

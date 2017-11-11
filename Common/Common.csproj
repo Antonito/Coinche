@@ -46,6 +46,7 @@
     <Compile Include="Core\Card.cs" />
     <Compile Include="Core\Contract.cs" />
     <Compile Include="Core\Game.cs" />
+    <Compile Include="PacketType\MatchWinner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

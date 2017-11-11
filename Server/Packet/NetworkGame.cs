@@ -86,22 +86,12 @@ namespace Coinche.Server.Packet
             {
                 var match = new Core.Match(lobby.Connection);
                 match.Run();
-                var team = match.WinnerTeam();
-                using (MemoryStream stream = new MemoryStream())
+
+                var connects = lobby.Connection.ToArray();
+                foreach (var connection in connects)
                 {
-                    MatchWinner win = new MatchWinner()
-                    {
-                        TeamWinner = match.WinnerId(),
-                        PseudoA = ConnectionManager.Get(team.Players[0].Connection).Pseudo,
-                        PseudoB = ConnectionManager.Get(team.Players[1].Connection).Pseudo
-                    };
-                    Serializer.Serialize(stream, win);
-                    foreach (var connection in lobby.Connection)
-                    {
-                        connection.SendObject("MatchWinner", stream.ToArray());
-                        lobby.RemovePlayer(connection);
-                        connection.SendObject("LobbySelect");
-                    }
+                    connection.SendObject("LobbySelect");
+                    lobby.RemovePlayer(connection);
                 }
             }
             catch (Exception)

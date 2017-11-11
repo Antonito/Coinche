@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
+using System.IO;
+using Coinche.Common.PacketType;
+using ProtoBuf;
 
 namespace Coinche.Server.Core
 {
@@ -65,30 +68,39 @@ namespace Coinche.Server.Core
 
                 // Store the game history for futur usage
                 _games.Add(game);
+
+                SendResult();
             }
         }
 
+        private void SendResult()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                MatchWinner win = new MatchWinner()
+                {
+                    TeamWinner = WinnerId(),
+                    PseudoA = ConnectionManager.Get(_teams[WinnerId()].Players[0].Connection).Pseudo,
+                    PseudoB = ConnectionManager.Get(_teams[WinnerId()].Players[1].Connection).Pseudo
+                };
+                Serializer.Serialize(stream, win);
+                foreach (var player in _players)
+                {
+                    player.Connection.SendObject("MatchWinner", stream.ToArray());
+                    player.Connection.SendObject("LobbySelect");
+                }
+            }
+        }
 
         /// <summary>
         /// Returns the team winner id.
         /// </summary>
         /// <returns>The winner.</returns>
-        public int WinnerId()
+        private int WinnerId()
         {
             if (_teams[0].HasWon())
                 return 0;
             return 1;
-        }
-
-        /// <summary>
-        /// Returns the team winner.
-        /// </summary>
-        /// <returns>The team.</returns>
-        public Team WinnerTeam()
-        {
-            if (_teams[0].HasWon())
-                return _teams[0];
-            return _teams[1];
         }
     }
 }

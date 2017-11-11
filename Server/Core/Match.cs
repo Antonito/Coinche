@@ -68,14 +68,17 @@ namespace Coinche.Server.Core
             }
         }
 
-        // TODO: return a Team instead of an int ?
+        //TODO: use this ? send to all player who won the match ?
+        //      and maybe trigger the SelectLobby ?
         /// <summary>
         /// Returns the team winner.
         /// </summary>
         /// <returns>The winner.</returns>
-        public int Winner()
+        public Team Winner()
         {
-            return 0;
+            if (_teams[0].HasWon())
+                return _teams[0];
+            return _teams[1];
         }
     }
 }

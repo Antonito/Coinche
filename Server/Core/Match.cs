@@ -73,6 +73,9 @@ namespace Coinche.Server.Core
             }
         }
 
+        /// <summary>
+        /// Sends the result.
+        /// </summary>
         private void SendResult()
         {
             using (MemoryStream stream = new MemoryStream())

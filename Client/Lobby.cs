@@ -10,7 +10,6 @@ namespace Coinche.Client
         private static readonly string _infos = "LobbyInfo";
         private static readonly string _err = "LobbyError";
         private static readonly string _select = "LobbySelect";
-        //private static readonly Mutex mutex = new Mutex();
         public static bool IsGameStarted;
 
         public static void Register(Connection connection)
@@ -29,7 +28,6 @@ namespace Coinche.Client
 
         public static void Connect(Connection connection)
         {
-            //mutex.WaitOne();
             Console.WriteLine("Which lobby do you want to join ?");
             bool success = false;
             string msg;
@@ -45,7 +43,6 @@ namespace Coinche.Client
             NetworkGame.Unregister(connection);
             connection.SendObject("LobbyRoomQuit");
             LobbyRoom.Unregister(connection);
-            //Lobby.Register(connection);
             Program.clientInfos.IsRun = false;
             Connect(connection);
         }
@@ -97,8 +94,6 @@ namespace Coinche.Client
                 NetworkGame.Unregister(connection);
                 connection.SendObject("LobbyRoomQuit");
                 LobbyRoom.Unregister(connection);
-                //Lobby.Register(connection);
-                //mutex.ReleaseMutex();
             }
         }
     }

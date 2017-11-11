@@ -1,22 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Coinche.Common.Core.Cards;
 using Coinche.Common.PacketType;
 
 namespace Coinche.Client
 {
+    /// <summary>
+    /// Client information.
+    /// </summary>
     public class ClientInformation
     {
+        /// <summary>
+        /// The lock
+        /// </summary>
         private readonly Object thisLock = new Object();
 
+        /// <summary>
+        /// The cards.
+        /// </summary>
         private readonly List<Card> _cards;
+
+        /// <summary>
+        /// The cards played.
+        /// </summary>
         private readonly List<Card> _cardsPlayed;
 
         public bool IsRun { get; set; }
         public bool CanRecoinche { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Coinche.Client.ClientInformation"/> class.
+        /// </summary>
         public ClientInformation()
         {
             IsRun = false;
@@ -25,6 +40,9 @@ namespace Coinche.Client
             _cardsPlayed = new List<Card>();
         }
 
+        /// <summary>
+        /// Resets the cards.
+        /// </summary>
         public void ResetCards()
         {
             lock (thisLock)
@@ -34,6 +52,10 @@ namespace Coinche.Client
             }
         }
 
+        /// <summary>
+        /// Adds the card.
+        /// </summary>
+        /// <param name="card">Card.</param>
         public void AddCard(PlayCard card)
         {
             lock (thisLock)
@@ -42,6 +64,9 @@ namespace Coinche.Client
             }
         }
 
+        /// <summary>
+        /// Reverts the cards.
+        /// </summary>
         public void RevertPlay()
         {
             lock (thisLock)
@@ -51,6 +76,10 @@ namespace Coinche.Client
             }
         }
 
+        /// <summary>
+        /// Gets the cards.
+        /// </summary>
+        /// <returns>The cards.</returns>
         public List<Card> GetCards()
         {
             lock (thisLock)
@@ -59,16 +88,30 @@ namespace Coinche.Client
             }
         }
 
+        /// <summary>
+        /// Gets the type of the card.
+        /// </summary>
+        /// <returns>The card type.</returns>
+        /// <param name="index">Index.</param>
         public CardType GetCardType(int index)
         {
             return _cards[index].Value;
         }
 
+        /// <summary>
+        /// Gets the color of the card.
+        /// </summary>
+        /// <returns>The card color.</returns>
+        /// <param name="index">Index.</param>
         public CardColor GetCardColor(int index)
         {
             return _cards[index].Color;
         }
 
+        /// <summary>
+        /// Plays the card.
+        /// </summary>
+        /// <param name="index">Index.</param>
         public void PlayCard(int index)
         {
             lock (thisLock)

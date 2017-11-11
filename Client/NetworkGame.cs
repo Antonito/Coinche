@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using NetworkCommsDotNet.Connections;
 using Coinche.Common.PacketType;
 using NetworkCommsDotNet;
 using ProtoBuf;
 using System.IO;
 using Coinche.Common.Core.Game;
-using System.Threading;
 
 namespace Coinche.Client
 {
     using Promise = Common.Core.Contract.Promise;
 
+    /// <summary>
+    /// Network game.
+    /// </summary>
     public static class NetworkGame
     {
         private static readonly string _type = "NetWorkGame";
@@ -25,7 +25,11 @@ namespace Coinche.Client
         private static readonly string _endFold = "EndFold";
         private static readonly string _winner = "MatchWinner";
 
-
+        /// <summary>
+        /// Register the specified connection.
+        /// </summary>
+        /// <returns>The register.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Register(Connection connection)
         {
             connection.AppendIncomingPacketHandler<byte[]>(_newGame, NewGameHandler);
@@ -38,6 +42,11 @@ namespace Coinche.Client
             connection.AppendIncomingPacketHandler<byte[]>(_winner, WinnerHandler);
         }
 
+        /// <summary>
+        /// Unregister the specified connection.
+        /// </summary>
+        /// <returns>The unregister.</returns>
+        /// <param name="connection">Connection.</param>
         public static void Unregister(Connection connection)
         {
             connection.RemoveIncomingPacketHandler(_newGame);

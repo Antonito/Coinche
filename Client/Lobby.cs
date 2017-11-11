@@ -60,11 +60,9 @@ namespace Coinche.Client
         private static void LobbyInfoHandler(PacketHeader header, Connection connection, string message)
         {
             Console.WriteLine(message);
-            //Unregister(connection);
             NetworkGame.Register(connection);
             LobbyRoom.Register(connection);
 
-            // TODO: Move
             Program.clientInfos.IsRun = true;
             IsGameStarted = false;
             Console.WriteLine("Send message to lobby: ");

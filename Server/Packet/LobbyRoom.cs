@@ -90,24 +90,5 @@ namespace Coinche.Server.Packet
                 Console.WriteLine(e.Message);
             }
         }
-
-        //TODO: remove this
-        /// <summary>
-        /// Disconnects one player from a lobby.
-        /// </summary>
-        /// <param name="connection">Connection.</param>
-        /// <param name="connectInfos">Connect infos.</param>
-        private static void DisconnectOnePlayer(Connection connection, ConnectionInformation connectInfos)
-        {
-            var room = connectInfos.Lobby.Name;
-            var pseudo = connectInfos.Pseudo;
-            Console.WriteLine("[LobbyRoom - " + room + "] " + pseudo + " Disconnected.");
-            connectInfos.Lobby.RemovePlayer(connection);
-            connectInfos.Lobby = null;
-            Unregister(connection);
-            NetworkGame.Unregister(connection);
-            SelectLobby.Register(connection);
-            connection.SendObject("LobbySelect");
-        }
     }
 }

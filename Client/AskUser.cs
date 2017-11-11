@@ -29,7 +29,13 @@ namespace Coinche.Client
                     Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
                     promiseList.Add((int)e);
                 }
-                else if (contract.MinimumValue != 0)
+                else if (contract.MinimumValue != 0 && !Program.clientInfos.CanRecoinche
+                         && e != Promise.ReCoinche)
+                {
+                    Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
+                    promiseList.Add((int)e);
+                }
+                else if (Program.clientInfos.CanRecoinche)
                 {
                     Console.WriteLine("(" + (int)e + ")" + " " + e.ToString());
                     promiseList.Add((int)e);

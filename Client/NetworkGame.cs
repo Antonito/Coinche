@@ -57,6 +57,7 @@ namespace Coinche.Client
 
         private static void NewGameHandler(PacketHeader header, Connection connection, byte[] info)
         {
+            Program.clientInfos.CanRecoinche = false;
             Program.clientInfos.ResetCards();
             Console.WriteLine("Starting new game");
             connection.SendObject("NewGameOK");
@@ -107,6 +108,10 @@ namespace Coinche.Client
             using (MemoryStream stream = new MemoryStream(info))
             {
                 var contract = Serializer.Deserialize<ContractInfo>(stream);
+                if (contract.Promise == Promise.Coinche)
+                {
+                    Program.clientInfos.CanRecoinche = true;
+                }
                 Console.WriteLine("Player " + contract.Pseudo + " chose " +
                                   contract.Promise.ToString() + " | " + contract.GameMode.ToString());
             }

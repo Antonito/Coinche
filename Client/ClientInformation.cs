@@ -15,10 +15,12 @@ namespace Coinche.Client
         private readonly List<Card> _cardsPlayed;
 
         public bool IsRun { get; set; }
+        public bool CanRecoinche { get; set; }
 
         public ClientInformation()
         {
             IsRun = false;
+            CanRecoinche = false;
             _cards = new List<Card>();
             _cardsPlayed = new List<Card>();
         }

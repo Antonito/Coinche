@@ -364,8 +364,7 @@ namespace Coinche.Server.Core
                 minimumContractValue = res.Promise;
             }
             Player target = null;
-            if (res.Promise == Common.Core.Contract.Promise.Coinche || 
-                res.Promise == Common.Core.Contract.Promise.General)
+            if (res.Promise == Common.Core.Contract.Promise.General)
             {
                 target = player;
             }

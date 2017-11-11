@@ -18,7 +18,6 @@ namespace Coinche.Client
         private static readonly string _type = "NetWorkGame";
         private static readonly string _newGame = "NewGame";
         private static readonly string _getCard = "PlayerGetGameCard";
-        private static readonly string _selectLobby = "SelectLobbyNetwork";
         private static readonly string _chooseContract = "ChooseContract";
         private static readonly string _chooseContractInfo = "ChooseContractInfo";
         private static readonly string _giveCard = "GiveMeCard";
@@ -27,10 +26,8 @@ namespace Coinche.Client
 
         public static void Register(Connection connection)
         {
-            connection.AppendIncomingPacketHandler<byte[]>(_type, InfoGameHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_newGame, NewGameHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_getCard, GetCardHandler);
-            connection.AppendIncomingPacketHandler<byte[]>(_selectLobby, SelectLobbyHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_chooseContract, ChooseContractHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_chooseContractInfo, ChooseContractInfoHandler);
             connection.AppendIncomingPacketHandler<byte[]>(_giveCard, GiveCardHandler);
@@ -40,19 +37,13 @@ namespace Coinche.Client
 
         public static void Unregister(Connection connection)
         {
-            connection.RemoveIncomingPacketHandler(_type);
             connection.RemoveIncomingPacketHandler(_newGame);
             connection.RemoveIncomingPacketHandler(_getCard);
-            connection.RemoveIncomingPacketHandler(_selectLobby);
             connection.RemoveIncomingPacketHandler(_chooseContract);
             connection.RemoveIncomingPacketHandler(_chooseContractInfo);
             connection.RemoveIncomingPacketHandler(_giveCard);
             connection.RemoveIncomingPacketHandler(_invalidCard);
             connection.RemoveIncomingPacketHandler(_endFold);
-        }
-
-        private static void InfoGameHandler(PacketHeader header, Connection connection, byte[] info)
-        {
         }
 
         private static void NewGameHandler(PacketHeader header, Connection connection, byte[] info)
@@ -149,13 +140,6 @@ namespace Coinche.Client
                 connection.SendObject("ChooseContractResp", streamResp.ToArray());
                 Console.WriteLine("Response sent !");
             }
-        }
-
-        // TODO: rm ???
-        private static void SelectLobbyHandler(PacketHeader header, Connection connection, byte[] info)
-        {
-            Console.WriteLine("Contract: ");
-            var contract = Console.ReadLine();
         }
 
         private static void GetCardHandler(PacketHeader header, Connection connection, byte[] info)

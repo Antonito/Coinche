@@ -30,6 +30,7 @@ The connection to a game can be done like this :
 	- During this step, the server sends a "GiveMeCard" event, the player then responds with a *PlayCard* packet.
 8. When the fold is over (when no one has no card left), the server notifies everyone with a *EndRound* packet.
 9. Back to step 6, until a team wins.
+	- When a team wins, all players are notified with a "MatchWinner" packet.
 
 ## Packets
 
@@ -101,6 +102,21 @@ EndRound:
         public int WinnerPoint { get; set; }
         [ProtoMember(3)]
         public int LoserPoint { get; set; }
+    }
+```
+
+MatchWinner:
+
+```c#
+    [ProtoContract]
+    public class MatchWinner
+    {
+        [ProtoMember(1)]
+        public int TeamWinner { get; set; }
+        [ProtoMember(2)]
+        public string PseudoA { get; set; }
+        [ProtoMember(3)]
+        public string PseudoB { get; set; }
     }
 ```
 

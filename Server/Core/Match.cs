@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace Coinche.Server.Core
 {
-    public class Match
+    public sealed class Match
     {
         /// <summary>
         /// The players.

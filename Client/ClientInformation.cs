@@ -9,7 +9,7 @@ namespace Coinche.Client
     /// <summary>
     /// Client information.
     /// </summary>
-    public class ClientInformation
+    public sealed class ClientInformation
     {
         /// <summary>
         /// The lock

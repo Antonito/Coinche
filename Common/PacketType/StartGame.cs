@@ -3,7 +3,7 @@
 namespace Coinche.Common.PacketType
 {
     [ProtoContract]
-    public class StartGame
+    public sealed class StartGame
     {
         [ProtoMember(1)]
         public bool IsReady { get; set; }

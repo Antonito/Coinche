@@ -3,7 +3,7 @@
 namespace Coinche.Common.PacketType
 {
     [ProtoContract]
-    public class PlayCard
+    public sealed class PlayCard
     {
         [ProtoMember(1)]
         public Core.Cards.CardType CardValue { get; set; }

@@ -3,7 +3,7 @@
 namespace Coinche.Common.PacketType
 {
     [ProtoContract]
-    public class MatchWinner
+    public sealed class MatchWinner
     {
         [ProtoMember(1)]
         public int TeamWinner { get; set; }

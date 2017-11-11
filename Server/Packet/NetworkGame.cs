@@ -65,7 +65,6 @@ namespace Coinche.Server.Packet
                     _gameReadyCount++;
                     connectInfos.IsGameReady = true;
                     Console.WriteLine("{0} is ready", connectInfos.Pseudo);
-                    // TODO: send to client ok waiting others for beauty purpose
                 }
                 if (_gameReadyCount == 4)
                 {

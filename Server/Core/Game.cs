@@ -169,6 +169,12 @@ namespace Coinche.Server.Core
                     fold.Run(out Player winner);
                     SetResult();
 
+                    if (_teams[0].Players[0].IsHandEmpty)
+                    {
+                        // It is the last fold
+                        winner.Score += 10;
+                    }
+
                     var team = (_teams[0].Players.Contains(winner)) ? _teams[0] : _teams[1];
                     var enemy = (team == _teams[0]) ? _teams[1] : _teams[0];
 
@@ -186,7 +192,6 @@ namespace Coinche.Server.Core
                     {
                         playerOrder = playerOrder.ShiftRight(1);
                     }
-
 
                     _folds.Add(fold);
                 }

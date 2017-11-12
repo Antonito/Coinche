@@ -52,9 +52,10 @@ namespace Coinche.Client
                     Thread.Sleep(500);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("An error occured.");
+                Console.WriteLine("Please double check that the server is up and running and try again.");
             }
 
             finally
